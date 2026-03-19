@@ -14,9 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.juejin.ui.Colors
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import com.example.juejin.ui.Colors
+import com.example.juejin.ui.Typographys
 
 @Composable
 fun HomeScreen() {
@@ -38,6 +40,6 @@ fun HomeScreen() {
                 modifier = Modifier.size(32.dp)
             )
         }
-        Text("首页", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
+        Text("首页", style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
     }
 }

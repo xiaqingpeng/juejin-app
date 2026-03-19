@@ -20,13 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.example.juejin.ui.Colors
 import com.example.juejin.enums.TabItem
 import com.example.juejin.screen.CoursesScreen
 import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
+import com.example.juejin.ui.Colors
 import kotlinx.coroutines.launch
 
 

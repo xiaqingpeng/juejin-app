@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
+import com.example.juejin.ui.Typographys
 
 @Composable
 fun HotScreen() {
@@ -38,6 +39,6 @@ fun HotScreen() {
                 modifier = Modifier.size(32.dp)
             )
         }
-        Text("沸点", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
+        Text("沸点", style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
     }
 }
