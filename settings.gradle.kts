@@ -25,6 +25,14 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        // JetBrains Compose repository for all Compose Multiplatform dependencies
+        maven {
+            url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        }
+        // Kotlin repository for Kotlin Multiplatform dependencies
+        maven {
+            url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
+        }
     }
 }
 

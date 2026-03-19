@@ -1,49 +1,231 @@
 package com.example.juejin
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import kotlinx.coroutines.launch
 
-import juejin.composeapp.generated.resources.Res
-import juejin.composeapp.generated.resources.compose_multiplatform
+// Tab items definition
+enum class TabItem(
+    val route: String,
+    val title: String
+) {
+    Home("home", "首页"),
+    Hot("hot", "沸点"),
+    Discover("discover", "发现"),
+    Courses("courses", "课程"),
+    Profile("profile", "我的")
+}
+
+
 
 @Composable
-@Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        val tabs = listOf(
+            TabItem.Home,
+            TabItem.Hot,
+            TabItem.Discover,
+            TabItem.Courses,
+            TabItem.Profile
+        )
+
+        // Pager state with proper initialization
+        val pagerState = rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0f
         ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+            tabs.size
+        }
+
+        val coroutineScope = rememberCoroutineScope()
+
+        // Scaffold provides proper layout structure
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                // Bottom Navigation Bar
+                NavigationBar(
+                    containerColor = Color.White,
+                    tonalElevation = 8.dp
                 ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    tabs.forEachIndexed { index, tab ->
+                        val isSelected = pagerState.currentPage == index
+                        NavigationBarItem(
+                            icon = {
+                                // Use emoji icons instead of Material Icons to avoid dependency issues
+                                val emoji = when (tab) {
+                                    TabItem.Home -> "🏠"
+                                    TabItem.Hot -> "🔥"
+                                    TabItem.Discover -> "🔍"
+                                    TabItem.Courses -> "📚"
+                                    TabItem.Profile -> "👤"
+                                }
+                                Text(emoji, fontSize = MaterialTheme.typography.bodyLarge.fontSize)
+                            },
+                            label = { Text(tab.title) },
+                            selected = isSelected,
+                            onClick = {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = Color(0xFF1890FF), // Blue color for selected items
+                                selectedTextColor = Color(0xFF1890FF),
+                                unselectedIconColor = Color(0xFF808080), // Gray color for unselected items
+                                unselectedTextColor = Color(0xFF808080),
+                                indicatorColor = Color.Transparent // No indicator line
+                            )
+                        )
+                    }
+                }
+            }
+        ) {
+            // Content padding from Scaffold
+            val padding = it
+
+            // Horizontal Pager with gesture support
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .background(MaterialTheme.colorScheme.background)
+                    // Add additional drag gesture support for better UX
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures {_, dragAmount ->
+                                val pageOffset = dragAmount / size.width
+                                coroutineScope.launch {
+                                    // Use scrollToPage with threshold for better compatibility
+                                    if (kotlin.math.abs(dragAmount) > size.width * 0.25) {
+                                        val targetPage = (pagerState.currentPage + (if (dragAmount < 0) 1 else -1)).coerceIn(0, tabs.size - 1)
+                                        pagerState.scrollToPage(targetPage)
+                                    }
+                                }
+                            }
+                    }
+            ) {
+                // Content for each tab
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    when (tabs[pagerState.currentPage]) {
+                        TabItem.Home -> HomeScreen()
+                        TabItem.Hot -> HotScreen()
+                        TabItem.Discover -> DiscoverScreen()
+                        TabItem.Courses -> CoursesScreen()
+                        TabItem.Profile -> ProfileScreen()
+                    }
                 }
             }
         }
+    }
+}
+
+// Individual screen components for each tab
+@Composable
+fun HomeScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
+                .padding(16.dp)
+        ) {
+            Text("🏠", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
+        }
+        Text("首页", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
+    }
+}
+
+@Composable
+fun HotScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
+                .padding(16.dp)
+        ) {
+            Text("🔥", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
+        }
+        Text("沸点", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
+    }
+}
+
+@Composable
+fun DiscoverScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
+                .padding(16.dp)
+        ) {
+            Text("🔍", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
+        }
+        Text("发现", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
+    }
+}
+
+@Composable
+fun CoursesScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
+                .padding(16.dp)
+        ) {
+            Text("📚", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
+        }
+        Text("课程", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
+    }
+}
+
+@Composable
+fun ProfileScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
+                .padding(16.dp)
+        ) {
+            Text("👤", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
+        }
+        Text("我的", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
     }
 }
