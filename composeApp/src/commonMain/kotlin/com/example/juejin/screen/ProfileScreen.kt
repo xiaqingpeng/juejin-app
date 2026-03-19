@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.juejin.ui.Colors
 
 @Composable
 fun ProfileScreen() {
@@ -27,7 +28,7 @@ fun ProfileScreen() {
         Box(
             modifier = Modifier
                 .size(64.dp)
-                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
+                .background(Colors.primaryBlue, shape = MaterialTheme.shapes.medium)
                 .padding(16.dp)
         ) {
             androidx.compose.material3.Icon(

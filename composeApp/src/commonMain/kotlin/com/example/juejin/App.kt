@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.example.juejin.ui.Colors
 import com.example.juejin.enums.TabItem
 import com.example.juejin.screen.CoursesScreen
 import com.example.juejin.screen.DiscoverScreen
@@ -56,7 +57,7 @@ fun App() {
             bottomBar = {
                 // Bottom Navigation Bar
                 NavigationBar(
-                    containerColor = Color.White,
+                    containerColor = Colors.white,
                     tonalElevation = 8.dp
                 ) {
                     tabs.forEachIndexed { index, tab ->
@@ -64,7 +65,7 @@ fun App() {
                         NavigationBarItem(
                             icon = {
                                 // Use Material Icons with dynamic coloring
-                                val iconColor = if (isSelected) Color(0xFF1890FF) else Color(0xFF808080)
+                                val iconColor = if (isSelected) Colors.primaryBlue else Colors.unselectedGray
                                 androidx.compose.material3.Icon(
                                     imageVector = tab.icon,
                                     contentDescription = tab.title,
@@ -79,10 +80,10 @@ fun App() {
                                 }
                             },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Color(0xFF1890FF), // Blue color for selected items
-                                selectedTextColor = Color(0xFF1890FF),
-                                unselectedIconColor = Color(0xFF808080), // Gray color for unselected items
-                                unselectedTextColor = Color(0xFF808080),
+                                selectedIconColor = Colors.primaryBlue, // Blue color for selected items
+                                selectedTextColor = Colors.primaryBlue,
+                                unselectedIconColor = Colors.unselectedGray, // Gray color for unselected items
+                                unselectedTextColor = Colors.unselectedGray,
                                 indicatorColor = Color.Transparent // No indicator line
                             )
                         )
