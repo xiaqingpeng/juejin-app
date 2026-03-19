@@ -1,30 +1,43 @@
 package com.example.juejin
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.coroutines.launch
 
 // Tab items definition
 enum class TabItem(
-    val route: String,
-    val title: String
+    val title: String,
+    val icon: ImageVector
 ) {
-    Home("home", "首页"),
-    Hot("hot", "沸点"),
-    Discover("discover", "发现"),
-    Courses("courses", "课程"),
-    Profile("profile", "我的")
+    Home("首页", Icons.Filled.Home),
+    Hot("沸点", Icons.Filled.Fireplace),
+    Discover("发现", Icons.Filled.Explore),
+    Courses("课程", Icons.Filled.Book),
+    Profile("我的", Icons.Filled.Person)
 }
 
 
@@ -63,15 +76,13 @@ fun App() {
                         val isSelected = pagerState.currentPage == index
                         NavigationBarItem(
                             icon = {
-                                // Use emoji icons instead of Material Icons to avoid dependency issues
-                                val emoji = when (tab) {
-                                    TabItem.Home -> "🏠"
-                                    TabItem.Hot -> "🔥"
-                                    TabItem.Discover -> "🔍"
-                                    TabItem.Courses -> "📚"
-                                    TabItem.Profile -> "👤"
-                                }
-                                Text(emoji, fontSize = MaterialTheme.typography.bodyLarge.fontSize)
+                                // Use Material Icons with dynamic coloring
+                                val iconColor = if (isSelected) Color(0xFF1890FF) else Color(0xFF808080)
+                                androidx.compose.material3.Icon(
+                                    imageVector = tab.icon,
+                                    contentDescription = tab.title,
+                                    tint = iconColor
+                                )
                             },
                             label = { Text(tab.title) },
                             selected = isSelected,
@@ -105,15 +116,14 @@ fun App() {
                     // Add additional drag gesture support for better UX
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures {_, dragAmount ->
-                                val pageOffset = dragAmount / size.width
-                                coroutineScope.launch {
-                                    // Use scrollToPage with threshold for better compatibility
-                                    if (kotlin.math.abs(dragAmount) > size.width * 0.25) {
-                                        val targetPage = (pagerState.currentPage + (if (dragAmount < 0) 1 else -1)).coerceIn(0, tabs.size - 1)
-                                        pagerState.scrollToPage(targetPage)
+                                        coroutineScope.launch {
+                                            // Use scrollToPage with threshold for better compatibility
+                                            if (kotlin.math.abs(dragAmount) > size.width * 0.25) {
+                                                val targetPage = (pagerState.currentPage + (if (dragAmount < 0) 1 else -1)).coerceIn(0, tabs.size - 1)
+                                                pagerState.scrollToPage(targetPage)
+                                            }
+                                        }
                                     }
-                                }
-                            }
                     }
             ) {
                 // Content for each tab
