@@ -2,12 +2,9 @@ package com.example.juejin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
@@ -23,23 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.juejin.enums.TabItem
+import com.example.juejin.screen.CoursesScreen
+import com.example.juejin.screen.DiscoverScreen
+import com.example.juejin.screen.HomeScreen
+import com.example.juejin.screen.HotScreen
+import com.example.juejin.screen.ProfileScreen
 import kotlinx.coroutines.launch
-
-// Tab items definition
-enum class TabItem(
-    val title: String,
-    val icon: ImageVector
-) {
-    Home("首页", Icons.Filled.Home),
-    Hot("沸点", Icons.Filled.Fireplace),
-    Discover("发现", Icons.Filled.Explore),
-    Courses("课程", Icons.Filled.Book),
-    Profile("我的", Icons.Filled.Person)
-}
-
 
 
 @Composable
@@ -144,98 +131,7 @@ fun App() {
     }
 }
 
-// Individual screen components for each tab
-@Composable
-fun HomeScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
-        ) {
-            Text("🏠", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-        }
-        Text("首页", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
-    }
-}
 
-@Composable
-fun HotScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
-        ) {
-            Text("🔥", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-        }
-        Text("沸点", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
-    }
-}
 
-@Composable
-fun DiscoverScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
-        ) {
-            Text("🔍", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-        }
-        Text("发现", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
-    }
-}
 
-@Composable
-fun CoursesScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
-        ) {
-            Text("📚", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-        }
-        Text("课程", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
-    }
-}
 
-@Composable
-fun ProfileScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .background(Color(0xFF1890FF), shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
-        ) {
-            Text("👤", fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-        }
-        Text("我的", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = 16.dp))
-    }
-}
