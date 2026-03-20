@@ -46,3 +46,23 @@ in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and r
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+
+
+### 查看日志方法：
+
+- 方法 1：Android Studio Logcat
+  1. 打开 Logcat 窗口（View → Tool Windows → Logcat 或按 Cmd+6）
+  2. 在搜索框输入 tag:CoursesScreen
+  3. 选择日志级别为 Debug
+
+- 方法 2：使用 adb 命令
+```bash
+adb logcat -s "CoursesScreen:D"
+```
+
+- 方法 3：Android Studio 终端
+``` bash
+./gradlew :composeApp:installDebug && adb logcat | grep "CoursesScreen"
+
+```

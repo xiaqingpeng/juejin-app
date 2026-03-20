@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -31,6 +32,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
         implementation(libs.compose.runtime)
@@ -42,20 +44,23 @@ kotlin {
         implementation(libs.compose.uiToolingPreview)
         implementation(libs.androidx.lifecycle.viewmodelCompose)
         implementation(libs.androidx.lifecycle.runtimeCompose)
+        implementation(libs.ktor.client.core)
+        implementation(libs.ktor.client.content.negotiation)
+        implementation(libs.ktor.serialization.kotlinx.json)
+        implementation(libs.kotlinx.serialization.json)
+        implementation(libs.kermit)
+            implementation("co.touchlab:kermit:2.0.4") //Add latest version
     }
         iosMain.dependencies {
-            // No iOS-specific dependencies needed for this implementation
+            implementation(libs.ktor.client.darwin)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.ktor.client.java)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-        }
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
         }
     }
 }

@@ -29,6 +29,15 @@ object Typographys {
     val largeIconText: TextStyle
         @Composable
         get() = MaterialTheme.typography.headlineLarge
+
+
+    /**
+     * Large icon text style (used for emoji icons in screens)
+     */
+    val bodyMediumText: TextStyle
+        @Composable
+        get() = MaterialTheme.typography.bodyMedium
+
 }
 
 
