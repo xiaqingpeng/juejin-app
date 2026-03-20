@@ -27,8 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import com.example.juejin.model.EventItem
-import com.example.juejin.model.EventResponse
-import com.example.juejin.network.HttpClientManager
+import com.example.juejin.network.ApiRepository
 import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
@@ -58,26 +57,29 @@ fun CoursesScreen() {
             }
             try {
                 Logger.d("CoursesScreen") { "Loading page $page, isRefresh=$isRefresh" }
-                val httpResponse = HttpClientManager.get(
-                    "http://120.48.95.51:7001/api/analytics/events?startDate=2025-12-30&endDate=2026-01-11&page=$page&pageSize=10"
-                )
-                val responseBody = HttpClientManager.getResponseBody(httpResponse)
-                Logger.d("CoursesScreen") { "Response body: $responseBody" }
-                val response: EventResponse = HttpClientManager.parseResponse(httpResponse)
-                Logger.d("CoursesScreen") { "Parsed response success=${response.success}, events count=${response.data.events.size}, total=${response.data.total}" }
-                if (response.success) {
-                    if (isRefresh) {
-                        events = response.data.events
-                        currentPage = 1
-                    } else {
-                        events = events + response.data.events
-                        currentPage = page
+                val result = ApiRepository.getEvents(page = page, pageSize = 10)
+                
+                result.fold(
+                    onSuccess = { response ->
+                        Logger.d("CoursesScreen") { 
+                            "Parsed response success=${response.success}, events count=${response.data.events.size}, total=${response.data.total}" 
+                        }
+                        if (response.success) {
+                            if (isRefresh) {
+                                events = response.data.events
+                                currentPage = 1
+                            } else {
+                                events = events + response.data.events
+                                currentPage = page
+                            }
+                            hasMoreData = response.data.events.isNotEmpty() && page < response.data.totalPages
+                        }
+                    },
+                    onFailure = { error ->
+                        Logger.e("CoursesScreen") { "Error loading data: ${error.message}" }
+                        error.printStackTrace()
                     }
-                    hasMoreData = response.data.events.isNotEmpty() && page < response.data.totalPages
-                }
-            } catch (e: Exception) {
-                Logger.e("CoursesScreen") { "Error loading data: ${e.message}" }
-                e.printStackTrace()
+                )
             } finally {
                 isLoading = false
                 isLoadingMore = false

@@ -48,8 +48,8 @@ kotlin {
         implementation(libs.ktor.client.content.negotiation)
         implementation(libs.ktor.serialization.kotlinx.json)
         implementation(libs.kotlinx.serialization.json)
+        implementation(libs.kotlinx.datetime)
         implementation(libs.kermit)
-            implementation("co.touchlab:kermit:2.0.4") //Add latest version
     }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

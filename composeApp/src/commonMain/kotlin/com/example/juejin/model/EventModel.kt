@@ -31,18 +31,18 @@ data class EventProperties(
 
 @Serializable
 data class EventItem(
-    val id: String,
-    val eventName: String,
-    val eventType: String,
+    val id: String? = null,
+    val eventName: String? = null,
+    val eventType: String? = null,
     val properties: EventProperties? = null,
-    val userId: String,
+    val userId: String? = null,
     val sessionId: String? = null,
     val duration: Int? = null,
     val errorMessage: String? = null,
     val ip: String? = null,
     val userAgent: String? = null,
     val requestId: String? = null,
-    val createdAt: String
+    val createdAt: String? = null
 )
 
 @Serializable

@@ -37,15 +37,15 @@ fun EventCard(event: EventItem) {
         ) {
             // Header
             Text(
-                text = event.eventName,
+                text = event.eventName ?: "Unknown Event",
                 style = Typographys.screenTitle,
                 color = Colors.primaryBlue
             )
             Spacer(modifier = Modifier.height(8.dp))
 
             // Basic Info
-            InfoRow(label = "ID", value = event.id)
-            InfoRow(label = "Type", value = event.eventType)
+            InfoRow(label = "ID", value = event.id ?: "N/A")
+            InfoRow(label = "Type", value = event.eventType ?: "N/A")
             InfoRow(label = "IP", value = event.ip ?: "N/A")
             InfoRow(label = "User Agent", value = event.userAgent ?: "N/A")
             InfoRow(label = "Duration", value = "${event.duration ?: 0} ms")
