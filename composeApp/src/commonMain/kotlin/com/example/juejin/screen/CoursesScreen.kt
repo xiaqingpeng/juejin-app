@@ -56,10 +56,11 @@ fun CoursesScreen() {
         }
     }
 
-    // Load more on scroll to end
-    LaunchedEffect(listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index) {
+    // Load more on scroll to end - 只在有数据且滚动到底部时触发
+    LaunchedEffect(listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index, events.size) {
         val lastIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
-        if (lastIndex == events.size - 1 && hasMoreData && !isLoading) {
+        // 确保有数据且滚动到最后一个 item 时才加载更多
+        if (events.isNotEmpty() && lastIndex == events.size - 1 && hasMoreData && !isLoading) {
             EventViewModel.loadMore()
         }
     }
