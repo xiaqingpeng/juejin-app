@@ -11,9 +11,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +38,7 @@ import juejin.composeapp.generated.resources.tab_courses
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoursesScreen() {
     val listState = rememberLazyListState()
@@ -44,6 +47,7 @@ fun CoursesScreen() {
     var events by remember { mutableStateOf<List<EventItem>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
     var isLoadingMore by remember { mutableStateOf(false) }
+    var isRefreshing by remember { mutableStateOf(false) }
     var currentPage by remember { mutableStateOf(1) }
     var hasMoreData by remember { mutableStateOf(true) }
 
@@ -51,7 +55,7 @@ fun CoursesScreen() {
     val loadData = { page: Int, isRefresh: Boolean ->
         coroutineScope.launch {
             if (isRefresh) {
-                isLoading = true
+                isRefreshing = true
             } else {
                 isLoadingMore = true
             }
@@ -81,7 +85,7 @@ fun CoursesScreen() {
                     }
                 )
             } finally {
-                isLoading = false
+                isRefreshing = false
                 isLoadingMore = false
             }
         }
@@ -124,25 +128,30 @@ fun CoursesScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = { loadData(1, true) }
             ) {
-                items(events) { event ->
-                    EventCard(event = event)
-                }
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(events) { event ->
+                        EventCard(event = event)
+                    }
 
-                if (isLoadingMore) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(color = Colors.primaryBlue)
+                    if (isLoadingMore) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(color = Colors.primaryBlue)
+                            }
                         }
                     }
                 }
