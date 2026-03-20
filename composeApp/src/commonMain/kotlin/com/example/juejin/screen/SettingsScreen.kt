@@ -4,13 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,39 +30,43 @@ import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_home
-import juejin.composeapp.generated.resources.tab_profile
+import juejin.composeapp.generated.resources.tab_profile_back
 import juejin.composeapp.generated.resources.tab_profile_setting
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
+fun SettingsScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(Res.string.tab_profile),
+                        text = stringResource(Res.string.tab_profile_setting),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
                 },
-                actions = {
-                    IconButton(onClick = onSettingsClick) {
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
                         Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = stringResource(Res.string.tab_profile_setting),
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(Res.string.tab_profile_back),
                         )
                     }
                 },
+                actions = {
+                    // Empty box to balance the navigation icon side
+                    Box(modifier = Modifier.width(48.dp))
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
-//                    containerColor = Color.White
+                    containerColor = Color.White,
                 )
             )
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -71,14 +76,14 @@ fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
                         .background(Colors.primaryBlue, shape = MaterialTheme.shapes.medium)
                         .padding(16.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = stringResource(Res.string.tab_profile),
+                androidx.compose.material3.Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = stringResource(Res.string.tab_home),
                     tint = Color.White,
                     modifier = Modifier.size(32.dp)
                 )
             }
-            Text(stringResource(Res.string.tab_profile), style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
+            Text(text= stringResource(Res.string.tab_profile_setting), style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
         }
     }
 }

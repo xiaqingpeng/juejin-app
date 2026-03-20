@@ -5,4 +5,7 @@
     <string name="tab_courses">课程</string>
     <string name="tab_profile">我的</string>
     <string name="app_name">掘金APP</string>
+    <string name="tab_profile_setting">设置</string>
+    <string name="tab_profile_back">返回</string>
+
 </resources>
