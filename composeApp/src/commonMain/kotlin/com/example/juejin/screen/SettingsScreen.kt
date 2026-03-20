@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.juejin.model.UserInfo
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
 import juejin.composeapp.generated.resources.Res
@@ -36,7 +37,10 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onBackClick: () -> Unit = {}) {
+fun SettingsScreen(
+    onBackClick: () -> Unit = {},
+    userInfo: UserInfo? = null
+) {
     Scaffold(
         topBar = {
             Surface(
@@ -87,6 +91,11 @@ fun SettingsScreen(onBackClick: () -> Unit = {}) {
                 )
             }
             Text(text= stringResource(Res.string.tab_profile_setting), style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
+            // Display user info
+            userInfo?.let {
+                Text(text = "ID: ${it.id}", style = Typographys.screenTitle, modifier = Modifier.padding(top = 8.dp))
+                Text(text = "Name: ${it.name}", style = Typographys.screenTitle, modifier = Modifier.padding(top = 4.dp))
+            }
         }
     }
 }

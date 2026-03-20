@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.juejin.model.UserInfo
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
 import juejin.composeapp.generated.resources.Res
@@ -34,7 +35,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
+fun ProfileScreen(onSettingsClick: (UserInfo) -> Unit = {}) {
     Scaffold(
         topBar = {
             Surface(
@@ -54,7 +55,7 @@ fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
 //                    )
                     // Settings icon on right
                     IconButton(
-                        onClick = onSettingsClick,
+                        onClick = { onSettingsClick(UserInfo(id = 1, name = "我的")) },
                         modifier = Modifier.align(Alignment.CenterEnd)
                     ) {
                         Icon(

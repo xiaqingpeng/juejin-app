@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.example.juejin.enums.TabItem
+import com.example.juejin.model.UserInfo
 import com.example.juejin.screen.CoursesScreen
 import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
@@ -56,6 +57,7 @@ fun App() {
 
         // Navigation state
         var showSettings by androidx.compose.runtime.remember { mutableStateOf(false) }
+        var userInfo by androidx.compose.runtime.remember { mutableStateOf<UserInfo?>(null) }
 
         // Scaffold provides proper layout structure
         Scaffold(
@@ -111,7 +113,10 @@ fun App() {
             // Show Settings screen or Main content
             if (showSettings) {
                 Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                    SettingsScreen(onBackClick = { showSettings = false })
+                    SettingsScreen(
+                        onBackClick = { showSettings = false },
+                        userInfo = userInfo
+                    )
                 }
             } else {
                 // Horizontal Pager with gesture support
@@ -147,7 +152,12 @@ fun App() {
                             TabItem.Hot -> HotScreen()
                             TabItem.Discover -> DiscoverScreen()
                             TabItem.Courses -> CoursesScreen()
-                            TabItem.Profile -> ProfileScreen(onSettingsClick = { showSettings = true })
+                            TabItem.Profile -> ProfileScreen(
+                                onSettingsClick = { user ->
+                                    userInfo = user
+                                    showSettings = true
+                                }
+                            )
                         }
                     }
                 }
