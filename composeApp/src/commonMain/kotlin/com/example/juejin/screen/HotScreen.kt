@@ -18,27 +18,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.tab_hot
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HotScreen() {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier
-                .size(64.dp)
-                .background(Colors.primaryBlue, shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
+                modifier =
+                        Modifier.size(64.dp)
+                                .background(Colors.primaryBlue, shape = MaterialTheme.shapes.medium)
+                                .padding(16.dp)
         ) {
             androidx.compose.material3.Icon(
-                imageVector = Icons.Filled.Fireplace,
-                contentDescription = "沸点",
-                tint = Color.White,
-                modifier = Modifier.size(32.dp)
+                    imageVector = Icons.Filled.Fireplace,
+                    contentDescription = stringResource(Res.string.tab_hot),
+                    tint = Color.White,
+                    modifier = Modifier.size(32.dp)
             )
         }
-        Text("沸点", style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
+        Text(stringResource(Res.string.tab_hot), style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
     }
 }

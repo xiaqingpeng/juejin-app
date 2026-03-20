@@ -28,97 +28,105 @@ import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
 import com.example.juejin.ui.Colors
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
-
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
     MaterialTheme {
-        val tabs = listOf(
-            TabItem.Home,
-            TabItem.Hot,
-            TabItem.Discover,
-            TabItem.Courses,
-            TabItem.Profile
-        )
+        val tabs =
+                listOf(
+                        TabItem.Home,
+                        TabItem.Hot,
+                        TabItem.Discover,
+                        TabItem.Courses,
+                        TabItem.Profile
+                )
 
         // Pager state with proper initialization
-        val pagerState = rememberPagerState(
-            initialPage = 0,
-            initialPageOffsetFraction = 0f
-        ) {
-            tabs.size
-        }
+        val pagerState =
+                rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { tabs.size }
 
         val coroutineScope = rememberCoroutineScope()
 
         // Scaffold provides proper layout structure
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                // Bottom Navigation Bar
-                NavigationBar(
-                    containerColor = Colors.white,
-                    tonalElevation = 8.dp
-                ) {
-                    tabs.forEachIndexed { index, tab ->
-                        val isSelected = pagerState.currentPage == index
-                        NavigationBarItem(
-                            icon = {
-                                // Use Material Icons with dynamic coloring
-                                val iconColor = if (isSelected) Colors.primaryBlue else Colors.unselectedGray
-                                androidx.compose.material3.Icon(
-                                    imageVector = tab.icon,
-                                    contentDescription = tab.title,
+                modifier = Modifier.fillMaxSize(),
+                bottomBar = {
+                    // Bottom Navigation Bar
+                    NavigationBar(containerColor = Colors.white, tonalElevation = 8.dp) {
+                        tabs.forEachIndexed { index, tab ->
+                            val isSelected = pagerState.currentPage == index
+                            NavigationBarItem(
+                                    icon = {
+                                        // Use Material Icons with dynamic coloring
+                                        val iconColor =
+                                                if (isSelected) Colors.primaryBlue
+                                                else Colors.unselectedGray
+                                        androidx.compose.material3.Icon(
+                                                imageVector = tab.icon,
+                                    contentDescription = stringResource(tab.title),
                                     tint = iconColor
-                                )
-                            },
-                            label = { Text(tab.title) },
-                            selected = isSelected,
-                            onClick = {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(index)
-                                }
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Colors.primaryBlue, // Blue color for selected items
-                                selectedTextColor = Colors.primaryBlue,
-                                unselectedIconColor = Colors.unselectedGray, // Gray color for unselected items
-                                unselectedTextColor = Colors.unselectedGray,
-                                indicatorColor = Color.Transparent // No indicator line
+                                        )
+                                    },
+                                    label = { Text(stringResource(tab.title)) },
+                                    selected = isSelected,
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(index)
+                                        }
+                                    },
+                                    colors =
+                                            NavigationBarItemDefaults.colors(
+                                                    selectedIconColor =
+                                                            Colors.primaryBlue, // Blue color for
+                                                    // selected items
+                                                    selectedTextColor = Colors.primaryBlue,
+                                                    unselectedIconColor =
+                                                            Colors.unselectedGray, // Gray color for
+                                                    // unselected
+                                                    // items
+                                                    unselectedTextColor = Colors.unselectedGray,
+                                                    indicatorColor =
+                                                            Color.Transparent // No indicator line
+                                            )
                             )
-                        )
+                        }
                     }
                 }
-            }
         ) {
             // Content padding from Scaffold
             val padding = it
 
             // Horizontal Pager with gesture support
             HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .background(MaterialTheme.colorScheme.background)
-                    // Add additional drag gesture support for better UX
-                    .pointerInput(Unit) {
-                        detectHorizontalDragGestures {_, dragAmount ->
-                                        coroutineScope.launch {
-                                            // Use scrollToPage with threshold for better compatibility
-                                            if (kotlin.math.abs(dragAmount) > size.width * 0.25) {
-                                                val targetPage = (pagerState.currentPage + (if (dragAmount < 0) 1 else -1)).coerceIn(0, tabs.size - 1)
-                                                pagerState.scrollToPage(targetPage)
+                    state = pagerState,
+                    modifier =
+                            Modifier.fillMaxSize()
+                                    .padding(padding)
+                                    .background(MaterialTheme.colorScheme.background)
+                                    // Add additional drag gesture support for better UX
+                                    .pointerInput(Unit) {
+                                        detectHorizontalDragGestures { _, dragAmount ->
+                                            coroutineScope.launch {
+                                                // Use scrollToPage with threshold for better
+                                                // compatibility
+                                                if (kotlin.math.abs(dragAmount) > size.width * 0.25
+                                                ) {
+                                                    val targetPage =
+                                                            (pagerState.currentPage +
+                                                                            (if (dragAmount < 0) 1
+                                                                            else -1))
+                                                                    .coerceIn(0, tabs.size - 1)
+                                                    pagerState.scrollToPage(targetPage)
+                                                }
                                             }
                                         }
                                     }
-                    }
             ) {
                 // Content for each tab
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     when (tabs[pagerState.currentPage]) {
                         TabItem.Home -> HomeScreen()
                         TabItem.Hot -> HotScreen()
@@ -131,8 +139,3 @@ fun App() {
         }
     }
 }
-
-
-
-
-

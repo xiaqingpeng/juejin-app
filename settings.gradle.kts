@@ -17,6 +17,10 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+
+        maven("https://maven.aliyun.com")
+        maven("https://maven.aliyun.com")
+
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
