@@ -18,82 +18,32 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.juejin.model.EventItem
-import com.example.juejin.network.ApiRepository
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
+import com.example.juejin.viewmodel.EventViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_courses
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoursesScreen() {
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
 
-    var events by remember { mutableStateOf<List<EventItem>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(false) }
-    var isLoadingMore by remember { mutableStateOf(false) }
-    var isRefreshing by remember { mutableStateOf(false) }
-    var currentPage by remember { mutableStateOf(1) }
-    var hasMoreData by remember { mutableStateOf(true) }
-
-    // Load data function
-    val loadData = { page: Int, isRefresh: Boolean ->
-        coroutineScope.launch {
-            if (isRefresh) {
-                isRefreshing = true
-            } else {
-                isLoadingMore = true
-            }
-            try {
-                println("[CoursesScreen] Loading page $page, isRefresh=$isRefresh")
-                val result = ApiRepository.getEvents(page = page, pageSize = 10)
-                
-                result.fold(
-                    onSuccess = { response ->
-                        println("[CoursesScreen] Parsed response success=${response.success}, events count=${response.data.events.size}, total=${response.data.total}")
-                        if (response.success) {
-                            if (isRefresh) {
-                                events = response.data.events
-                                currentPage = 1
-                                println("[CoursesScreen] Refreshed with ${response.data.events.size} events")
-                                // 打印 events 为 JSON 字符串
-                                val jsonString = Json.encodeToString(response.data.events)
-                                println("[CoursesScreen] Events JSON: $jsonString")
-                            } else {
-                                events = events + response.data.events
-                                currentPage = page
-                                println("[CoursesScreen] Loaded more, total events: ${events.size}")
-                            }
-                            hasMoreData = response.data.events.isNotEmpty() && page < response.data.totalPages
-                        }
-                    },
-                    onFailure = { error ->
-                        println("[CoursesScreen] Error loading data: ${error.message}")
-                        error.printStackTrace()
-                    }
-                )
-            } finally {
-                isRefreshing = false
-                isLoadingMore = false
-            }
-        }
-    }
+    // 从全局 ViewModel 订阅状态
+    val events by EventViewModel.events.collectAsState()
+    val isLoading by EventViewModel.isLoading.collectAsState()
+    val hasMoreData by EventViewModel.hasMoreData.collectAsState()
+    val errorMessage by EventViewModel.errorMessage.collectAsState()
 
     // Initial load (使用 remember 确保只执行一次)
     val initialLoadExecuted = remember { mutableStateOf(false) }
@@ -101,15 +51,16 @@ fun CoursesScreen() {
         androidx.compose.runtime.SideEffect {
             if (!initialLoadExecuted.value) {
                 initialLoadExecuted.value = true
-                loadData(1, true)
+                EventViewModel.refresh()
             }
         }
     }
 
     // Load more on scroll to end
     LaunchedEffect(listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index) {
-        if (!isLoadingMore && hasMoreData && listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == events.size - 1) {
-            loadData(currentPage + 1, false)
+        val lastIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+        if (lastIndex == events.size - 1 && hasMoreData && !isLoading) {
+            EventViewModel.loadMore()
         }
     }
 
@@ -139,8 +90,8 @@ fun CoursesScreen() {
                 .padding(paddingValues)
         ) {
             PullToRefreshBox(
-                isRefreshing = isRefreshing,
-                onRefresh = { loadData(1, true) }
+                isRefreshing = isLoading,
+                onRefresh = { EventViewModel.refresh() }
             ) {
                 LazyColumn(
                     state = listState,
@@ -152,7 +103,7 @@ fun CoursesScreen() {
                         EventCard(event = event)
                     }
 
-                    if (isLoadingMore) {
+                    if (isLoading && events.isNotEmpty()) {
                         item {
                             Box(
                                 modifier = Modifier

@@ -25,7 +25,6 @@ import com.example.juejin.ui.Typographys
 import com.example.juejin.ui.components.TopNavigationBar
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_profile
-import juejin.composeapp.generated.resources.tab_profile_setting
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
