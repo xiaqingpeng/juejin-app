@@ -1,6 +1,5 @@
 package com.example.juejin.network
 
-import co.touchlab.kermit.Logger
 import com.example.juejin.model.EventResponse
 
 /**
@@ -39,18 +38,21 @@ object ApiRepository {
             val start = startDate ?: dateRange.first
             val end = endDate ?: dateRange.second
             
-            Logger.d("ApiRepository") { "Date range: $start to $end" }
+            println("[ApiRepository] Date range: $start to $end")
             
             val path = "/api/analytics/events?startDate=$start&endDate=$end&page=$page&pageSize=$pageSize"
             val url = ApiConfig.buildUrl(path)
             
-            Logger.d("ApiRepository") { "Request URL: $url" }
+            println("[ApiRepository] Request URL: $url")
             
             val response = HttpClientManager.get(url)
             val result: EventResponse = HttpClientManager.parseResponse(response)
+            
+            println("[ApiRepository] Response success: ${result.success}, events count: ${result.data.events.size}")
+            
             Result.success(result)
         } catch (e: Exception) {
-            Logger.e("ApiRepository") { "Error: ${e.message}" }
+            println("[ApiRepository] Error: ${e.message}")
             e.printStackTrace()
             Result.failure(e)
         }

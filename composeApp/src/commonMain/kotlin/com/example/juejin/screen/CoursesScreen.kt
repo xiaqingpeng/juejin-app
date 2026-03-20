@@ -27,9 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
 import com.example.juejin.model.EventItem
 import com.example.juejin.network.ApiRepository
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
@@ -60,27 +61,30 @@ fun CoursesScreen() {
                 isLoadingMore = true
             }
             try {
-                Logger.d("CoursesScreen") { "Loading page $page, isRefresh=$isRefresh" }
+                println("[CoursesScreen] Loading page $page, isRefresh=$isRefresh")
                 val result = ApiRepository.getEvents(page = page, pageSize = 10)
                 
                 result.fold(
                     onSuccess = { response ->
-                        Logger.d("CoursesScreen") { 
-                            "Parsed response success=${response.success}, events count=${response.data.events.size}, total=${response.data.total}" 
-                        }
+                        println("[CoursesScreen] Parsed response success=${response.success}, events count=${response.data.events.size}, total=${response.data.total}")
                         if (response.success) {
                             if (isRefresh) {
                                 events = response.data.events
                                 currentPage = 1
+                                println("[CoursesScreen] Refreshed with ${response.data.events.size} events")
+                                // 打印 events 为 JSON 字符串
+                                val jsonString = Json.encodeToString(response.data.events)
+                                println("[CoursesScreen] Events JSON: $jsonString")
                             } else {
                                 events = events + response.data.events
                                 currentPage = page
+                                println("[CoursesScreen] Loaded more, total events: ${events.size}")
                             }
                             hasMoreData = response.data.events.isNotEmpty() && page < response.data.totalPages
                         }
                     },
                     onFailure = { error ->
-                        Logger.e("CoursesScreen") { "Error loading data: ${error.message}" }
+                        println("[CoursesScreen] Error loading data: ${error.message}")
                         error.printStackTrace()
                     }
                 )
@@ -91,9 +95,15 @@ fun CoursesScreen() {
         }
     }
 
-    // Initial load
-    LaunchedEffect(Unit) {
-        loadData(1, true)
+    // Initial load (使用 remember 确保只执行一次)
+    val initialLoadExecuted = remember { mutableStateOf(false) }
+    if (!initialLoadExecuted.value) {
+        androidx.compose.runtime.SideEffect {
+            if (!initialLoadExecuted.value) {
+                initialLoadExecuted.value = true
+                loadData(1, true)
+            }
+        }
     }
 
     // Load more on scroll to end

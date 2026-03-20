@@ -122,6 +122,7 @@ fun App() {
                 // Horizontal Pager with gesture support
                 HorizontalPager(
                         state = pagerState,
+                        beyondViewportPageCount = 0, // 禁用预加载，只加载当前页面
                         modifier =
                                 Modifier.fillMaxSize()
                                         .padding(padding)
@@ -144,10 +145,10 @@ fun App() {
                                                 }
                                             }
                                         }
-                ) {
-                    // Content for each tab
+                ) { page ->
+                    // Content for each tab - 使用 page 参数而不是 currentPage
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        when (tabs[pagerState.currentPage]) {
+                        when (tabs[page]) {
                             TabItem.Home -> HomeScreen()
                             TabItem.Hot -> HotScreen()
                             TabItem.Discover -> DiscoverScreen()
