@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.juejin.platform.openUrl
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.privacy_dialog_agree
 import juejin.composeapp.generated.resources.privacy_dialog_basic_version
@@ -50,6 +51,10 @@ fun PrivacyPolicyDialog(
     onBasicVersionClick: () -> Unit = {}
 ) {
     val linkColor = Color(0xFF1677FF)
+    
+    // URL 定义
+    val userAgreementUrl = "https://cdn.lifesense.com/sportsAppWebViews/webpack/simple_page/agreement.html"
+    val privacyPolicyUrl = "https://cdn.lifesense.com/common/#/privacyPolicy"
 
     Dialog(onDismissRequest = { /* 禁止外部关闭 */ }) {
         Column(
@@ -95,10 +100,10 @@ fun PrivacyPolicyDialog(
                     
                     if (offset in uaStart..uaEnd) {
                         println("[PrivacyDialog] 用户点击《用户协议》")
-                        onUserAgreementClick()
+                        openUrl(userAgreementUrl)
                     } else if (offset in ppStart..ppEnd) {
                         println("[PrivacyDialog] 用户点击《隐私政策》")
-                        onPrivacyPolicyClick()
+                        openUrl(privacyPolicyUrl)
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium
