@@ -1,68 +1,65 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+# Kotlin Multiplatform 打包指南
 
-### Build and Run Android Application
+## Android
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+| 类型 | 命令 | 产物 |
+|------|------|------|
+| 开发测试 | `./gradlew :composeApp:assembleDebug` | APK |
+| 正式发布 | `./gradlew :composeApp:assembleRelease` | APK |
+| 上架专用 | `./gradlew :composeApp:bundleRelease` | AAB |
 
-### Build and Run Desktop (JVM) Application
-
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+**产物路径**：`composeApp/build/outputs/apk/release/`
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## iOS
 
+| 场景 | 方式 | 说明 |
+|------|------|------|
+| 模拟器运行 | Android Studio 直接运行 | 或使用 `iosDeployAppleSim` 命令 |
+| 生成 Framework | `./gradlew :composeApp:embedAndSignAppleFrameworkForXcode` | 供 Xcode 调用 |
+| 正式分发 | Xcode → Product → Archive → Distribute App | 导出 `.ipa` 文件 |
 
+**环境要求**：macOS + 开发者证书
 
-### 查看日志方法：
+---
 
-- 方法 1：Android Studio Logcat
-  1. 打开 Logcat 窗口（View → Tool Windows → Logcat 或按 Cmd+6）
-  2. 在搜索框输入 tag:CoursesScreen
-  3. 选择日志级别为 Debug
+## Web
 
-- 方法 2：使用 adb 命令
+| 类型 | 命令 | 产物 |
+|------|------|------|
+| 生产打包 | `./gradlew :composeApp:wasmJsBrowserDistribution` | HTML/JS/Wasm |
+| 开发运行 | `./gradlew :composeApp:wasmJsBrowserRun` | 热重载支持 |
+
+**产物路径**：`composeApp/build/dist/wasmJs/productionExecutable/`
+
+---
+
+## Desktop
+
+| 平台 | 命令 | 产物 |
+|------|------|------|
+| Windows | `./gradlew packageExe` | EXE 安装包 |
+| macOS | `./gradlew packageDmg` | DMG 安装包 |
+| Linux | `./gradlew packageDeb` | DEB 安装包 |
+
+---
+
+## 日志查看
+
 ```bash
 adb logcat -s "CoursesScreen:D"
 ```
 
-- 方法 3：Android Studio 终端
-``` bash
-./gradlew :composeApp:installDebug && adb logcat | grep "CoursesScreen"
+---
 
-```
+## 平台速查
+
+| 平台 | 核心命令 | 产物 | 前置条件 |
+|------|----------|------|----------|
+| Android | `assembleRelease` | APK/AAB | 签名配置 |
+| iOS | Xcode Archive | IPA | macOS + 证书 |
+| Web | `wasmJsBrowserDistribution` | HTML/JS/Wasm | 无 |
+| Desktop | `packageExe` / `packageDmg` | EXE/DMG | 本地 OS |
