@@ -28,8 +28,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +45,18 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoursesScreen() {
+    // 导航状态
+    var selectedLogStat by remember { mutableStateOf<com.example.juejin.model.LogStatsItem?>(null) }
+
+    // 如果选中了某个日志项，显示详情页面
+    if (selectedLogStat != null) {
+        CourseDetailScreen(
+            logStat = selectedLogStat,
+            onBackClick = { selectedLogStat = null }
+        )
+        return
+    }
+
     // 平台列表（All 为全平台，null 表示不传 platform 参数）
     val platforms = listOf(
         null to "全部",
@@ -146,7 +160,8 @@ fun CoursesScreen() {
                 isLoading = isLoading,
                 hasMoreData = hasMoreData,
                 total = total,
-                avgDurationMs = avgDurationMs
+                avgDurationMs = avgDurationMs,
+                onItemClick = { logStat -> selectedLogStat = logStat }
             )
         }
     }
@@ -160,7 +175,8 @@ private fun PlatformLogStatsPage(
     isLoading: Boolean,
     hasMoreData: Boolean,
     total: Int,
-    avgDurationMs: Int
+    avgDurationMs: Int,
+    onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -203,7 +219,10 @@ private fun PlatformLogStatsPage(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(logStats) { logStat ->
-                    EventCard(logStat = logStat)
+                    EventCard(
+                        logStat = logStat,
+                        onClick = { onItemClick(logStat) }
+                    )
                 }
 
                 if (isLoading && logStats.isNotEmpty()) {
