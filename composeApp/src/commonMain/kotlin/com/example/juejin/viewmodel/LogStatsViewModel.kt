@@ -42,7 +42,7 @@ object LogStatsViewModel {
      * 加载日志统计列表
      * @param pageNum 页码
      * @param isRefresh 是否刷新
-     * @param platform 平台（如 Windows, macOS, Linux, iOS, Android, Web）
+     * @param platform 平台（如 Windows, macOS, Linux, iOS, Android, Web），null 表示全平台
      * @param startTime 开始时间（ISO 8601 格式）
      * @param endTime 结束时间（ISO 8601 格式）
      */
@@ -55,10 +55,8 @@ object LogStatsViewModel {
     ) {
         if (GlobalState.isLoading.value) return
         
-        // 更新当前平台
-        if (platform != null) {
-            currentPlatform = platform
-        }
+        // 更新当前平台（包括 null，表示 All/全平台）
+        currentPlatform = platform
         
         viewModelScope.launch {
             GlobalState.setLoading(true)
@@ -69,7 +67,7 @@ object LogStatsViewModel {
                 
                 val result = ApiRepository.getLogStats(
                     pageNum = pageNum,
-                    pageSize = 100,
+                    pageSize = 10,
                     platform = currentPlatform,
                     startTime = startTime,
                     endTime = endTime

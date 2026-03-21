@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
@@ -40,22 +38,23 @@ import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
 import com.example.juejin.viewmodel.LogStatsViewModel
-import juejin.composeapp.generated.resources.Res
-import juejin.composeapp.generated.resources.tab_courses
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoursesScreen() {
-    // 平台列表（从接口数据中获取，这里定义支持的 platform 和对应的显示名称）
+    // 平台列表（All 为全平台，null 表示不传 platform 参数）
     val platforms = listOf(
-        "Windows" to "Windows",
-        "macOS" to "macOS",
-        "Linux" to "Linux",
-        "iOS" to "iOS",
-        "Android" to "Android",
-        "Web" to "Web"
+        null to "全部",
+        "Android" to "谷歌Android",
+        "Harmony" to "华为鸿蒙",
+        "iOS" to "苹果iOS",
+        "Linux" to "嵌入式Linux",
+        "MacOS" to "苹果MacOS",
+        "MiniProgram" to "微信小程序",
+        "TV" to "Android TV",
+        "Web" to "Web网页",
+        "Windows" to "微软Windows"
     )
 
     val pagerState = rememberPagerState(initialPage = 0) { platforms.size }
@@ -73,7 +72,7 @@ fun CoursesScreen() {
 
     // 当切换 Tab 时重新加载数据
     LaunchedEffect(currentPage) {
-        val platform = platforms[currentPage].first
+        val platform = platforms[currentPage].first // null 表示 All/全平台
         LogStatsViewModel.refresh(platform = platform)
     }
 
@@ -84,19 +83,7 @@ fun CoursesScreen() {
                 shadowElevation = 0.dp
             ) {
                 Column {
-                    // 标题
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.tab_courses),
-                            style = Typographys.screenTitle
-                        )
-                    }
-                    // 平台 Tab Row
+                    // 平台 Tab Row（移除课程标题）
                     ScrollableTabRow(
                         selectedTabIndex = pagerState.currentPage,
                         modifier = Modifier.fillMaxWidth(),
@@ -115,7 +102,7 @@ fun CoursesScreen() {
                         },
                         divider = {}
                     ) {
-                        platforms.forEachIndexed { index, (platform, displayName) ->
+                        platforms.forEachIndexed { index, (platformKey, displayName) ->
                             Tab(
                                 selected = pagerState.currentPage == index,
                                 onClick = {
@@ -152,9 +139,9 @@ fun CoursesScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) { page ->
-            val platform = platforms[page].first
+            val platformKey = platforms[page].first
             PlatformLogStatsPage(
-                platform = platform,
+                platform = platformKey,
                 logStats = logStats,
                 isLoading = isLoading,
                 hasMoreData = hasMoreData,
@@ -168,7 +155,7 @@ fun CoursesScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlatformLogStatsPage(
-    platform: String,
+    platform: String?,
     logStats: List<com.example.juejin.model.LogStatsItem>,
     isLoading: Boolean,
     hasMoreData: Boolean,
