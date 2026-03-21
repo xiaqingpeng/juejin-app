@@ -1,6 +1,6 @@
 package com.example.juejin.network
 
-import com.example.juejin.model.EventResponse
+import com.example.juejin.model.LogStatsResponse
 
 /**
  * API 请求仓库
@@ -8,47 +8,41 @@ import com.example.juejin.model.EventResponse
  */
 object ApiRepository {
 
-     /**
-     * 获取最近一个月的日期范围
-     * @return Pair<startDate, endDate> 格式为 "yyyy-MM-dd"
-     */
-    fun getLastMonthDateRange(): Pair<String, String> {
-        // 使用固定日期范围，避免 kotlinx-datetime 兼容性问题
-        // TODO: 后续可以改用动态日期计算
-        return Pair("2025-12-20", "2026-03-20")
-    }
-    
     /**
-     * 获取事件列表
-     * @param page 页码
+     * 获取系统日志统计列表
+     * @param pageNum 页码
      * @param pageSize 每页数量
-     * @param startDate 开始日期（默认为最近一个月）
-     * @param endDate 结束日期（默认为当前日期）
-     * @return EventResponse 事件响应
+     * @param startTime 开始时间（ISO 8601 格式，如：2026-03-21T00:00:00Z）
+     * @param endTime 结束时间（ISO 8601 格式，如：2026-03-21T23:59:59Z）
+     * @return LogStatsResponse 日志统计响应
      */
-    suspend fun getEvents(
-        page: Int = 1,
+    suspend fun getLogStats(
+        pageNum: Int = 1,
         pageSize: Int = 10,
-        startDate: String? = null,
-        endDate: String? = null
-    ): Result<EventResponse> {
+        startTime: String? = null,
+        endTime: String? = null
+    ): Result<LogStatsResponse> {
         return try {
-            // 获取日期范围
-            val dateRange = getLastMonthDateRange()
-            val start = startDate ?: dateRange.first
-            val end = endDate ?: dateRange.second
+            // 构建查询参数
+            val params = buildString {
+                append("?pageNum=$pageNum&pageSize=$pageSize")
+                if (!startTime.isNullOrEmpty()) {
+                    append("&startTime=$startTime")
+                }
+                if (!endTime.isNullOrEmpty()) {
+                    append("&endTime=$endTime")
+                }
+            }
             
-            println("[ApiRepository] Date range: $start to $end")
-            
-            val path = "/api/analytics/events?startDate=$start&endDate=$end&page=$page&pageSize=$pageSize"
+            val path = "/system/logs/stats$params"
             val url = ApiConfig.buildUrl(path)
             
             println("[ApiRepository] Request URL: $url")
             
             val response = HttpClientManager.get(url)
-            val result: EventResponse = HttpClientManager.parseResponse(response)
+            val result: LogStatsResponse = HttpClientManager.parseResponse(response)
             
-            println("[ApiRepository] Response success: ${result.success}, events count: ${result.data.events.size}")
+            println("[ApiRepository] Response code: ${result.code}, rows count: ${result.rows.size}, total: ${result.total}")
             
             Result.success(result)
         } catch (e: Exception) {

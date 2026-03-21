@@ -1,6 +1,6 @@
 package com.example.juejin.store
 
-import com.example.juejin.model.EventItem
+import com.example.juejin.model.LogStatsItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,9 +11,17 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 object GlobalState {
     
-    // 事件列表状态
-    private val _events = MutableStateFlow<List<EventItem>>(emptyList())
-    val events: StateFlow<List<EventItem>> = _events.asStateFlow()
+    // 日志统计列表状态
+    private val _logStats = MutableStateFlow<List<LogStatsItem>>(emptyList())
+    val logStats: StateFlow<List<LogStatsItem>> = _logStats.asStateFlow()
+    
+    // 总记录数
+    private val _total = MutableStateFlow(0)
+    val total: StateFlow<Int> = _total.asStateFlow()
+    
+    // 平均响应时间
+    private val _avgDurationMs = MutableStateFlow(0)
+    val avgDurationMs: StateFlow<Int> = _avgDurationMs.asStateFlow()
     
     // 当前页码
     private val _currentPage = MutableStateFlow(1)
@@ -32,17 +40,31 @@ object GlobalState {
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
     
     /**
-     * 设置事件列表
+     * 设置日志统计列表
      */
-    fun setEvents(events: List<EventItem>) {
-        _events.value = events
+    fun setLogStats(logStats: List<LogStatsItem>) {
+        _logStats.value = logStats
     }
     
     /**
-     * 追加事件列表（用于加载更多）
+     * 追加日志统计列表（用于加载更多）
      */
-    fun appendEvents(events: List<EventItem>) {
-        _events.value = _events.value + events
+    fun appendLogStats(logStats: List<LogStatsItem>) {
+        _logStats.value = _logStats.value + logStats
+    }
+    
+    /**
+     * 设置总记录数
+     */
+    fun setTotal(total: Int) {
+        _total.value = total
+    }
+    
+    /**
+     * 设置平均响应时间
+     */
+    fun setAvgDurationMs(avgDurationMs: Int) {
+        _avgDurationMs.value = avgDurationMs
     }
     
     /**
@@ -84,7 +106,9 @@ object GlobalState {
      * 重置所有状态
      */
     fun reset() {
-        _events.value = emptyList()
+        _logStats.value = emptyList()
+        _total.value = 0
+        _avgDurationMs.value = 0
         _currentPage.value = 1
         _hasMoreData.value = true
         _isLoading.value = false

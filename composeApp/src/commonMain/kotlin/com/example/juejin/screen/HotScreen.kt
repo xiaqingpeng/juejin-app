@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
-import com.example.juejin.viewmodel.EventViewModel
+import com.example.juejin.viewmodel.LogStatsViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_hot
 import org.jetbrains.compose.resources.stringResource
@@ -38,9 +38,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun HotScreen() {
     // 从全局 ViewModel 订阅状态（共享 CoursesScreen 的数据）
-    val events by EventViewModel.events.collectAsState()
-    val isLoading by EventViewModel.isLoading.collectAsState()
-    val hasMoreData by EventViewModel.hasMoreData.collectAsState()
+    val logStats by LogStatsViewModel.logStats.collectAsState()
+    val isLoading by LogStatsViewModel.isLoading.collectAsState()
+    val hasMoreData by LogStatsViewModel.hasMoreData.collectAsState()
+    val total by LogStatsViewModel.total.collectAsState()
+    val avgDurationMs by LogStatsViewModel.avgDurationMs.collectAsState()
 
     // 下拉刷新状态
     var isRefreshing by remember { mutableStateOf(false) }
@@ -48,14 +50,14 @@ fun HotScreen() {
     // 下拉刷新回调
     val onRefresh = {
         isRefreshing = true
-        EventViewModel.refresh()
+        LogStatsViewModel.refresh()
         isRefreshing = false
     }
 
     // 首次加载数据（如果全局状态为空）
     LaunchedEffect(Unit) {
-        if (events.isEmpty() && !isLoading) {
-            EventViewModel.refresh()
+        if (logStats.isEmpty() && !isLoading) {
+            LogStatsViewModel.refresh()
         }
     }
 
@@ -84,6 +86,23 @@ fun HotScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            // 统计信息展示
+            if (logStats.isNotEmpty()) {
+                Surface(
+                    color = Colors.primaryBlue.copy(alpha = 0.1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        style = Typographys.bodyMediumText,
+                        color = Colors.primaryBlue
+                    )
+                }
+            }
+
             PullToRefreshBox(
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh
@@ -93,14 +112,14 @@ fun HotScreen() {
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(events) { event ->
-                        EventCard(event = event)
+                    items(logStats) { logStat ->
+                        EventCard(logStat = logStat)
                     }
                 }
             }
 
             // 初始加载指示器
-            if (isLoading && events.isEmpty()) {
+            if (isLoading && logStats.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -110,7 +129,7 @@ fun HotScreen() {
             }
 
             // 空数据提示
-            if (!isLoading && events.isEmpty()) {
+            if (!isLoading && logStats.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
