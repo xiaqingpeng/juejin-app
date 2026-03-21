@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.juejin.enums.TabItem
 import com.example.juejin.model.LogStatsItem
 import com.example.juejin.screen.CourseDetailScreen
@@ -197,22 +199,30 @@ fun App() {
 
             // Show Notification Permission Dialog (after privacy accepted)
             if (showNotificationDialog) {
-                NotificationPermissionDialog(
-                    onDismiss = { showNotificationDialog = false },
-                    onAllow = {
-                        println("[NotificationDialog] 用户点击始终允许")
-                        showNotificationDialog = false
-                        // 请求通知权限
-                        coroutineScope.launch {
-                            val granted = requestNotificationPermission()
-                            println("[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}")
+                Dialog(
+                    onDismissRequest = { showNotificationDialog = false },
+                    properties = DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true
+                    )
+                ) {
+                    NotificationPermissionDialog(
+                        onDismiss = { showNotificationDialog = false },
+                        onAllow = {
+                            println("[NotificationDialog] 用户点击始终允许")
+                            showNotificationDialog = false
+                            // 请求通知权限
+                            coroutineScope.launch {
+                                val granted = requestNotificationPermission()
+                                println("[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}")
+                            }
+                        },
+                        onDeny = {
+                            println("[NotificationDialog] 用户点击禁止")
+                            showNotificationDialog = false
                         }
-                    },
-                    onDeny = {
-                        println("[NotificationDialog] 用户点击禁止")
-                        showNotificationDialog = false
-                    }
-                )
+                    )
+                }
             }
 
             // Show Settings screen, Course Detail screen, or Main content
