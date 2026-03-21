@@ -20,6 +20,17 @@ import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.course_detail_basic_info
+import juejin.composeapp.generated.resources.course_detail_id
+import juejin.composeapp.generated.resources.course_detail_ip_address
+import juejin.composeapp.generated.resources.course_detail_network_info
+import juejin.composeapp.generated.resources.course_detail_performance_info
+import juejin.composeapp.generated.resources.course_detail_platform
+import juejin.composeapp.generated.resources.course_detail_platform_name
+import juejin.composeapp.generated.resources.course_detail_request_method
+import juejin.composeapp.generated.resources.course_detail_request_path
+import juejin.composeapp.generated.resources.course_detail_request_time
+import juejin.composeapp.generated.resources.course_detail_response_time
 import juejin.composeapp.generated.resources.no_data
 import juejin.composeapp.generated.resources.tab_profile_request
 import org.jetbrains.compose.resources.stringResource
@@ -46,23 +57,23 @@ fun CourseDetailScreen(logStat: LogStatsItem?, onBackClick: () -> Unit = {}) {
         ) {
             if (logStat != null) {
                 // 基本信息卡片
-                DetailScreenCard(title = "基本信息") {
-                    DetailScreenCardItem(label = "ID", value = "${logStat.id ?: "N/A"}")
-                    DetailScreenCardItem(label = "请求路径", value = logStat.path ?: "N/A")
-                    DetailScreenCardItem(label = "请求方法", value = logStat.method ?: "N/A")
-                    DetailScreenCardItem(label = "请求时间", value = logStat.requestTime ?: "N/A")
+                DetailScreenCard(title = stringResource(Res.string.course_detail_basic_info)) {
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_id), value = "${logStat.id ?: "N/A"}")
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_path), value = logStat.path ?: "N/A")
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_method), value = logStat.method ?: "N/A")
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_time), value = logStat.requestTime ?: "N/A")
                 }
 
                 // 网络信息卡片
-                DetailScreenCard(title = "网络信息") {
-                    DetailScreenCardItem(label = "IP 地址", value = logStat.ip ?: "N/A")
-                    DetailScreenCardItem(label = "平台", value = logStat.platform ?: "N/A")
-                    DetailScreenCardItem(label = "平台名称", value = logStat.platformName ?: "N/A")
+                DetailScreenCard(title = stringResource(Res.string.course_detail_network_info)) {
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_ip_address), value = logStat.ip ?: "N/A")
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_platform), value = logStat.platform ?: "N/A")
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_platform_name), value = logStat.platformName ?: "N/A")
                 }
 
                 // 性能信息卡片
-                DetailScreenCard(title = "性能信息") {
-                    DetailScreenCardItem(label = "响应时间", value = "${logStat.durationMs ?: 0} ms")
+                DetailScreenCard(title = stringResource(Res.string.course_detail_performance_info)) {
+                    DetailScreenCardItem(label = stringResource(Res.string.course_detail_response_time), value = "${logStat.durationMs ?: 0} ms")
                 }
             } else {
                 // 数据为空提示

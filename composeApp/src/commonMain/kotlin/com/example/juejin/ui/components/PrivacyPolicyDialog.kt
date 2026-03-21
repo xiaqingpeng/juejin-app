@@ -24,6 +24,18 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.privacy_dialog_agree
+import juejin.composeapp.generated.resources.privacy_dialog_basic_version
+import juejin.composeapp.generated.resources.privacy_dialog_basic_version_text
+import juejin.composeapp.generated.resources.privacy_dialog_exit
+import juejin.composeapp.generated.resources.privacy_dialog_full_text
+import juejin.composeapp.generated.resources.privacy_dialog_permission_camera
+import juejin.composeapp.generated.resources.privacy_dialog_permission_phone
+import juejin.composeapp.generated.resources.privacy_dialog_privacy_policy
+import juejin.composeapp.generated.resources.privacy_dialog_user_agreement
+import juejin.composeapp.generated.resources.privacy_dialog_welcome
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 隐私政策弹窗
@@ -50,15 +62,15 @@ fun PrivacyPolicyDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "欢迎使用稀土掘金",
+                text = stringResource(Res.string.privacy_dialog_welcome),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
             // 第一行：用户协议与隐私政策（可点击）
-            val userAgreementText = "《用户协议》"
-            val privacyPolicyText = "《隐私政策》"
-            val firstLineFullText = "欢迎使用稀土掘金！我们将通过$userAgreementText 与$privacyPolicyText 帮助您了解我们如何收集、处理个人信息。"
+            val userAgreementText = stringResource(Res.string.privacy_dialog_user_agreement)
+            val privacyPolicyText = stringResource(Res.string.privacy_dialog_privacy_policy)
+            val firstLineFullText = stringResource(Res.string.privacy_dialog_full_text)
             val firstLineAnnotatedString = buildAnnotatedString {
                 append(firstLineFullText)
                 addStyle(
@@ -95,8 +107,8 @@ fun PrivacyPolicyDialog(
             Spacer(modifier = Modifier.height(12.dp))
             
             // 第二行：基础版掘金（可点击）
-            val basicVersionText = "设置 - 基础版掘金"
-            val secondLineFullText = "我们尊重您的选择权，如果您希望仅使用基本功能，可随时在$basicVersionText 中进行选择。"
+            val basicVersionText = stringResource(Res.string.privacy_dialog_basic_version)
+            val secondLineFullText = stringResource(Res.string.privacy_dialog_basic_version_text)
             val secondLineAnnotatedString = buildAnnotatedString {
                 append(secondLineFullText)
                 addStyle(
@@ -123,7 +135,11 @@ fun PrivacyPolicyDialog(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "1、我们可能会申请相机（摄像头）、相册(存储)权限，以实现设置、更换头像、完成应用升级。\n\n2、我们可能会申请电话权限，以保障软件服务的安全运营及效率、判断帐户。",
+                text = buildString {
+                    append(stringResource(Res.string.privacy_dialog_permission_camera))
+                    append("\n\n")
+                    append(stringResource(Res.string.privacy_dialog_permission_phone))
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray
             )
@@ -136,11 +152,11 @@ fun PrivacyPolicyDialog(
                 colors = ButtonDefaults.buttonColors(containerColor = linkColor),
                 shape = RoundedCornerShape(4.dp),
             ) {
-                Text("同意", color = Color.White)
+                Text(stringResource(Res.string.privacy_dialog_agree), color = Color.White)
             }
 
             TextButton(onClick = onDecline) {
-                Text("退出应用", color = Color.Gray)
+                Text(stringResource(Res.string.privacy_dialog_exit), color = Color.Gray)
             }
         }
     }

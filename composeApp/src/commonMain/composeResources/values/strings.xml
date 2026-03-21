@@ -5,9 +5,34 @@
     <string name="tab_courses">课程</string>
     <string name="tab_profile_request">请求详情</string>
     <string name="tab_profile">我的</string>
-    <string name="app_name">掘金APP</string>
+    <string name="app_name">掘金 APP</string>
     <string name="tab_profile_setting">设置</string>
     <string name="tab_profile_back">返回</string>
 
     <string name="no_data">暂无数据</string>
+    
+    <!-- Privacy Policy Dialog -->
+    <string name="privacy_dialog_welcome">欢迎使用稀土掘金</string>
+    <string name="privacy_dialog_full_text">欢迎使用稀土掘金！我们将通过《用户协议》与《隐私政策》帮助您了解我们如何收集、处理个人信息。</string>
+    <string name="privacy_dialog_user_agreement">《用户协议》</string>
+    <string name="privacy_dialog_privacy_policy">《隐私政策》</string>
+    <string name="privacy_dialog_basic_version_text">我们尊重您的选择权，如果您希望仅使用基本功能，可随时在设置 - 基础版掘金中进行选择。</string>
+    <string name="privacy_dialog_basic_version">设置 - 基础版掘金</string>
+    <string name="privacy_dialog_permission_camera">1、我们可能会申请相机（摄像头）、相册 (存储) 权限，以实现设置、更换头像、完成应用升级。</string>
+    <string name="privacy_dialog_permission_phone">2、我们可能会申请电话权限，以保障软件服务的安全运营及效率、判断帐户。</string>
+    <string name="privacy_dialog_agree">同意</string>
+    <string name="privacy_dialog_exit">退出应用</string>
+    
+    <!-- Course Detail Screen -->
+    <string name="course_detail_basic_info">基本信息</string>
+    <string name="course_detail_id">ID</string>
+    <string name="course_detail_request_path">请求路径</string>
+    <string name="course_detail_request_method">请求方法</string>
+    <string name="course_detail_request_time">请求时间</string>
+    <string name="course_detail_network_info">网络信息</string>
+    <string name="course_detail_ip_address">IP 地址</string>
+    <string name="course_detail_platform">平台</string>
+    <string name="course_detail_platform_name">平台名称</string>
+    <string name="course_detail_performance_info">性能信息</string>
+    <string name="course_detail_response_time">响应时间</string>
 </resources>
