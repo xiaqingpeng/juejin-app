@@ -35,4 +35,9 @@
     <string name="course_detail_platform_name">平台名称</string>
     <string name="course_detail_performance_info">性能信息</string>
     <string name="course_detail_response_time">响应时间</string>
+    
+    <!-- Notification Permission Dialog -->
+    <string name="notification_dialog_title">是否允许"稀土掘金"发送通知？</string>
+    <string name="notification_dialog_deny">禁止</string>
+    <string name="notification_dialog_allow">始终允许</string>
 </resources>

@@ -38,9 +38,11 @@ import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
 import com.example.juejin.screen.SettingsScreen
 import com.example.juejin.platform.exitApp
+import com.example.juejin.platform.requestNotificationPermission
 import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.PrivacyPolicyDialog
+import com.example.juejin.ui.components.NotificationPermissionDialog
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -74,6 +76,9 @@ fun App() {
         var isPrivacyAccepted by remember {
             mutableStateOf(PrivacyStorage.isPrivacyPolicyAccepted())
         }
+        
+        // Notification permission state
+        var showNotificationDialog by remember { mutableStateOf(false) }
 
         // Check privacy policy on first launch
         LaunchedEffect(Unit) {
@@ -169,6 +174,8 @@ fun App() {
                         PrivacyStorage.setPrivacyPolicyAccepted(true)
                         isPrivacyAccepted = true
                         showPrivacyDialog = false
+                        // 显示通知权限弹窗
+                        showNotificationDialog = true
                     },
                     onDecline = {
                         println("[PrivacyDialog] 用户点击退出应用")
@@ -184,6 +191,26 @@ fun App() {
                     },
                     onBasicVersionClick = {
                         println("[PrivacyDialog] 用户点击设置 - 基础版掘金")
+                    }
+                )
+            }
+
+            // Show Notification Permission Dialog (after privacy accepted)
+            if (showNotificationDialog) {
+                NotificationPermissionDialog(
+                    onDismiss = { showNotificationDialog = false },
+                    onAllow = {
+                        println("[NotificationDialog] 用户点击始终允许")
+                        showNotificationDialog = false
+                        // 请求通知权限
+                        coroutineScope.launch {
+                            val granted = requestNotificationPermission()
+                            println("[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}")
+                        }
+                    },
+                    onDeny = {
+                        println("[NotificationDialog] 用户点击禁止")
+                        showNotificationDialog = false
                     }
                 )
             }
