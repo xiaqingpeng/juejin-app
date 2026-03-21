@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.example.juejin.enums.TabItem
-import com.example.juejin.model.UserInfo
 import com.example.juejin.screen.CoursesScreen
 import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
@@ -57,7 +56,6 @@ fun App() {
 
         // Navigation state
         var showSettings by androidx.compose.runtime.remember { mutableStateOf(false) }
-        var userInfo by androidx.compose.runtime.remember { mutableStateOf<UserInfo?>(null) }
 
         // Scaffold provides proper layout structure
         Scaffold(
@@ -76,8 +74,8 @@ fun App() {
                                                     else Colors.unselectedGray
                                             androidx.compose.material3.Icon(
                                                     imageVector = tab.icon,
-                                        contentDescription = stringResource(tab.title),
-                                        tint = iconColor
+                                                    contentDescription = stringResource(tab.title),
+                                                    tint = iconColor
                                             )
                                         },
                                         label = { Text(stringResource(tab.title)) },
@@ -90,17 +88,20 @@ fun App() {
                                         colors =
                                                 NavigationBarItemDefaults.colors(
                                                         selectedIconColor =
-                                                                Colors.primaryBlue, // Blue color for
+                                                                Colors.primaryBlue, // Blue color
+                                                        // for
                                                         // selected items
                                                         selectedTextColor = Colors.primaryBlue,
                                                         unselectedIconColor =
-                                                                Colors.unselectedGray, // Gray color for
+                                                                Colors.unselectedGray, // Gray color
+                                                        // for
                                                         // unselected
                                                         // items
                                                         unselectedTextColor = Colors.unselectedGray,
                                                         indicatorColor =
-                                                                Color.Transparent // No indicator line
-                                                )
+                                                                Color.Transparent // No indicator
+                                                        // line
+                                                        )
                                 )
                             }
                         }
@@ -114,8 +115,7 @@ fun App() {
             if (showSettings) {
                 Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                     SettingsScreen(
-                        onBackClick = { showSettings = false },
-                        userInfo = userInfo
+                            onBackClick = { showSettings = false },
                     )
                 }
             } else {
@@ -133,11 +133,13 @@ fun App() {
                                                 coroutineScope.launch {
                                                     // Use scrollToPage with threshold for better
                                                     // compatibility
-                                                    if (kotlin.math.abs(dragAmount) > size.width * 0.25
+                                                    if (kotlin.math.abs(dragAmount) >
+                                                                    size.width * 0.25
                                                     ) {
                                                         val targetPage =
                                                                 (pagerState.currentPage +
-                                                                                (if (dragAmount < 0) 1
+                                                                                (if (dragAmount < 0)
+                                                                                        1
                                                                                 else -1))
                                                                         .coerceIn(0, tabs.size - 1)
                                                         pagerState.scrollToPage(targetPage)
@@ -153,12 +155,8 @@ fun App() {
                             TabItem.Hot -> HotScreen()
                             TabItem.Discover -> DiscoverScreen()
                             TabItem.Courses -> CoursesScreen()
-                            TabItem.Profile -> ProfileScreen(
-                                onSettingsClick = { user ->
-                                    userInfo = user
-                                    showSettings = true
-                                }
-                            )
+                            TabItem.Profile ->
+                                    ProfileScreen(onSettingsClick = { showSettings = true })
                         }
                     }
                 }
