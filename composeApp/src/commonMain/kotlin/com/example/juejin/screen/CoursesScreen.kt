@@ -30,22 +30,21 @@ import com.example.juejin.viewmodel.LogStatsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CoursesScreen(
-    onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}
-) {
+fun CoursesScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}) {
     // 平台列表（All 为全平台，null 表示不传 platform 参数）
-    val platforms = listOf(
-        TabItem(null, "全部"),
-        TabItem("Android", "谷歌Android"),
-        TabItem("Harmony", "华为鸿蒙"),
-        TabItem("iOS", "苹果iOS"),
-        TabItem("Linux", "嵌入式Linux"),
-        TabItem("MacOS", "苹果MacOS"),
-        TabItem("MiniProgram", "微信小程序"),
-        TabItem("TV", "Android TV"),
-        TabItem("Web", "Web网页"),
-        TabItem("Windows", "微软Windows")
-    )
+    val platforms =
+            listOf(
+                    TabItem(null, "全部"),
+                    TabItem("Android", "谷歌Android"),
+                    TabItem("Harmony", "华为鸿蒙"),
+                    TabItem("iOS", "苹果iOS"),
+                    TabItem("Linux", "嵌入式Linux"),
+                    TabItem("MacOS", "苹果MacOS"),
+                    TabItem("MiniProgram", "微信小程序"),
+                    TabItem("TV", "Android TV"),
+                    TabItem("Web", "Web网页"),
+                    TabItem("Windows", "微软Windows")
+            )
 
     // 从全局 ViewModel 订阅状态
     val logStats by LogStatsViewModel.logStats.collectAsState()
@@ -55,19 +54,17 @@ fun CoursesScreen(
     val avgDurationMs by LogStatsViewModel.avgDurationMs.collectAsState()
 
     TabPager(
-        tabs = platforms,
-        onTabSelected = { _, platform ->
-            LogStatsViewModel.refresh(platform = platform)
-        }
+            tabs = platforms,
+            onTabSelected = { _, platform -> LogStatsViewModel.refresh(platform = platform) }
     ) { _, platform ->
         PlatformLogStatsPage(
-            platform = platform,
-            logStats = logStats,
-            isLoading = isLoading,
-            hasMoreData = hasMoreData,
-            total = total,
-            avgDurationMs = avgDurationMs,
-            onItemClick = onItemClick
+                platform = platform,
+                logStats = logStats,
+                isLoading = isLoading,
+                hasMoreData = hasMoreData,
+                total = total,
+                avgDurationMs = avgDurationMs,
+                onItemClick = onItemClick
         )
     }
 }
@@ -75,13 +72,13 @@ fun CoursesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlatformLogStatsPage(
-    platform: String?,
-    logStats: List<com.example.juejin.model.LogStatsItem>,
-    isLoading: Boolean,
-    hasMoreData: Boolean,
-    total: Int,
-    avgDurationMs: Int,
-    onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}
+        platform: String?,
+        logStats: List<com.example.juejin.model.LogStatsItem>,
+        isLoading: Boolean,
+        hasMoreData: Boolean,
+        total: Int,
+        avgDurationMs: Int,
+        onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -93,53 +90,42 @@ private fun PlatformLogStatsPage(
         }
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         // 统计信息展示
         if (logStats.isNotEmpty()) {
             Surface(
-                color = Colors.primaryBlue.copy(alpha = 0.1f),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    color = Colors.primaryBlue.copy(alpha = 0.1f),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    style = Typographys.bodyMediumText,
-                    color = Colors.primaryBlue
+                        text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        style = Typographys.bodyMediumText,
+                        color = Colors.primaryBlue
                 )
             }
         }
 
         PullToRefreshBox(
-            isRefreshing = isLoading,
-            onRefresh = { LogStatsViewModel.refresh(platform = platform) }
+                isRefreshing = isLoading,
+                onRefresh = { LogStatsViewModel.refresh(platform = platform) }
         ) {
             LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(logStats) { logStat ->
-                    EventCard(
-                        logStat = logStat,
-                        onClick = { onItemClick(logStat) }
-                    )
+                    EventCard(logStat = logStat, onClick = { onItemClick(logStat) })
                 }
 
                 if (isLoading && logStats.isNotEmpty()) {
                     item {
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(color = Colors.primaryBlue)
-                        }
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                contentAlignment = Alignment.Center
+                        ) { CircularProgressIndicator(color = Colors.primaryBlue) }
                     }
                 }
             }
@@ -147,10 +133,7 @@ private fun PlatformLogStatsPage(
 
         // Loading indicator for initial load
         if (isLoading && logStats.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Colors.primaryBlue)
             }
         }

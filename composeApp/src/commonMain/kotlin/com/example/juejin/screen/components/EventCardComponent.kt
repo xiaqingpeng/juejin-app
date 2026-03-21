@@ -1,5 +1,6 @@
 package com.example.juejin.screen.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,10 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,30 +19,20 @@ import com.example.juejin.model.LogStatsItem
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.Typographys
 
-/**
- * 日志统计卡片组件
- * 展示系统日志统计详情信息
- */
+/** 日志统计卡片组件 展示系统日志统计详情信息 */
 @Composable
-fun EventCard(
-    logStat: LogStatsItem,
-    onClick: () -> Unit = {}
-) {
+fun EventCard(logStat: LogStatsItem, onClick: () -> Unit = {}) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             // Header - Path
             Text(
-                text = logStat.path ?: "Unknown Path",
-                style = Typographys.screenTitle,
-                color = Colors.primaryBlue
+                    text = logStat.path ?: "Unknown Path",
+                    style = Typographys.screenTitle,
+                    color = Colors.primaryBlue
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -59,25 +48,11 @@ fun EventCard(
     }
 }
 
-/**
- * 信息行组件
- * 用于展示键值对信息
- */
+/** 信息行组件 用于展示键值对信息 */
 @Composable
 fun InfoRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = "$label:",
-            style = Typographys.bodyMediumText,
-            color = Color.Gray
-        )
-        Text(
-            text = value,
-            style = Typographys.bodyMediumText,
-            color = Color.Black
-        )
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = "$label:", style = Typographys.bodyMediumText, color = Color.Gray)
+        Text(text = value, style = Typographys.bodyMediumText, color = Color.Black)
     }
 }

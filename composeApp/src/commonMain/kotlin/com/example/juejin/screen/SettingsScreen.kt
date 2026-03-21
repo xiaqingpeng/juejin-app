@@ -33,7 +33,8 @@ fun SettingsScreen(
             topBar = {
                 TopNavigationBarWithBack(
                         title = stringResource(Res.string.tab_profile_setting),
-                        onBackClick = onBackClick
+                        onBackClick = onBackClick,
+                        backgroundColor=Colors.white
                 )
             }
     ) { paddingValues ->
