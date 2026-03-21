@@ -12,6 +12,7 @@ object ApiRepository {
      * 获取系统日志统计列表
      * @param pageNum 页码
      * @param pageSize 每页数量
+     * @param platform 平台（如 Windows, macOS, Linux, iOS, Android, Web）
      * @param startTime 开始时间（ISO 8601 格式，如：2026-03-21T00:00:00Z）
      * @param endTime 结束时间（ISO 8601 格式，如：2026-03-21T23:59:59Z）
      * @return LogStatsResponse 日志统计响应
@@ -19,6 +20,7 @@ object ApiRepository {
     suspend fun getLogStats(
         pageNum: Int = 1,
         pageSize: Int = 10,
+        platform: String? = null,
         startTime: String? = null,
         endTime: String? = null
     ): Result<LogStatsResponse> {
@@ -26,6 +28,9 @@ object ApiRepository {
             // 构建查询参数
             val params = buildString {
                 append("?pageNum=$pageNum&pageSize=$pageSize")
+                if (!platform.isNullOrEmpty()) {
+                    append("&platform=$platform")
+                }
                 if (!startTime.isNullOrEmpty()) {
                     append("&startTime=$startTime")
                 }

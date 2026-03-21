@@ -35,31 +35,42 @@ object LogStatsViewModel {
         }
     }
     
+    // 当前选中的平台
+    private var currentPlatform: String? = null
+    
     /**
      * 加载日志统计列表
      * @param pageNum 页码
      * @param isRefresh 是否刷新
+     * @param platform 平台（如 Windows, macOS, Linux, iOS, Android, Web）
      * @param startTime 开始时间（ISO 8601 格式）
      * @param endTime 结束时间（ISO 8601 格式）
      */
     fun loadLogStats(
         pageNum: Int = 1,
         isRefresh: Boolean = false,
+        platform: String? = null,
         startTime: String? = null,
         endTime: String? = null
     ) {
         if (GlobalState.isLoading.value) return
+        
+        // 更新当前平台
+        if (platform != null) {
+            currentPlatform = platform
+        }
         
         viewModelScope.launch {
             GlobalState.setLoading(true)
             GlobalState.clearError()
             
             try {
-                println("[LogStatsViewModel] Loading page $pageNum, isRefresh=$isRefresh")
+                println("[LogStatsViewModel] Loading page $pageNum, platform=$currentPlatform, isRefresh=$isRefresh")
                 
                 val result = ApiRepository.getLogStats(
                     pageNum = pageNum,
-                    pageSize = 10,
+                    pageSize = 100,
+                    platform = currentPlatform,
                     startTime = startTime,
                     endTime = endTime
                 )
@@ -105,17 +116,17 @@ object LogStatsViewModel {
     /**
      * 刷新数据
      */
-    fun refresh(startTime: String? = null, endTime: String? = null) {
-        loadLogStats(pageNum = 1, isRefresh = true, startTime = startTime, endTime = endTime)
+    fun refresh(platform: String? = null, startTime: String? = null, endTime: String? = null) {
+        loadLogStats(pageNum = 1, isRefresh = true, platform = platform, startTime = startTime, endTime = endTime)
     }
     
     /**
      * 加载更多
      */
-    fun loadMore(startTime: String? = null, endTime: String? = null) {
+    fun loadMore(platform: String? = null, startTime: String? = null, endTime: String? = null) {
         if (GlobalState.hasMoreData.value && !GlobalState.isLoading.value) {
             val nextPage = GlobalState.currentPage.value + 1
-            loadLogStats(pageNum = nextPage, isRefresh = false, startTime = startTime, endTime = endTime)
+            loadLogStats(pageNum = nextPage, isRefresh = false, platform = platform, startTime = startTime, endTime = endTime)
         }
     }
     
