@@ -41,14 +41,14 @@ fun NotificationPermissionDialog(
 ) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth(0.85f)
+            .fillMaxWidth(0.98f)  // 调宽到 98%
             .padding(8.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(8.dp),  // 圆角 8dp
         color = Color(0xFFF2F2F2),
         shadowElevation = 8.dp
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(20.dp),  // 调整内边距
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // 铃铛图标
@@ -64,7 +64,7 @@ fun NotificationPermissionDialog(
             // 标题
             Text(
                 text = stringResource(Res.string.notification_dialog_title),
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
                 color = Color.Black
@@ -77,32 +77,44 @@ fun NotificationPermissionDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                // 禁止按钮
-                TextButton(
-                    onClick = onDeny,
+                // 禁止按钮 - 灰色背景，蓝色文字
+                Surface(
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF007AFF))
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color(0xFFE5E5E5)
                 ) {
-                    Text(
-                        text = stringResource(Res.string.notification_dialog_deny),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
-                    )
+                    TextButton(
+                        onClick = onDeny,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF007AFF))
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.notification_dialog_deny),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
                 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 
-                // 始终允许按钮
-                TextButton(
-                    onClick = onAllow,
+                // 始终允许按钮 - 灰色背景
+                Surface(
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF007AFF))
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color(0xFFE5E5E5)
                 ) {
-                    Text(
-                        text = stringResource(Res.string.notification_dialog_allow),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
-                    )
+                    TextButton(
+                        onClick = onAllow,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF007AFF))
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.notification_dialog_allow),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
             }
         }

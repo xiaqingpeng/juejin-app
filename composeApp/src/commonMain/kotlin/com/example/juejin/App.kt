@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
@@ -199,29 +200,41 @@ fun App() {
 
             // Show Notification Permission Dialog (after privacy accepted)
             if (showNotificationDialog) {
-                Dialog(
-                    onDismissRequest = { showNotificationDialog = false },
-                    properties = DialogProperties(
-                        dismissOnBackPress = true,
-                        dismissOnClickOutside = true
-                    )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.BottomCenter
                 ) {
-                    NotificationPermissionDialog(
-                        onDismiss = { showNotificationDialog = false },
-                        onAllow = {
-                            println("[NotificationDialog] 用户点击始终允许")
-                            showNotificationDialog = false
-                            // 请求通知权限
-                            coroutineScope.launch {
-                                val granted = requestNotificationPermission()
-                                println("[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}")
-                            }
-                        },
-                        onDeny = {
-                            println("[NotificationDialog] 用户点击禁止")
-                            showNotificationDialog = false
-                        }
+                    // 底部间距
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
                     )
+                    
+                    Dialog(
+                        onDismissRequest = { showNotificationDialog = false },
+                        properties = DialogProperties(
+                            dismissOnBackPress = true,
+                            dismissOnClickOutside = true
+                        )
+                    ) {
+                        NotificationPermissionDialog(
+                            onDismiss = { showNotificationDialog = false },
+                            onAllow = {
+                                println("[NotificationDialog] 用户点击始终允许")
+                                showNotificationDialog = false
+                                // 请求通知权限
+                                coroutineScope.launch {
+                                    val granted = requestNotificationPermission()
+                                    println("[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}")
+                                }
+                            },
+                            onDeny = {
+                                println("[NotificationDialog] 用户点击禁止")
+                                showNotificationDialog = false
+                            }
+                        )
+                    }
                 }
             }
 
