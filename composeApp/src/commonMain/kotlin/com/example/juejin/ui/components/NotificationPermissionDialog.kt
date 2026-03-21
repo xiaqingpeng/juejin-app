@@ -65,6 +65,9 @@ fun NotificationPermissionDialog(
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
+        },
+        text = {
+            // 空文本用于占位，保持布局
         }
     )
 }
