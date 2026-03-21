@@ -3,8 +3,11 @@ package com.example.juejin
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
@@ -14,8 +17,10 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,7 +37,10 @@ import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
 import com.example.juejin.screen.SettingsScreen
+import com.example.juejin.platform.exitApp
+import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
+import com.example.juejin.ui.components.PrivacyPolicyDialog
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -57,8 +65,22 @@ fun App() {
         val coroutineScope = rememberCoroutineScope()
 
         // Navigation state
-        var showSettings by androidx.compose.runtime.remember { mutableStateOf(false) }
-        var selectedLogStat by androidx.compose.runtime.remember { mutableStateOf<LogStatsItem?>(null) }
+        var showSettings by remember { mutableStateOf(false) }
+        var selectedLogStat by remember { mutableStateOf<LogStatsItem?>(null) }
+
+        // Privacy policy state
+        var showPrivacyDialog by remember { mutableStateOf(false) }
+        var showPrivacyDeclined by remember { mutableStateOf(false) }
+        var isPrivacyAccepted by remember {
+            mutableStateOf(PrivacyStorage.isPrivacyPolicyAccepted())
+        }
+
+        // Check privacy policy on first launch
+        LaunchedEffect(Unit) {
+            if (!isPrivacyAccepted) {
+                showPrivacyDialog = true
+            }
+        }
 
         // Scaffold provides proper layout structure
         Scaffold(
@@ -113,6 +135,58 @@ fun App() {
         ) {
             // Content padding from Scaffold
             val padding = it
+
+            // Show Privacy Declined Screen
+            if (showPrivacyDeclined) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "无法继续使用",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = Colors.primaryBlue
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "您需要同意隐私政策才能使用本应用",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Gray
+                        )
+                    }
+                }
+                return@Scaffold
+            }
+
+            // Show Privacy Policy Dialog
+            if (showPrivacyDialog) {
+                PrivacyPolicyDialog(
+                    onAccept = {
+                        println("[PrivacyDialog] 用户点击同意")
+                        PrivacyStorage.setPrivacyPolicyAccepted(true)
+                        isPrivacyAccepted = true
+                        showPrivacyDialog = false
+                    },
+                    onDecline = {
+                        println("[PrivacyDialog] 用户点击退出应用")
+                        showPrivacyDialog = false
+                        showPrivacyDeclined = true
+                        exitApp()
+                    },
+                    onUserAgreementClick = {
+                        println("[PrivacyDialog] 用户点击《用户协议》")
+                    },
+                    onPrivacyPolicyClick = {
+                        println("[PrivacyDialog] 用户点击《隐私政策》")
+                    },
+                    onBasicVersionClick = {
+                        println("[PrivacyDialog] 用户点击设置 - 基础版掘金")
+                    }
+                )
+            }
 
             // Show Settings screen, Course Detail screen, or Main content
             when {
