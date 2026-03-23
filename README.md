@@ -63,3 +63,13 @@ adb logcat -s "CoursesScreen:D"
 | iOS | Xcode Archive | IPA | macOS + 证书 |
 | Web | `wasmJsBrowserDistribution` | HTML/JS/Wasm | 无 |
 | Desktop | `packageExe` / `packageDmg` | EXE/DMG | 本地 OS |
+
+
+
+## desktop平台 日志查看
+
+```bash
+./gradlew :composeApp:jvmRun --stacktrace
+```
+
+
