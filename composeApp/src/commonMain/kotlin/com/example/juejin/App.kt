@@ -36,6 +36,7 @@ import com.example.juejin.model.LogStatsItem
 import com.example.juejin.screen.CourseDetailScreen
 import com.example.juejin.screen.CoursesScreen
 import com.example.juejin.viewmodel.DiscoverViewModel
+import com.example.juejin.viewmodel.HotViewModel
 import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
@@ -55,6 +56,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun App() {
     val discoverViewModel = DiscoverViewModel()
+    val hotViewModel = HotViewModel()
     
     MaterialTheme {
         val tabs =
@@ -291,12 +293,11 @@ fun App() {
                         ) {
                             when (tabs[page]) {
                                 TabItem.Home -> HomeScreen()
-                                TabItem.Hot -> HotScreen()
+                                TabItem.Hot -> HotScreen(vm = hotViewModel)
                                 TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
                                 TabItem.Courses -> CoursesScreen(
                                     onItemClick = { logStat -> selectedLogStat = logStat }
                                 )
-
                                 TabItem.Profile -> ProfileScreen(
                                     onSettingsClick = { showSettings = true }
                                 )
