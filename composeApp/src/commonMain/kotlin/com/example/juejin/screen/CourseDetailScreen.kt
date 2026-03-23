@@ -17,7 +17,7 @@ import com.example.juejin.model.LogStatsItem
 import com.example.juejin.screen.components.DetailScreenCard
 import com.example.juejin.screen.components.DetailScreenCardItem
 import com.example.juejin.ui.Colors
-import com.example.juejin.ui.Typographys
+import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.course_detail_basic_info
@@ -81,7 +81,7 @@ fun CourseDetailScreen(logStat: LogStatsItem?, onBackClick: () -> Unit = {}) {
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
-                ) { Text(text = stringResource(Res.string.no_data), style = Typographys.screenTitle, color = Color.Gray) }
+                ) { Text(text = stringResource(Res.string.no_data), style = Typography.largeTitle, color = Color.Gray) }
             }
         }
     }

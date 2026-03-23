@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.example.juejin.ui.Typographys
+import com.example.juejin.ui.typography.Typography
 
 /**
  * 全局可复用的顶部导航栏组件
@@ -79,7 +79,7 @@ fun TopNavigationBar(
             // 中间标题
             Text(
                 text = title,
-                style = Typographys.screenTitle,
+                style = Typography.largeTitle,
                 color = contentColor,
                 modifier = Modifier.align(Alignment.Center)
             )

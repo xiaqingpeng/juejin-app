@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
-import com.example.juejin.ui.Typographys
+import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TabItem
 import com.example.juejin.ui.components.TabPager
 import com.example.juejin.viewmodel.LogStatsViewModel
@@ -108,7 +108,7 @@ private fun PlatformLogStatsPage(
                 Text(
                         text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        style = Typographys.bodyMediumText,
+                        style = Typography.body,
                         color = Colors.primaryBlue
                 )
             }

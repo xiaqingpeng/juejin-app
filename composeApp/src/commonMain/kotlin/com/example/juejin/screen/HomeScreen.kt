@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
-import com.example.juejin.ui.Typographys
+import com.example.juejin.ui.typography.Typography
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_home
 import org.jetbrains.compose.resources.stringResource
@@ -42,6 +42,6 @@ fun HomeScreen() {
                 modifier = Modifier.size(32.dp)
             )
         }
-        Text(stringResource(Res.string.tab_home), style = Typographys.screenTitle, modifier = Modifier.padding(top = 16.dp))
+        Text(stringResource(Res.string.tab_home), style = Typography.largeTitle, modifier = Modifier.padding(top = 16.dp))
     }
 }

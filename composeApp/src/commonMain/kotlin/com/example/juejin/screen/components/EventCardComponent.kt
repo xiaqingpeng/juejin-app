@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.model.LogStatsItem
 import com.example.juejin.ui.Colors
-import com.example.juejin.ui.Typographys
+import com.example.juejin.ui.typography.Typography
 
 /** 日志统计卡片组件 展示系统日志统计详情信息 */
 @Composable
@@ -31,7 +31,7 @@ fun EventCard(logStat: LogStatsItem, onClick: () -> Unit = {}) {
             // Header - Path
             Text(
                     text = logStat.path ?: "Unknown Path",
-                    style = Typographys.screenTitle,
+                    style = Typography.largeTitle,
                     color = Colors.primaryBlue
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -52,7 +52,7 @@ fun EventCard(logStat: LogStatsItem, onClick: () -> Unit = {}) {
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "$label:", style = Typographys.bodyMediumText, color = Color.Gray)
-        Text(text = value, style = Typographys.bodyMediumText, color = Color.Black)
+        Text(text = "$label:", style = Typography.caption, color = Color.Gray)
+        Text(text = value, style = Typography.body, color = Color.Black)
     }
 }
