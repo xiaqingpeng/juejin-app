@@ -18,23 +18,39 @@ REMOTE_NAME="origin"
 MAX_RETRIES=3
 RETRY_DELAY=10
 PROJECT_NAME="juejin-app"
-
-echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}    GitHub Release 资产上传${NC}"
-echo -e "${BLUE}========================================${NC}"
+FORCE_CREATE=false
 
 # 检查参数
 if [ $# -eq 0 ]; then
-    echo -e "${YELLOW}用法: $0 <文件路径> [标签名]${NC}"
+    echo -e "${YELLOW}用法: $0 <文件路径> [选项]${NC}"
     echo -e "${YELLOW}示例: $0 juejin-app-v1.0.0-android-debug.apk${NC}"
-    echo -e "${YELLOW}示例: $0 juejin-app-v1.0.0-macos.dmg v1.0.0${NC}"
+    echo -e "${YELLOW}示例: $0 juejin-app-v1.0.0-macos.dmg --tag v1.0.0${NC}"
+    echo -e "${YELLOW}选项:${NC}"
+    echo -e "  --force           强制创建Release"
+    echo -e "  --tag TAG_NAME    指定标签名"
     exit 1
 fi
 
 ASSET_FILE="$1"
-if [ $# -ge 2 ]; then
-    TAG_NAME="$2"
-fi
+shift
+
+# 解析命令行参数
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --force)
+            FORCE_CREATE=true
+            shift
+            ;;
+        --tag)
+            TAG_NAME="$2"
+            shift 2
+            ;;
+        *)
+            echo -e "${RED}✗ 未知参数: $1${NC}"
+            exit 1
+            ;;
+    esac
+done
 
 echo -e "${CYAN}标签: ${TAG_NAME}${NC}"
 echo -e "${CYAN}文件: ${ASSET_FILE}${NC}"
@@ -108,7 +124,7 @@ else
     echo -e "${YELLOW}⚠️  Release ${TAG_NAME} 不存在，将创建新的Release${NC}"
     
     read -p "是否创建新的Release? [y/N]: " create_release
-    if [[ "$create_release" =~ ^[Yy]$ ]]; then
+    if [[ "$create_release" =~ ^[Yy]$ ]] || [ "$FORCE_CREATE" = true ]; then
         echo -e "${CYAN}创建Release...${NC}"
         
         # 根据文件类型生成Release说明

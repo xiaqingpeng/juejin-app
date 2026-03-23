@@ -18,6 +18,9 @@ PROJECT_NAME="juejin-app"
 BUILD_DIR="build/releases"
 UPLOAD_TO_RELEASE=false
 
+# 获取脚本所在目录
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}    Kotlin Multiplatform 跨平台构建${NC}"
 echo -e "${BLUE}========================================${NC}"
@@ -264,8 +267,8 @@ if [ "$UPLOAD_TO_RELEASE" = true ]; then
     for file in "$BUILD_DIR"/*; do
         if [ -f "$file" ]; then
             echo -e "${YELLOW}上传: $(basename "$file")${NC}"
-            if [ -f "./upload-release.sh" ]; then
-                ./upload-release.sh "$file" "$VERSION"
+            if [ -f "$SCRIPT_DIR/upload-release.sh" ]; then
+                "$SCRIPT_DIR/upload-release.sh" "$file" "$VERSION"
             else
                 echo -e "${RED}✗ upload-release.sh 不存在${NC}"
             fi
