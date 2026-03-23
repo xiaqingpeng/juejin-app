@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.model.UserInfo
+import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBar
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_profile
@@ -39,8 +40,8 @@ fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
 fun JuejinProfilePage(onSettingsClick: () -> Unit = {}, userInfo: UserInfo = UserInfo()) {
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),
-            surface = Color.White
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
         )
     ) {
         Scaffold(
@@ -83,7 +84,7 @@ private fun ProfileHeader(userInfo: UserInfo) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(Colors.Background.surface)
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -92,10 +93,10 @@ private fun ProfileHeader(userInfo: UserInfo) {
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFE0E0E0)),
+                    .background(Colors.UI.avatar),
                 contentAlignment = Alignment.Center
             ) {
-                Text("QP", color = Color.DarkGray, fontSize = 20.sp)
+                Text("QP", color = Colors.Text.darkGray, fontSize = 20.sp)
             }
 
             Spacer(Modifier.width(12.dp))
@@ -111,24 +112,24 @@ private fun ProfileHeader(userInfo: UserInfo) {
                     Surface(
                         modifier = Modifier.height(20.dp),
 
-                        color = Color(0xFFE8F4FF),
+                        color = Colors.UI.levelBadge,
                         shape = RoundedCornerShape(10.dp),
 
                     ) {
                         Text(
                             userInfo.level,
                             fontSize = 10.sp,
-                            color = Color(0xFF1377EB),
+                            color = Colors.UI.levelText,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text("0 徽章 >", fontSize = 12.sp, color = Color.Gray)
+                    Text("查看更多 >", fontSize = 12.sp, color = Colors.Text.secondary)
                 }
             }
 
             Spacer(Modifier.weight(1f))
-            Text("个人主页 >", fontSize = 12.sp, color = Color.Gray)
+            Text("个人主页 >", fontSize = 12.sp, color = Colors.Text.secondary)
         }
 
         Spacer(Modifier.height(16.dp))
@@ -148,7 +149,7 @@ private fun ProfileHeader(userInfo: UserInfo) {
 private fun ProfileStatItem(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(value, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Text(label, fontSize = 12.sp, color = Color.Gray)
+        Text(label, fontSize = 12.sp, color = Colors.Text.secondary)
     }
 }
 
@@ -158,7 +159,7 @@ private fun MemberBanner() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C54)),
+        colors = CardDefaults.cardColors(containerColor = Colors.UI.memberBanner),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
@@ -170,16 +171,16 @@ private fun MemberBanner() {
             Text(
                 "年度会员限时五折 领小册周边福利",
                 fontSize = 14.sp,
-                color = Color.White,
+                color = Colors.Text.white,
                 modifier = Modifier.weight(1f)
             )
             Button(
                 onClick = {},
                 modifier = Modifier.height(32.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFD700)),
+                colors = ButtonDefaults.buttonColors(containerColor = Colors.UI.memberButton),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text("了解一下", fontSize = 12.sp, color = Color.Black)
+                Text("了解一下", fontSize = 12.sp, color = Colors.UI.memberButtonText)
             }
         }
     }
@@ -197,10 +198,10 @@ private fun QuickFunctionSection() {
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            QuickFunctionItem(Icons.Default.CheckCircle, "每日签到", Color(0xFF1377EB))
-            QuickFunctionItem(Icons.Default.Casino, "幸运转盘", Color(0xFFFF9800))
-            QuickFunctionItem(Icons.Default.BugReport, "Bug挑战赛", Color(0xFF9C27B0))
-            QuickFunctionItem(Icons.Default.Star, "福利兑换", Color(0xFFE91E63))
+            QuickFunctionItem(Icons.Default.CheckCircle, "每日签到", Colors.QuickFunctions.checkIn)
+            QuickFunctionItem(Icons.Default.Casino, "幸运转盘", Colors.QuickFunctions.luckyWheel)
+            QuickFunctionItem(Icons.Default.BugReport, "Bug挑战赛", Colors.QuickFunctions.bugChallenge)
+            QuickFunctionItem(Icons.Default.Star, "福利兑换", Colors.QuickFunctions.welfare)
         }
     }
 }
@@ -228,7 +229,7 @@ private fun CreatorCenterSection() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("创作者中心", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text("进入首页 >", fontSize = 12.sp, color = Color.Gray)
+            Text("进入首页 >", fontSize = 12.sp, color = Colors.Text.secondary)
         }
         Spacer(Modifier.height(16.dp))
         Row(

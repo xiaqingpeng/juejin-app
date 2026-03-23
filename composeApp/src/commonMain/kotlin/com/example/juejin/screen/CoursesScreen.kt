@@ -11,8 +11,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.screen.components.EventCard
 import com.example.juejin.ui.Colors
@@ -52,12 +55,17 @@ fun CoursesScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit =
     val hasMoreData by LogStatsViewModel.hasMoreData.collectAsState()
     val total by LogStatsViewModel.total.collectAsState()
     val avgDurationMs by LogStatsViewModel.avgDurationMs.collectAsState()
-
-    TabPager(
+    MaterialTheme(
+        colorScheme = lightColorScheme(
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
+        )
+    ) {
+        TabPager(
             tabs = platforms,
             onTabSelected = { _, platform -> LogStatsViewModel.refresh(platform = platform) }
-    ) { _, platform ->
-        PlatformLogStatsPage(
+        ) { _, platform ->
+            PlatformLogStatsPage(
                 platform = platform,
                 logStats = logStats,
                 isLoading = isLoading,
@@ -66,7 +74,7 @@ fun CoursesScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit =
                 avgDurationMs = avgDurationMs,
                 onItemClick = onItemClick
         )
-    }
+    }}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

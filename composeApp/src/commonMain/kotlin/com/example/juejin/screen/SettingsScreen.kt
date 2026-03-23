@@ -18,9 +18,12 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -44,49 +47,55 @@ import juejin.composeapp.generated.resources.tab_profile_setting
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun SettingsScreen(
-    onBackClick: () -> Unit = {},
-    viewModel: SettingViewModel = SettingViewModel()
-) {
+fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = SettingViewModel()) {
     val darkMode by viewModel.darkMode.collectAsStateWithLifecycle()
     val pushNotification by viewModel.pushNotification.collectAsStateWithLifecycle()
     val settings by remember { derivedStateOf { viewModel.getUpdatedSettings() } }
+    MaterialTheme(
+            colorScheme =
+                    lightColorScheme(
+                            background = Colors.primaryWhite,
+                            surface = Colors.primaryWhite
+                    )
+    ) {
+        Scaffold(
+                topBar = {
+                    TopNavigationBarWithBack(
+                            title = stringResource(Res.string.tab_profile_setting),
+                            onBackClick = onBackClick,
+                            //                backgroundColor = Colors.primaryWhite
+                            )
+                }
+        ) { padding ->
+            LazyColumn(
+                    modifier =
+                            Modifier.padding(padding)
+                                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                items(settings) { item ->
+                    SettingItemRow(
+                            item = item,
+                            darkMode = darkMode,
+                            pushNotification = pushNotification,
+                            onDarkModeChanged = viewModel::updateDarkMode,
+                            onPushNotificationChanged = viewModel::updatePushNotification,
+                            onItemClick = {
+                                /* 处理点击事件 */
+                                println("SettingItemRow的值${item}")
+                            }
+                    )
+                }
 
-    Scaffold(
-        topBar = {
-            TopNavigationBarWithBack(
-                title = stringResource(Res.string.tab_profile_setting),
-                onBackClick = onBackClick,
-                backgroundColor = Colors.primaryWhite
-            )
-        }
-    ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding).background(MaterialTheme.colorScheme.background)) {
-            items(settings) { item ->
-                SettingItemRow(
-                    item = item,
-                    darkMode = darkMode,
-                    pushNotification = pushNotification,
-                    onDarkModeChanged = viewModel::updateDarkMode,
-                    onPushNotificationChanged = viewModel::updatePushNotification,
-                    onItemClick = {
-                    /* 处理点击事件 */
-                        println("SettingItemRow的值${item}")
-                    }
-                )
-            }
-
-            // 版本信息
-            item {
-                Text(
-                    "当前版本: v6.7.7 (Build-90b7915)",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    color = Color.Gray,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Center
-                )
+                // 版本信息
+                item {
+                    Text(
+                            "当前版本: v6.7.7 (Build-90b7915)",
+                            modifier = Modifier.fillMaxWidth().padding(16.dp),
+                            color = Colors.Text.secondary,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
@@ -94,82 +103,93 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingItemRow(
-    item: SettingItem,
-    darkMode: String,
-    pushNotification: Boolean,
-    onDarkModeChanged: (String) -> Unit,
-    onPushNotificationChanged: (Boolean) -> Unit,
-    onItemClick: (SettingItem) -> Unit
+        item: SettingItem,
+        darkMode: String,
+        pushNotification: Boolean,
+        onDarkModeChanged: (String) -> Unit,
+        onPushNotificationChanged: (Boolean) -> Unit,
+        onItemClick: (SettingItem) -> Unit
 ) {
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onItemClick(item) }
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth().clickable { onItemClick(item) }.padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = item.title,
-                fontSize = 16.sp,
-                color = if (item.isDestructive) Color.Red else Color.Black,
-                modifier = Modifier.weight(1f)
+                    text = item.title,
+                    fontSize = 16.sp,
+                    color = if (item.isDestructive) Colors.Text.destructive else Colors.Text.primary,
+                    modifier = Modifier.weight(1f)
             )
 
             when (item.type) {
                 SettingType.SELECTOR -> {
                     var expanded by remember { mutableStateOf(false) }
                     val options = listOf("跟随系统", "浅色模式", "深色模式")
-                    
+
                     Box {
                         Text(
-                            text = darkMode,
-                            color = Color.Gray,
-                            fontSize = 14.sp,
-                            modifier = Modifier.clickable { expanded = true }
+                                text = darkMode,
+                                color = Colors.primaryBlue,
+                                fontSize = 14.sp,
+                                modifier = Modifier.clickable { expanded = true }
                         )
-                        
+
                         DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
+                                expanded = expanded,
+                                containerColor = Colors.primaryWhite,
+                                onDismissRequest = { expanded = false }
                         ) {
                             options.forEach { option ->
                                 DropdownMenuItem(
-                                    text = { Text(option) },
-                                    onClick = {
-                                        onDarkModeChanged(option)
-                                        expanded = false
-                                    }
+                                        text = { Text(option) },
+                                        onClick = {
+                                            onDarkModeChanged(option)
+                                            expanded = false
+                                        },
+                                        colors =
+                                                MenuItemColors(
+                                                        Colors.primaryBlue,
+                                                        leadingIconColor = Colors.primaryBlue,
+                                                        trailingIconColor = Colors.primaryBlue,
+                                                        disabledTextColor = Colors.primaryBlue,
+                                                        disabledLeadingIconColor =
+                                                                Colors.primaryBlue,
+                                                        disabledTrailingIconColor =
+                                                                Colors.primaryBlue,
+                                                )
                                 )
                             }
                         }
                     }
                 }
-                
                 SettingType.SWITCH -> {
                     Switch(
-                        checked = pushNotification,
-                        onCheckedChange = onPushNotificationChanged
+                            checked = pushNotification,
+                            onCheckedChange = onPushNotificationChanged,
+                            colors =
+                                    SwitchDefaults.colors(
+                                            checkedThumbColor = Colors.Switch.checkedThumb,
+                                            uncheckedThumbColor = Colors.Switch.uncheckedThumb,
+                                            checkedTrackColor = Colors.Switch.checkedTrack,
+                                            uncheckedTrackColor = Colors.Switch.uncheckedTrack
+                                    )
                     )
                 }
-                
                 else -> {
                     Icon(
-                        Icons.Default.ChevronRight,
-                        contentDescription = null,
-                        tint = Color.Gray,
-                        modifier = Modifier.size(20.dp)
+                            Icons.Default.ChevronRight,
+                            contentDescription = null,
+                            tint = Colors.Text.secondary,
+                            modifier = Modifier.size(20.dp)
                     )
                 }
             }
         }
-        
+
         if (item.title != "退出登录") {
-            Divider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color(0xFFE0E0E0)
-            )
+            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = Colors.UI.divider)
         }
     }
 }
