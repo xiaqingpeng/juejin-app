@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -24,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
+import com.example.juejin.ui.Colors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.notification_bell
 import juejin.composeapp.generated.resources.notification_dialog_allow
@@ -86,7 +85,7 @@ fun NotificationPermissionDialog(
                     TextButton(
                         onClick = onDeny,
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF007AFF))
+                        colors = ButtonDefaults.textButtonColors(contentColor = Colors.primaryBlue)
                     ) {
                         Text(
                             text = stringResource(Res.string.notification_dialog_deny),
@@ -102,12 +101,12 @@ fun NotificationPermissionDialog(
                 Surface(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(8.dp),
-                    color = Color(0xFFE5E5E5)
+                    color = Colors.primaryGrey
                 ) {
                     TextButton(
                         onClick = onAllow,
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF007AFF))
+                        colors = ButtonDefaults.textButtonColors(contentColor = Colors.primaryBlue)
                     ) {
                         Text(
                             text = stringResource(Res.string.notification_dialog_allow),

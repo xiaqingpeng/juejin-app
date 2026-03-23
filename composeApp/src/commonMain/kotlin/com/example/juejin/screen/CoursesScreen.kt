@@ -107,7 +107,7 @@ private fun PlatformLogStatsPage(
         }
 
         PullToRefreshBox(
-                isRefreshing = isLoading,
+                isLoading && logStats.isNotEmpty(),
                 onRefresh = { LogStatsViewModel.refresh(platform = platform) }
         ) {
             LazyColumn(

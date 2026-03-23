@@ -43,7 +43,7 @@ fun CourseDetailScreen(logStat: LogStatsItem?, onBackClick: () -> Unit = {}) {
                 TopNavigationBarWithBack(
                         title = stringResource(Res.string.tab_profile_request),
                         onBackClick = onBackClick,
-                        backgroundColor = Colors.white
+                        backgroundColor = Colors.primaryWhite
                 )
             }
     ) { paddingValues ->

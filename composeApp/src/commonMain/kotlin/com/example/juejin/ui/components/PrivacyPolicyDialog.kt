@@ -1,7 +1,6 @@
 package com.example.juejin.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.juejin.platform.openUrl
+import com.example.juejin.ui.Colors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.privacy_dialog_agree
 import juejin.composeapp.generated.resources.privacy_dialog_basic_version
@@ -50,7 +49,7 @@ fun PrivacyPolicyDialog(
     onPrivacyPolicyClick: () -> Unit = {},
     onBasicVersionClick: () -> Unit = {}
 ) {
-    val linkColor = Color(0xFF1677FF)
+    val linkColor = Colors.primaryBlue
     
     // URL 定义
     val userAgreementUrl = "https://cdn.lifesense.com/sportsAppWebViews/webpack/simple_page/agreement.html"
@@ -157,11 +156,11 @@ fun PrivacyPolicyDialog(
                 colors = ButtonDefaults.buttonColors(containerColor = linkColor),
                 shape = RoundedCornerShape(4.dp),
             ) {
-                Text(stringResource(Res.string.privacy_dialog_agree), color = Color.White)
+                Text(stringResource(Res.string.privacy_dialog_agree), color = Colors.primaryWhite)
             }
 
             TextButton(onClick = onDecline) {
-                Text(stringResource(Res.string.privacy_dialog_exit), color = Color.Gray)
+                Text(stringResource(Res.string.privacy_dialog_exit), color = Colors.primaryGray)
             }
         }
     }

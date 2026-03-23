@@ -96,7 +96,7 @@ fun App() {
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
                     if (!showSettings && selectedLogStat == null) {
-                        NavigationBar(containerColor = Colors.white, tonalElevation = 8.dp) {
+                        NavigationBar(containerColor = Colors.primaryWhite, tonalElevation = 8.dp) {
                             tabs.forEachIndexed { index, tab ->
                                 val isSelected = pagerState.currentPage == index
                                 NavigationBarItem(

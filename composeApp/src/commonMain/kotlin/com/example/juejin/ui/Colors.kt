@@ -15,9 +15,19 @@ object Colors {
      * Gray color used for unselected tab items
      */
     val unselectedGray = Color(0xFF808080)
+
+    val primaryGrey = Color(0xFFE5E5E5)
+
+
+
+
     
     /**
      * White color used for backgrounds
      */
-    val white = Color(0xFFFFFFFF)
+    val primaryWhite = Color(0xFFFFFFFF)
+
+    val primaryGray = Color.Gray
+
+
 }
