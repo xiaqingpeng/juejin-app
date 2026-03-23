@@ -32,12 +32,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
-    JuejinProfilePage()
-    // TODO: Implement onSettingsClick functionality
+    JuejinProfilePage(onSettingsClick = onSettingsClick)
 }
 
 @Composable
-fun JuejinProfilePage(userInfo: UserInfo = UserInfo()) {
+fun JuejinProfilePage(onSettingsClick: () -> Unit = {}, userInfo: UserInfo = UserInfo()) {
     MaterialTheme(
         colorScheme = lightColorScheme(
             background = Color(0xFFF5F5F5),
@@ -48,7 +47,7 @@ fun JuejinProfilePage(userInfo: UserInfo = UserInfo()) {
             topBar = {
                 TopNavigationBar(
                     title = stringResource(Res.string.tab_profile),
-                    onRightClick = { /* onSettingsClick() */ },
+                    onRightClick = { onSettingsClick()  },
                     rightIcon = Icons.Filled.Settings
                 )
             }
