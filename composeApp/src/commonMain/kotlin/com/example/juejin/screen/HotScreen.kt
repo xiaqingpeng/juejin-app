@@ -40,13 +40,13 @@ fun HotScreen(vm: HotViewModel) {
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(hots) { hot ->
-                PostItem(hot)
+                HotItem(hot)
             }
         }
     }
 
     @Composable
-    fun PostItem(hot: Hot) {
+    fun HotItem(hot: Hot) {
         Column(modifier = Modifier.padding(16.dp)) {
             // 头像 + 昵称 + 时间
             Row(verticalAlignment = Alignment.CenterVertically) {

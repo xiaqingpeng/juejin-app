@@ -14,10 +14,10 @@ class HotViewModel : ViewModel() {
     val hots: StateFlow<List<Hot>> = _hots.asStateFlow()
 
     init {
-        loadPosts()
+        loadHots()
     }
 
-    fun loadPosts() {
+    fun loadHots() {
         viewModelScope.launch {
             _hots.value = listOf(
                 Hot(

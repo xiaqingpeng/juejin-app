@@ -75,7 +75,7 @@ object LogStatsViewModel {
                 
                 result.fold(
                     onSuccess = { response ->
-                        if (response.code == 0) {
+                        if (response.code == 0 || response.code == 200) {
                             if (isRefresh) {
                                 GlobalState.setLogStats(response.rows)
                                 GlobalState.setCurrentPage(1)

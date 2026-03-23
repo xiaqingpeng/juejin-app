@@ -151,6 +151,12 @@ object HttpClientManager {
     suspend inline fun <reified T> parseResponse(response: HttpResponse): T {
         val responseBody = response.bodyAsText()
         Logger.d("HttpClient") { "Response: $responseBody" }
+        
+        // 检查响应体是否为空
+        if (responseBody.isBlank()) {
+            throw IllegalArgumentException("Empty response body")
+        }
+        
         return json.decodeFromString<T>(responseBody)
     }
     

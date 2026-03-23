@@ -42,7 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentHotprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -130,7 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentHotprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
@@ -150,7 +150,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentHotprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :composeApp:embedAndSignAppleFrameworkForXcode\n";
 		};
@@ -162,7 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentHotprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
