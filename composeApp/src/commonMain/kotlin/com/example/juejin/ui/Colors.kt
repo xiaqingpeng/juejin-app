@@ -12,6 +12,8 @@ object Colors {
     val primaryGrey = Color(0xFFE5E5E5)
     val primaryWhite = Color(0xFFFFFFFF)
     val primaryGray = Color.Gray
+
+    val primaryBlack = Color.Black
     
     // 文本颜色
     object Text {

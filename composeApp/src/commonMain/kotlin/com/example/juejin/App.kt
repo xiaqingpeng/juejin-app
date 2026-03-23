@@ -35,6 +35,7 @@ import com.example.juejin.enums.TabItem
 import com.example.juejin.model.LogStatsItem
 import com.example.juejin.screen.CourseDetailScreen
 import com.example.juejin.screen.CoursesScreen
+import com.example.juejin.viewmodel.DiscoverViewModel
 import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
@@ -53,6 +54,8 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
+    val discoverViewModel = DiscoverViewModel()
+    
     MaterialTheme {
         val tabs =
                 listOf(
@@ -245,6 +248,7 @@ fun App() {
                         SettingsScreen(onBackClick = { showSettings = false })
                     }
                 }
+
                 selectedLogStat != null -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         CourseDetailScreen(
@@ -253,6 +257,7 @@ fun App() {
                         )
                     }
                 }
+
                 else -> {
                     // Horizontal Pager with gesture support
                     HorizontalPager(
@@ -271,7 +276,7 @@ fun App() {
                                             if (kotlin.math.abs(dragAmount) > size.width * 0.25) {
                                                 val targetPage =
                                                     (pagerState.currentPage +
-                                                        (if (dragAmount < 0) 1 else -1))
+                                                            (if (dragAmount < 0) 1 else -1))
                                                         .coerceIn(0, tabs.size - 1)
                                                 pagerState.scrollToPage(targetPage)
                                             }
@@ -279,16 +284,22 @@ fun App() {
                                     }
                                 }
                     ) { page ->
-                        // Content for each tab - 使用 page 参数而不是 currentPage
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        // Content for each tab
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
                             when (tabs[page]) {
                                 TabItem.Home -> HomeScreen()
                                 TabItem.Hot -> HotScreen()
-                                TabItem.Discover -> DiscoverScreen()
+                                TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
                                 TabItem.Courses -> CoursesScreen(
                                     onItemClick = { logStat -> selectedLogStat = logStat }
                                 )
-                                TabItem.Profile -> ProfileScreen(onSettingsClick = { showSettings = true })
+
+                                TabItem.Profile -> ProfileScreen(
+                                    onSettingsClick = { showSettings = true }
+                                )
                             }
                         }
                     }
