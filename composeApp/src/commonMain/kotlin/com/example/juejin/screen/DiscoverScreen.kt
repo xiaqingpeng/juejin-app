@@ -19,6 +19,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -62,6 +65,22 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         // 推荐圈子
         item { SectionTitle("推荐圈子") }
         items(circles) { CircleItem(it) }
+
+
+        // 推荐收集榜
+        item { SectionTitle("推荐收集榜") }
+        items(circles) { CircleItem(it) }
+
+        // 推荐收集榜
+        item { SectionTitle("推荐收集榜") }
+        items(circles) { CircleItem(it) }
+
+        // 推荐收集榜
+        item { SectionTitle("推荐收集榜") }
+        items(circles) { CircleItem(it) }
+
+
+
     }
 }
 
@@ -129,15 +148,29 @@ fun ArticleItem(article: Article) {
                 )
                 Row {
                     Text(
-                        text = "👍 ${article.likeCount}",
+                        text = article.likeCount.toString(),
                         style = MaterialTheme.typography.bodySmall,
                         color = Colors.Text.secondary
                     )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "点赞数",
+                        tint = Colors.Text.secondary,
+                        modifier = Modifier.size(14.dp)
+                    )
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
-                        text = "💬 ${article.commentCount}",
+                        text = article.commentCount.toString(),
                         style = MaterialTheme.typography.bodySmall,
                         color = Colors.Text.secondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.Default.Comment,
+                        contentDescription = "评论数",
+                        tint = Colors.Text.secondary,
+                        modifier = Modifier.size(14.dp)
                     )
                 }
             }
