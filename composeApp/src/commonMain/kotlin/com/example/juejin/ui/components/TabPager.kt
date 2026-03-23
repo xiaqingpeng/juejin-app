@@ -46,9 +46,10 @@ data class TabItem(
  * @param onTabSelected Tab 切换回调，返回 (index, key)
  * @param pageContent 页面内容，参数为 (page, key)
  */
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TabPager(
+fun <T : TabItem> TabPager(
     tabs: List<TabItem>,
     initialPage: Int = 0,
     onTabSelected: (index: Int, key: String?) -> Unit = { _, _ -> },
@@ -83,8 +84,7 @@ fun TabPager(
                             if (tabPositions.isNotEmpty() && page < tabPositions.size) {
                                 SecondaryIndicator(
                                     modifier = Modifier.tabIndicatorOffset(tabPositions[page]),
-                                    color = Colors.primaryBlue,
-                                    height = 2.dp
+                                    color = Colors.primaryBlue
                                 )
                             }
                         },

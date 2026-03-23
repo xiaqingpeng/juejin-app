@@ -61,7 +61,7 @@ fun CoursesScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit =
             surface = Colors.Background.surface
         )
     ) {
-        TabPager(
+        TabPager<TabItem>(
             tabs = platforms,
             onTabSelected = { _, platform -> LogStatsViewModel.refresh(platform = platform) }
         ) { _, platform ->

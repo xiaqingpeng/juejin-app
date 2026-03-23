@@ -1,7 +1,7 @@
 package com.example.juejin.viewmodel
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Article
+import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.DateRange
@@ -9,7 +9,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LiveTv
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.Work
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,13 +39,13 @@ class DiscoverViewModel : ViewModel() {
         viewModelScope.launch {
             _modules.value = listOf(
                 DiscoverModule("1", "职场锦囊", Icons.Default.Work, "hot"),
-                DiscoverModule("2", "行业速递", Icons.Default.TrendingUp, "hot"),
+                DiscoverModule("2", "行业速递", Icons.AutoMirrored.Filled.TrendingUp, "hot"),
                 DiscoverModule("3", "掘金一周", Icons.Default.DateRange, "hot"),
                 DiscoverModule("4", "高校精选", Icons.Default.School, "hot"),
                 DiscoverModule("5", "直播", Icons.Default.LiveTv, "column"),
                 DiscoverModule("6", "专栏", Icons.Default.Book, "column"),
                 DiscoverModule("7", "收藏集", Icons.Default.Collections, "column"),
-                DiscoverModule("8", "文章榜", Icons.Default.Article, "column"),
+                DiscoverModule("8", "文章榜", Icons.AutoMirrored.Filled.Article, "column"),
                 DiscoverModule("9", "作者榜", Icons.Default.Person, "column")
             )
 
