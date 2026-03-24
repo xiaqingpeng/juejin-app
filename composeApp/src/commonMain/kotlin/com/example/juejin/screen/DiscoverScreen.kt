@@ -1,6 +1,5 @@
 package com.example.juejin.screen
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,8 +21,6 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.automirrored.filled.Comment
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.juejin.model.Article
@@ -46,41 +44,100 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
     val circles by vm.circles.collectAsStateWithLifecycle()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5)),
+        contentPadding = PaddingValues(0.dp)
     ) {
+        // 顶部间距
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        
         // 模块入口
         item {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                items(modules) { mod ->
-                    ModuleItem(mod)
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+                    .padding(16.dp)
+            ) {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    items(modules) { mod ->
+                        ModuleItem(mod)
+                    }
                 }
             }
         }
 
+        // 分组间距
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
         // 每日掘金
-        item { SectionTitle("每日掘金") }
-        items(articles) { ArticleItem(it) }
+        item { 
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+                    .padding(horizontal = 16.dp)
+            ) {
+                SectionTitle("每日掘金")
+            }
+        }
+        items(articles) { article ->
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+            ) {
+                ArticleItem(article)
+            }
+        }
+
+        // 分组间距
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         // 推荐圈子
-        item { SectionTitle("推荐圈子") }
-        items(circles) { CircleItem(it) }
+        item { 
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+                    .padding(horizontal = 16.dp)
+            ) {
+                SectionTitle("推荐圈子")
+            }
+        }
+        items(circles) { circle ->
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+            ) {
+                CircleItem(circle)
+            }
+        }
 
+        // 分组间距
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         // 推荐收集榜
-        item { SectionTitle("推荐收集榜") }
-        items(circles) { CircleItem(it) }
-
-        // 推荐收集榜
-        item { SectionTitle("推荐收集榜") }
-        items(circles) { CircleItem(it) }
-
-        // 推荐收集榜
-        item { SectionTitle("推荐收集榜") }
-        items(circles) { CircleItem(it) }
-
-
-
+        item { 
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+                    .padding(horizontal = 16.dp)
+            ) {
+                SectionTitle("推荐收集榜")
+            }
+        }
+        items(circles) { circle ->
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .background(Colors.primaryWhite)
+            ) {
+                CircleItem(circle)
+            }
+        }
     }
 }
 
@@ -107,72 +164,65 @@ fun ModuleItem(mod: DiscoverModule) {
 
 @Composable
 fun ArticleItem(article: Article) {
-    Card(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Colors.Background.surface
-        )
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        Text(
+            text = article.title, 
+            style = MaterialTheme.typography.titleMedium,
+            color = Colors.Text.primary
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "作者: ${article.author}", 
+            style = MaterialTheme.typography.bodySmall,
+            color = Colors.Text.secondary
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = article.summary,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Colors.Text.secondary,
+            maxLines = 2
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = article.title, 
-                style = MaterialTheme.typography.titleMedium,
-                color = Colors.Text.primary
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "作者: ${article.author}", 
+                text = article.publishTime,
                 style = MaterialTheme.typography.bodySmall,
                 color = Colors.Text.secondary
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = article.summary,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Colors.Text.secondary,
-                maxLines = 2
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            Row {
                 Text(
-                    text = article.publishTime,
+                    text = article.likeCount.toString(),
                     style = MaterialTheme.typography.bodySmall,
                     color = Colors.Text.secondary
                 )
-                Row {
-                    Text(
-                        text = article.likeCount.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Colors.Text.secondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "点赞数",
-                        tint = Colors.Text.secondary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = article.commentCount.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Colors.Text.secondary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Comment,
-                        contentDescription = "评论数",
-                        tint = Colors.Text.secondary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                }
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "点赞数",
+                    tint = Colors.Text.secondary,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = article.commentCount.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Colors.Text.secondary
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Comment,
+                    contentDescription = "评论数",
+                    tint = Colors.Text.secondary,
+                    modifier = Modifier.size(14.dp)
+                )
             }
         }
     }
@@ -180,64 +230,57 @@ fun ArticleItem(article: Article) {
 
 @Composable
 fun CircleItem(circle: Circle) {
-    Card(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Colors.Background.surface
-        )
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+        // 圈子头像
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium),
+            contentAlignment = Alignment.Center
         ) {
-            // 圈子头像
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = circle.name.firstOrNull()?.toString() ?: "C",
-                    color = Colors.Text.primary,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-            
-            Spacer(modifier = Modifier.width(12.dp))
-            
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = circle.name, 
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Colors.Text.primary
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "${circle.memberCount}人 · ${circle.hotCount}沸点", 
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Colors.Text.secondary
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = circle.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Colors.Text.secondary,
-                    maxLines = 1
-                )
-            }
-            
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = null,
-                tint = Colors.Text.secondary,
-                modifier = Modifier.size(20.dp)
+            Text(
+                text = circle.name.firstOrNull()?.toString() ?: "C",
+                color = Colors.Text.primary,
+                style = MaterialTheme.typography.titleMedium
             )
         }
+        
+        Spacer(modifier = Modifier.width(12.dp))
+        
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = circle.name, 
+                style = MaterialTheme.typography.titleMedium,
+                color = Colors.Text.primary
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "${circle.memberCount}人 · ${circle.hotCount}沸点", 
+                style = MaterialTheme.typography.bodySmall,
+                color = Colors.Text.secondary
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = circle.description,
+                style = MaterialTheme.typography.bodySmall,
+                color = Colors.Text.secondary,
+                maxLines = 1
+            )
+        }
+        
+        Icon(
+            imageVector = Icons.Default.ChevronRight,
+            contentDescription = null,
+            tint = Colors.Text.secondary,
+            modifier = Modifier.size(20.dp)
+        )
     }
 }
 

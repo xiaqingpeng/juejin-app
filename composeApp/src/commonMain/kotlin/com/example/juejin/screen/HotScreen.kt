@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -16,8 +18,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DividerDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,9 +38,28 @@ import com.example.juejin.viewmodel.HotViewModel
 fun HotScreen(vm: HotViewModel) {
         val hots by vm.hots.collectAsStateWithLifecycle()
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5)),
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            // 顶部间距
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            
             items(hots) { hot ->
-                HotItem(hot)
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .background(Colors.primaryWhite)
+                ) {
+                    HotItem(hot)
+                }
+                // 卡片之间的细间距
+                Spacer(
+                    modifier = Modifier.fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color(0xFFF5F5F5))
+                )
             }
         }
     }
@@ -103,12 +122,6 @@ fun HotScreen(vm: HotViewModel) {
                 ActionButton("${hot.commentCount} 评论")
                 ActionButton("${hot.shareCount} 分享")
             }
-
-            HorizontalDivider(
-                modifier = Modifier.padding(top = 8.dp),
-                thickness = DividerDefaults.Thickness,
-                color = DividerDefaults.color
-            )
         }
     }
 
