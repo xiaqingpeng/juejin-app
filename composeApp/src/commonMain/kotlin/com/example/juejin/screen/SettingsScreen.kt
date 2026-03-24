@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.juejin.model.SettingItem
 import com.example.juejin.model.SettingType
+import com.example.juejin.platform.getAppVersionInfo
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.viewmodel.SettingViewModel
@@ -88,8 +89,9 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
 
                 // 版本信息
                 item {
+                    val versionInfo = getAppVersionInfo()
                     Text(
-                            "当前版本: v6.7.7 (Build-90b7915)",
+                            "当前版本: ${versionInfo.getFormattedVersion()}",
                             modifier = Modifier.fillMaxWidth().padding(16.dp),
                             color = Colors.Text.secondary,
                             fontSize = 12.sp,
