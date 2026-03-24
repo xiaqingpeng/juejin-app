@@ -17,6 +17,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,6 +49,7 @@ import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.NotificationPermissionDialog
+import com.example.juejin.ui.components.StatusBarEffect
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -58,7 +60,15 @@ fun App() {
     val discoverViewModel = DiscoverViewModel()
     val hotViewModel = HotViewModel()
     
-    MaterialTheme {
+    // 设置状态栏为浅色模式（深色文字/图标）
+    StatusBarEffect(isDark = false, color = Colors.primaryWhite)
+    
+    MaterialTheme(
+        colorScheme = lightColorScheme(
+            background = Colors.primaryWhite,
+            surface = Colors.primaryWhite
+        )
+    ) {
         val tabs =
                 listOf(
                         TabItem.Home,
@@ -98,6 +108,7 @@ fun App() {
         // Scaffold provides proper layout structure
         Scaffold(
                 modifier = Modifier.fillMaxSize(),
+                containerColor = Colors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
                     if (!showSettings && selectedLogStat == null) {
