@@ -13,9 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuItemColors
@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,6 +54,7 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
     
     // 导航状态
     var selectedSetting by remember { mutableStateOf<SettingItem?>(null) }
+    var showEditProfile by remember { mutableStateOf(false) }
     
     MaterialTheme(
             colorScheme =
@@ -63,13 +63,21 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
                             surface = Colors.primaryWhite
                     )
     ) {
-        // 显示详情页面或列表页面
-        if (selectedSetting != null) {
+        // 显示编辑资料页面
+        if (showEditProfile) {
+            EditProfileDetailScreen(
+                onBackClick = { showEditProfile = false }
+            )
+        }
+        // 显示详情页面
+        else if (selectedSetting != null) {
             SettingDetailScreen(
                 settingItem = selectedSetting!!,
                 onBackClick = { selectedSetting = null }
             )
-        } else {
+        }
+        // 显示列表页面
+        else {
             SettingsListScreen(
                 settings = settings,
                 darkMode = darkMode,
@@ -77,8 +85,12 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
                 onDarkModeChanged = viewModel::updateDarkMode,
                 onPushNotificationChanged = viewModel::updatePushNotification,
                 onItemClick = { item ->
+                    // 特殊处理：编辑资料跳转到专门的编辑页面
+                    if (item.title == "编辑资料") {
+                        showEditProfile = true
+                    }
                     // 只有 NORMAL 类型的设置项才跳转到详情页
-                    if (item.type == SettingType.NORMAL && !item.isDestructive) {
+                    else if (item.type == SettingType.NORMAL && !item.isDestructive) {
                         selectedSetting = item
                     } else if (item.isDestructive) {
                         // 处理退出登录等破坏性操作

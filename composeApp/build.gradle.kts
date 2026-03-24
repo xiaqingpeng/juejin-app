@@ -53,6 +53,8 @@ kotlin {
         implementation(libs.kotlinx.serialization.json)
         implementation(libs.kotlinx.datetime)
         implementation(libs.kermit)
+        implementation(libs.coil.compose)
+        implementation(libs.coil.network.ktor)
     }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
