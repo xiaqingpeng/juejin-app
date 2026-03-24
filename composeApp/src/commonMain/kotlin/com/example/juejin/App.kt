@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -61,6 +62,11 @@ fun App() {
     val hotViewModel = HotViewModel()
     val userViewModel = remember { com.example.juejin.viewmodel.UserViewModel() }
     
+    // 注册测试案例
+    LaunchedEffect(Unit) {
+        com.example.juejin.test.registerTestCases()
+    }
+    
     // 设置状态栏为浅色模式（深色文字/图标）
     StatusBarEffect(isDark = false, color = Colors.primaryWhite)
     
@@ -88,6 +94,10 @@ fun App() {
         // Navigation state
         var showSettings by remember { mutableStateOf(false) }
         var selectedLogStat by remember { mutableStateOf<LogStatsItem?>(null) }
+        
+        // Test navigation state
+        var showTestList by remember { mutableStateOf(false) }
+        var selectedTestCase by remember { mutableStateOf<com.example.juejin.test.TestCase?>(null) }
 
         // Privacy policy state
         var showPrivacyDialog by remember { mutableStateOf(false) }
@@ -112,7 +122,7 @@ fun App() {
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
-                    if (!showSettings && selectedLogStat == null) {
+                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null) {
                         NavigationBar(containerColor = Colors.primaryWhite, tonalElevation = 8.dp) {
                             tabs.forEachIndexed { index, tab ->
                                 val isSelected = pagerState.currentPage == index
@@ -152,6 +162,26 @@ fun App() {
                                                                 Color.Transparent // No indicator
                                                         // line
                                                         )
+                                )
+                            }
+                        }
+                    }
+                },
+                floatingActionButton = {
+                    // 开发环境的测试入口按钮（仅在非生产环境显示）
+                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null) {
+                        // TODO: 添加环境判断，只在开发环境显示
+                        val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
+                        
+                        if (isDevelopment) {
+                            androidx.compose.material3.FloatingActionButton(
+                                onClick = { showTestList = true },
+                                containerColor = Colors.primaryBlue,
+                                contentColor = Colors.primaryWhite
+                            ) {
+                                androidx.compose.material3.Icon(
+                                    imageVector = androidx.compose.material.icons.Icons.Default.BugReport,
+                                    contentDescription = "测试"
                                 )
                             }
                         }
@@ -257,6 +287,29 @@ fun App() {
 
             // Show Settings screen, Course Detail screen, or Main content
             when {
+                selectedTestCase != null -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+                        com.example.juejin.test.TestDetailScreen(
+                            testCase = selectedTestCase!!,
+                            onBackClick = { 
+                                selectedTestCase = null
+                                showTestList = true  // 返回到测试列表页
+                            }
+                        )
+                    }
+                }
+                
+                showTestList -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+                        com.example.juejin.test.TestListScreen(
+                            onBackClick = { showTestList = false },
+                            onTestClick = { testCase -> 
+                                selectedTestCase = testCase
+                            }
+                        )
+                    }
+                }
+                
                 showSettings -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         SettingsScreen(
