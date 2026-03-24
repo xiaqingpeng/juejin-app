@@ -278,3 +278,155 @@ java -version
 本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
 
 
+
+
+---
+
+## 🎯 发布系统
+
+### 快速发布
+
+```bash
+# 1. 验证环境
+./scripts/release/verify-scripts.sh
+
+# 2. 选择发布方式
+./scripts/release/complete-release.sh
+
+# 3. 或直接使用命令
+./scripts/release/quick-build-upload.sh --version v1.0.0 --platform android
+```
+
+### 可用脚本
+
+| 脚本 | 用途 | 示例 |
+|------|------|------|
+| `verify-scripts.sh` | 验证环境配置 | `./scripts/release/verify-scripts.sh` |
+| `android-build.sh` | Android 构建 | `--version v1.0.0 --type all` |
+| `desktop-build.sh` | Desktop 构建 | `--version v1.0.0 --platforms current` |
+| `quick-build-upload.sh` | 快速构建上传 | `--version v1.0.0 --platform android` |
+| `create-lite-tag.sh` | 轻量级发布 | `--tag v1.0.0` |
+| `complete-release.sh` | 菜单式发布 | 交互式选择 |
+
+### 构建产物
+
+所有构建产物保存在：
+- Android: `build/releases/android/`
+- Desktop: `build/releases/desktop/`
+
+### 详细文档
+
+- 📖 [发布指南](RELEASE_GUIDE.md) - 完整的发布流程
+- 🚀 [快速开始](QUICK_START.md) - 5分钟快速上手
+- 📱 [iOS 状态栏](iOS_STATUS_BAR_TEST.md) - iOS 状态栏配置
+- 📊 [发布总结](RELEASE_SUMMARY.md) - 系统总览
+
+---
+
+## 🎨 状态栏配置
+
+项目已配置统一的跨平台状态栏样式：
+
+- ✅ Android: 白色状态栏 + 深色图标
+- ✅ iOS: 深色图标（浅色模式）
+- ✅ 统一的 API 接口
+
+详见：[STATUS_BAR_SETUP.md](STATUS_BAR_SETUP.md)
+
+---
+
+## 🛠️ 开发工具
+
+### 必需工具
+- Git
+- Java 17+
+- Gradle (通过 gradlew)
+- GitHub CLI (`gh`) - 用于上传 Release
+
+### 可选工具
+- Android SDK - Android 构建
+- Xcode - iOS 构建
+- ADB - Android 调试
+
+### 首次设置
+
+```bash
+# 1. 安装 GitHub CLI
+brew install gh
+
+# 2. 认证
+gh auth login
+
+# 3. 验证环境
+./scripts/release/verify-scripts.sh
+```
+
+---
+
+## 📦 发布流程
+
+### 开发测试
+
+```bash
+# 构建 Debug 版本
+./scripts/release/android-build.sh --version v1.0.0-dev --type debug
+
+# 安装到设备
+adb install -r build/releases/android/juejin-app-v1.0.0-dev-android-debug.apk
+```
+
+### 正式发布
+
+```bash
+# 方式 1: 使用菜单
+./scripts/release/complete-release.sh
+# 选择 "选项 8: 快速构建上传"
+
+# 方式 2: 直接命令
+./scripts/release/quick-build-upload.sh --version v1.0.0 --platform all
+```
+
+### 热修复
+
+```bash
+# 轻量级发布（避免 Actions 超时）
+./scripts/release/create-lite-tag.sh --tag v1.0.1
+```
+
+---
+
+## 🐛 故障排除
+
+### 构建失败
+
+```bash
+./gradlew clean
+./scripts/release/android-build.sh --version v1.0.0 --type debug
+```
+
+### 找不到 APK
+
+```bash
+find composeApp/build/outputs/apk -name "*.apk"
+```
+
+### 上传失败
+
+```bash
+gh auth status
+gh auth login
+```
+
+---
+
+## 📞 获取帮助
+
+- 查看脚本帮助：`./scripts/release/<script>.sh --help`
+- 验证环境：`./scripts/release/verify-scripts.sh`
+- 问题反馈：[GitHub Issues](https://github.com/xiaqingpeng/juejin-app/issues)
+
+---
+
+## 📄 许可证
+
+[添加你的许可证信息]

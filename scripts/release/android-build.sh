@@ -151,8 +151,15 @@ case $BUILD_TYPE in
         echo -e "${YELLOW}构建 Debug APK...${NC}"
         if ./gradlew :composeApp:assembleDebug --no-daemon; then
             echo -e "${GREEN}✓ Debug APK 构建成功${NC}"
-            cp "composeApp/build/outputs/apk/debug/composeApp-debug.apk" \
-               "$BUILD_DIR/${PROJECT_NAME}-${VERSION}-android-debug.apk"
+            
+            # 查找实际的 APK 文件
+            DEBUG_APK=$(find composeApp/build/outputs/apk/debug -name "*.apk" | head -1)
+            if [ -n "$DEBUG_APK" ] && [ -f "$DEBUG_APK" ]; then
+                cp "$DEBUG_APK" "$BUILD_DIR/${PROJECT_NAME}-${VERSION}-android-debug.apk"
+                echo -e "${GREEN}✓ Debug APK 已复制${NC}"
+            else
+                echo -e "${YELLOW}⚠️  未找到 Debug APK 文件${NC}"
+            fi
         else
             echo -e "${RED}✗ Debug APK 构建失败${NC}"
         fi
@@ -161,8 +168,15 @@ case $BUILD_TYPE in
         echo -e "${YELLOW}构建 Release APK...${NC}"
         if ./gradlew :composeApp:assembleRelease --no-daemon; then
             echo -e "${GREEN}✓ Release APK 构建成功${NC}"
-            cp "composeApp/build/outputs/apk/release/composeApp-release.apk" \
-               "$BUILD_DIR/${PROJECT_NAME}-${VERSION}-android-release.apk"
+            
+            # 查找实际的 APK 文件
+            RELEASE_APK=$(find composeApp/build/outputs/apk/release -name "*.apk" | head -1)
+            if [ -n "$RELEASE_APK" ] && [ -f "$RELEASE_APK" ]; then
+                cp "$RELEASE_APK" "$BUILD_DIR/${PROJECT_NAME}-${VERSION}-android-release.apk"
+                echo -e "${GREEN}✓ Release APK 已复制${NC}"
+            else
+                echo -e "${YELLOW}⚠️  未找到 Release APK 文件${NC}"
+            fi
         else
             echo -e "${RED}✗ Release APK 构建失败${NC}"
         fi
@@ -171,8 +185,15 @@ case $BUILD_TYPE in
         echo -e "${YELLOW}构建 Release AAB...${NC}"
         if ./gradlew :composeApp:bundleRelease --no-daemon; then
             echo -e "${GREEN}✓ Release AAB 构建成功${NC}"
-            cp "composeApp/build/outputs/bundle/release/composeApp-release.aab" \
-               "$BUILD_DIR/${PROJECT_NAME}-${VERSION}-android-release.aab"
+            
+            # 查找实际的 AAB 文件
+            RELEASE_AAB=$(find composeApp/build/outputs/bundle/release -name "*.aab" | head -1)
+            if [ -n "$RELEASE_AAB" ] && [ -f "$RELEASE_AAB" ]; then
+                cp "$RELEASE_AAB" "$BUILD_DIR/${PROJECT_NAME}-${VERSION}-android-release.aab"
+                echo -e "${GREEN}✓ Release AAB 已复制${NC}"
+            else
+                echo -e "${YELLOW}⚠️  未找到 Release AAB 文件${NC}"
+            fi
         else
             echo -e "${RED}✗ Release AAB 构建失败${NC}"
         fi
