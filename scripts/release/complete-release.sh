@@ -43,21 +43,25 @@ echo -e "  ${CYAN}3.${NC} 检测流水线状态 ${YELLOW}(监控Actions运行)${
 echo -e "  ${CYAN}4.${NC} 手动上传Release资产 ${YELLOW}(备用上传方案)${NC}"
 echo -e "  ${CYAN}5.${NC} 完整流程 (1→2→3) ${YELLOW}(传统发布流程)${NC}"
 echo -e "  ${CYAN}6.${NC} 创建轻量级标签 ${YELLOW}(避免Actions超时)${NC}"
-echo -e "  ${CYAN}7.${NC} 跨平台构建和打包 ${YELLOW}(本地全平台构建)${NC}"
+echo -e "  ${CYAN}7.${NC} 跨平台构建和打包 ${YELLOW}(Android + Desktop)${NC}"
+echo -e "  ${CYAN}7a.${NC} 全平台构建 ${YELLOW}(Android + iOS + Desktop + Linux + Windows + Web)${NC}"
 echo -e "  ${CYAN}8.${NC} 快速构建上传 ${YELLOW}(基于现有构建快速发布)${NC}"
 echo -e "  ${CYAN}9.${NC} Android 专用构建 ${YELLOW}(仅构建Android平台)${NC}"
 echo -e "  ${CYAN}10.${NC} Desktop 专用构建 ${YELLOW}(仅构建Desktop平台)${NC}"
+echo -e "  ${CYAN}11.${NC} iOS 专用构建 ${YELLOW}(仅构建iOS平台)${NC}"
+echo -e "  ${CYAN}12.${NC} Linux 专用构建 ${YELLOW}(仅构建Linux平台)${NC}"
+echo -e "  ${CYAN}13.${NC} Windows 专用构建 ${YELLOW}(仅构建Windows平台)${NC}"
+echo -e "  ${CYAN}14.${NC} Web 专用构建 ${YELLOW}(仅构建Web/Wasm平台)${NC}"
 echo -e "  ${CYAN}0.${NC} 退出"
 echo ""
 echo -e "${BLUE}💡 推荐选择:${NC}"
 echo -e "  ${GREEN}• 选项 7${NC} - 完整的跨平台构建，适合正式发布"
 echo -e "  ${GREEN}• 选项 8${NC} - 快速发布，适合基于现有构建的热修复"
 echo -e "  ${GREEN}• 选项 6${NC} - 轻量级发布，避免GitHub Actions超时问题"
-echo -e "  ${GREEN}• 选项 9${NC} - Android快速测试和发布"
-echo -e "  ${GREEN}• 选项 10${NC} - Desktop快速测试和发布"
+echo -e "  ${GREEN}• 选项 9-14${NC} - 单平台快速测试和发布"
 echo ""
 
-read -p "请输入选择 [0-10]: " choice
+read -p "请输入选择 [0-14, 7a]: " choice
 
 case $choice in
     1)
@@ -145,6 +149,16 @@ case $choice in
             exit 1
         fi
         ;;
+    7a)
+        echo -e "${YELLOW}执行全平台构建...${NC}"
+        if [ -f "$SCRIPT_DIR/all-platforms-build.sh" ]; then
+            cd "$PROJECT_ROOT"
+            "$SCRIPT_DIR/all-platforms-build.sh"
+        else
+            echo -e "${RED}✗ 错误: all-platforms-build.sh 不存在${NC}"
+            exit 1
+        fi
+        ;;
     8)
         echo -e "${YELLOW}执行快速构建上传...${NC}"
         if [ -f "$SCRIPT_DIR/quick-build-upload.sh" ]; then
@@ -172,6 +186,46 @@ case $choice in
             "$SCRIPT_DIR/desktop-build.sh"
         else
             echo -e "${RED}✗ 错误: desktop-build.sh 不存在${NC}"
+            exit 1
+        fi
+        ;;
+    11)
+        echo -e "${YELLOW}执行iOS专用构建...${NC}"
+        if [ -f "$SCRIPT_DIR/ios-build.sh" ]; then
+            cd "$PROJECT_ROOT"
+            "$SCRIPT_DIR/ios-build.sh"
+        else
+            echo -e "${RED}✗ 错误: ios-build.sh 不存在${NC}"
+            exit 1
+        fi
+        ;;
+    12)
+        echo -e "${YELLOW}执行Linux专用构建...${NC}"
+        if [ -f "$SCRIPT_DIR/linux-build.sh" ]; then
+            cd "$PROJECT_ROOT"
+            "$SCRIPT_DIR/linux-build.sh"
+        else
+            echo -e "${RED}✗ 错误: linux-build.sh 不存在${NC}"
+            exit 1
+        fi
+        ;;
+    13)
+        echo -e "${YELLOW}执行Windows专用构建...${NC}"
+        if [ -f "$SCRIPT_DIR/windows-build.sh" ]; then
+            cd "$PROJECT_ROOT"
+            "$SCRIPT_DIR/windows-build.sh"
+        else
+            echo -e "${RED}✗ 错误: windows-build.sh 不存在${NC}"
+            exit 1
+        fi
+        ;;
+    14)
+        echo -e "${YELLOW}执行Web专用构建...${NC}"
+        if [ -f "$SCRIPT_DIR/web-build.sh" ]; then
+            cd "$PROJECT_ROOT"
+            "$SCRIPT_DIR/web-build.sh"
+        else
+            echo -e "${RED}✗ 错误: web-build.sh 不存在${NC}"
             exit 1
         fi
         ;;
