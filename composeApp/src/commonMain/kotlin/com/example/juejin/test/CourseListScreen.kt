@@ -24,7 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.juejin.screen.components.course.EventCard
+import com.example.juejin.test.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TabItem

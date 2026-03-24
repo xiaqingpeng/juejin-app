@@ -35,7 +35,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.juejin.enums.TabItem
 import com.example.juejin.model.LogStatsItem
-import com.example.juejin.screen.CourseDetailScreen
 import com.example.juejin.screen.CourseScreen
 import com.example.juejin.viewmodel.DiscoverViewModel
 import com.example.juejin.viewmodel.HotViewModel
@@ -93,7 +92,6 @@ fun App() {
 
         // Navigation state
         var showSettings by remember { mutableStateOf(false) }
-        var selectedLogStat by remember { mutableStateOf<LogStatsItem?>(null) }
         
         // Test navigation state
         var showTestList by remember { mutableStateOf(false) }
@@ -126,7 +124,7 @@ fun App() {
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
-                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
+                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
                         NavigationBar(containerColor = Colors.primaryWhite, tonalElevation = 8.dp) {
                             tabs.forEachIndexed { index, tab ->
                                 val isSelected = pagerState.currentPage == index
@@ -173,7 +171,7 @@ fun App() {
                 },
                 floatingActionButton = {
                     // 开发环境的测试入口按钮（仅在非生产环境显示）
-                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
+                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
                         // TODO: 添加环境判断，只在开发环境显示
                         val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
                         
@@ -293,7 +291,7 @@ fun App() {
             when {
                 selectedCourse != null -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        CourseDetailScreen(
+                        com.example.juejin.test.CourseDetailScreen(
                             logStat = selectedCourse,
                             onBackClick = { 
                                 selectedCourse = null
@@ -354,15 +352,6 @@ fun App() {
                     }
                 }
 
-                selectedLogStat != null -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        CourseDetailScreen(
-                            logStat = selectedLogStat,
-                            onBackClick = { selectedLogStat = null }
-                        )
-                    }
-                }
-
                 else -> {
                     // Horizontal Pager with gesture support
                     HorizontalPager(
@@ -398,9 +387,7 @@ fun App() {
                                 TabItem.Home -> HomeScreen()
                                 TabItem.Hot -> HotScreen(vm = hotViewModel)
                                 TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
-                                TabItem.Courses -> CourseScreen(
-                                    onItemClick = { logStat -> selectedLogStat = logStat }
-                                )
+                                TabItem.Courses -> CourseScreen()
                                 TabItem.Profile -> ProfileScreen(
                                     onSettingsClick = { showSettings = true },
                                     userViewModel = userViewModel

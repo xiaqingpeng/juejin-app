@@ -1,4 +1,4 @@
-package com.example.juejin.screen
+package com.example.juejin.test
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,9 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.juejin.model.LogStatsItem
-import com.example.juejin.screen.components.course.DetailScreenCard
-import com.example.juejin.screen.components.course.DetailScreenCardItem
+import com.example.juejin.test.components.DetailScreenCard
+import com.example.juejin.test.components.DetailScreenCardItem
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TopNavigationBarWithBack
@@ -32,16 +31,15 @@ import juejin.composeapp.generated.resources.course_detail_request_path
 import juejin.composeapp.generated.resources.course_detail_request_time
 import juejin.composeapp.generated.resources.course_detail_response_time
 import juejin.composeapp.generated.resources.no_data
-import juejin.composeapp.generated.resources.tab_profile_request
 import org.jetbrains.compose.resources.stringResource
 
-/** 课程详情页面（二级页面） 展示单个日志统计项的详细数据 */
+/** 课程详情页面（测试区域） 展示单个日志统计项的详细数据 */
 @Composable
-fun CourseDetailScreen(logStat: LogStatsItem?, onBackClick: () -> Unit = {}) {
+fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onBackClick: () -> Unit = {}) {
     Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
-                        title = stringResource(Res.string.tab_profile_request),
+                        title = "课程详情",
                         onBackClick = onBackClick,
                         backgroundColor = Colors.primaryWhite
                 )

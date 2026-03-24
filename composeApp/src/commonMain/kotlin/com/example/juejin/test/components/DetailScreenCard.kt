@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.course
+package com.example.juejin.test.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

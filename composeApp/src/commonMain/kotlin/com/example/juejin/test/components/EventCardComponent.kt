@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.course
+package com.example.juejin.test.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,13 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.juejin.model.LogStatsItem
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 
 /** 日志统计卡片组件 展示系统日志统计详情信息 */
 @Composable
-fun EventCard(logStat: LogStatsItem, onClick: () -> Unit = {}) {
+fun EventCard(logStat: com.example.juejin.model.LogStatsItem, onClick: () -> Unit = {}) {
     Card(
             modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
             colors = CardDefaults.cardColors(containerColor = Color.White),
