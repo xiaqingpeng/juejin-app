@@ -22,9 +22,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.juejin.screen.components.EventCard
+import com.example.juejin.screen.components.course.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TabItem
@@ -33,7 +32,7 @@ import com.example.juejin.viewmodel.LogStatsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CoursesScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}) {
+fun CourseScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}) {
     // 平台列表（All 为全平台，null 表示不传 platform 参数）
     val platforms =
             listOf(

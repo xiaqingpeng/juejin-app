@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components
+package com.example.juejin.screen.components.course
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -52,6 +52,10 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
     val darkMode by viewModel.darkMode.collectAsStateWithLifecycle()
     val pushNotification by viewModel.pushNotification.collectAsStateWithLifecycle()
     val settings by remember { derivedStateOf { viewModel.getUpdatedSettings() } }
+    
+    // 导航状态
+    var selectedSetting by remember { mutableStateOf<SettingItem?>(null) }
+    
     MaterialTheme(
             colorScheme =
                     lightColorScheme(
@@ -59,45 +63,79 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
                             surface = Colors.primaryWhite
                     )
     ) {
-        Scaffold(
-                topBar = {
-                    TopNavigationBarWithBack(
-                            title = stringResource(Res.string.tab_profile_setting),
-                            onBackClick = onBackClick,
-                            //                backgroundColor = Colors.primaryWhite
-                            )
-                }
-        ) { padding ->
-            LazyColumn(
-                    modifier =
-                            Modifier.padding(padding)
-                                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                items(settings) { item ->
-                    SettingItemRow(
-                            item = item,
-                            darkMode = darkMode,
-                            pushNotification = pushNotification,
-                            onDarkModeChanged = viewModel::updateDarkMode,
-                            onPushNotificationChanged = viewModel::updatePushNotification,
-                            onItemClick = {
-                                /* 处理点击事件 */
-                                println("SettingItemRow的值${item}")
-                            }
-                    )
-                }
+        // 显示详情页面或列表页面
+        if (selectedSetting != null) {
+            SettingDetailScreen(
+                settingItem = selectedSetting!!,
+                onBackClick = { selectedSetting = null }
+            )
+        } else {
+            SettingsListScreen(
+                settings = settings,
+                darkMode = darkMode,
+                pushNotification = pushNotification,
+                onDarkModeChanged = viewModel::updateDarkMode,
+                onPushNotificationChanged = viewModel::updatePushNotification,
+                onItemClick = { item ->
+                    // 只有 NORMAL 类型的设置项才跳转到详情页
+                    if (item.type == SettingType.NORMAL && !item.isDestructive) {
+                        selectedSetting = item
+                    } else if (item.isDestructive) {
+                        // 处理退出登录等破坏性操作
+                        println("执行破坏性操作: ${item.title}")
+                    }
+                },
+                onBackClick = onBackClick
+            )
+        }
+    }
+}
 
-                // 版本信息
-                item {
-                    val versionInfo = getAppVersionInfo()
-                    Text(
-                            "当前版本: ${versionInfo.getFormattedVersion()}",
-                            modifier = Modifier.fillMaxWidth().padding(16.dp),
-                            color = Colors.Text.secondary,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center
-                    )
-                }
+@Composable
+private fun SettingsListScreen(
+    settings: List<SettingItem>,
+    darkMode: String,
+    pushNotification: Boolean,
+    onDarkModeChanged: (String) -> Unit,
+    onPushNotificationChanged: (Boolean) -> Unit,
+    onItemClick: (SettingItem) -> Unit,
+    onBackClick: () -> Unit
+) {
+    Scaffold(
+            topBar = {
+                TopNavigationBarWithBack(
+                        title = stringResource(Res.string.tab_profile_setting),
+                        onBackClick = onBackClick,
+                        //                backgroundColor = Colors.primaryWhite
+                        )
+            }
+    ) { padding ->
+        LazyColumn(
+                modifier =
+                        Modifier.padding(padding)
+                                .background(MaterialTheme.colorScheme.background)
+        ) {
+            items(settings) { item ->
+                SettingItemRow(
+                        item = item,
+                        darkMode = darkMode,
+                        pushNotification = pushNotification,
+                        onDarkModeChanged = onDarkModeChanged,
+                        onPushNotificationChanged = onPushNotificationChanged,
+                        onItemClick = onItemClick
+                )
+            }
+
+            // 版本信息
+            item {
+                val versionInfo = getAppVersionInfo()
+                Text(
+                        "当前版本: ${versionInfo.getFormattedVersion()}",
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        color = Colors.Text.secondary,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                )
             }
         }
     }

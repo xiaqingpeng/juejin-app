@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.model.LogStatsItem
-import com.example.juejin.screen.components.DetailScreenCard
-import com.example.juejin.screen.components.DetailScreenCardItem
+import com.example.juejin.screen.components.course.DetailScreenCard
+import com.example.juejin.screen.components.course.DetailScreenCardItem
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TopNavigationBarWithBack

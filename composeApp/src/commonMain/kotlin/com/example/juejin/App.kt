@@ -35,7 +35,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.juejin.enums.TabItem
 import com.example.juejin.model.LogStatsItem
 import com.example.juejin.screen.CourseDetailScreen
-import com.example.juejin.screen.CoursesScreen
+import com.example.juejin.screen.CourseScreen
 import com.example.juejin.viewmodel.DiscoverViewModel
 import com.example.juejin.viewmodel.HotViewModel
 import com.example.juejin.screen.DiscoverScreen
@@ -306,7 +306,7 @@ fun App() {
                                 TabItem.Home -> HomeScreen()
                                 TabItem.Hot -> HotScreen(vm = hotViewModel)
                                 TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
-                                TabItem.Courses -> CoursesScreen(
+                                TabItem.Courses -> CourseScreen(
                                     onItemClick = { logStat -> selectedLogStat = logStat }
                                 )
                                 TabItem.Profile -> ProfileScreen(
