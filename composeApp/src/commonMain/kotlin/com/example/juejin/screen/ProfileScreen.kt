@@ -52,7 +52,7 @@ fun JuejinProfilePage(
     val user by userViewModel.user.collectAsStateWithLifecycle()
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
+            background = Color(0xFFF5F5F5),
             surface = Colors.Background.surface
         )
     ) {
@@ -68,21 +68,33 @@ fun JuejinProfilePage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(Color(0xFFF5F5F5))
                     .verticalScroll(rememberScrollState())
                     .padding(paddingValues)
             ) {
                 // 用户信息
                 ProfileHeader(user)
 
+                // 分组间距
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
+
                 // 会员横幅
                 MemberBanner()
+
+                // 分组间距
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
 
                 // 快捷功能
                 QuickFunctionSection()
 
+                // 分组间距
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
+
                 // 创作者中心
                 CreatorCenterSection()
+
+                // 分组间距
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
 
                 // 更多功能
                 MoreFunctionSection()
@@ -170,32 +182,37 @@ private fun ProfileStatItem(label: String, value: String) {
 
 @Composable
 private fun MemberBanner() {
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Colors.UI.memberBanner),
-        shape = RoundedCornerShape(8.dp)
+            .background(Color.White)
+            .padding(16.dp)
     ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Colors.UI.memberBanner),
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Text(
-                "年度会员限时五折 领小册周边福利",
-                fontSize = 14.sp,
-                color = Colors.Text.white,
-                modifier = Modifier.weight(1f)
-            )
-            Button(
-                onClick = {},
-                modifier = Modifier.height(32.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Colors.UI.memberButton),
-                shape = RoundedCornerShape(16.dp)
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("了解一下", fontSize = 12.sp, color = Colors.UI.memberButtonText)
+                Text(
+                    "年度会员限时五折 领小册周边福利",
+                    fontSize = 14.sp,
+                    color = Colors.Text.white,
+                    modifier = Modifier.weight(1f)
+                )
+                Button(
+                    onClick = {},
+                    modifier = Modifier.height(32.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Colors.UI.memberButton),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text("了解一下", fontSize = 12.sp, color = Colors.UI.memberButtonText)
+                }
             }
         }
     }
