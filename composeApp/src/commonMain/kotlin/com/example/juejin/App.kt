@@ -59,6 +59,7 @@ import org.jetbrains.compose.resources.stringResource
 fun App() {
     val discoverViewModel = DiscoverViewModel()
     val hotViewModel = HotViewModel()
+    val userViewModel = remember { com.example.juejin.viewmodel.UserViewModel() }
     
     // 设置状态栏为浅色模式（深色文字/图标）
     StatusBarEffect(isDark = false, color = Colors.primaryWhite)
@@ -258,7 +259,10 @@ fun App() {
             when {
                 showSettings -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        SettingsScreen(onBackClick = { showSettings = false })
+                        SettingsScreen(
+                            onBackClick = { showSettings = false },
+                            userViewModel = userViewModel
+                        )
                     }
                 }
 
@@ -310,7 +314,8 @@ fun App() {
                                     onItemClick = { logStat -> selectedLogStat = logStat }
                                 )
                                 TabItem.Profile -> ProfileScreen(
-                                    onSettingsClick = { showSettings = true }
+                                    onSettingsClick = { showSettings = true },
+                                    userViewModel = userViewModel
                                 )
                             }
                         }

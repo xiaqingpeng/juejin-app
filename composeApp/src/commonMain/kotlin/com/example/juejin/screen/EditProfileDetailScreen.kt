@@ -37,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,9 +59,11 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileDetailScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
 ) {
-    var user by remember { mutableStateOf(User()) }
+    val user by viewModel.user.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     var editingField by remember { mutableStateOf<EditField?>(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -139,7 +142,7 @@ fun EditProfileDetailScreen(
                         value = user.username,
                         onClick = {
                             editingField = EditField("用户名", user.username, 20) { newValue ->
-                                user = user.copy(username = newValue)
+                                viewModel.updateUsername(newValue)
                             }
                         }
                     )
@@ -152,7 +155,7 @@ fun EditProfileDetailScreen(
                         value = user.position,
                         onClick = {
                             editingField = EditField("职位", user.position, 30) { newValue ->
-                                user = user.copy(position = newValue)
+                                viewModel.updatePosition(newValue)
                             }
                         }
                     )
@@ -165,7 +168,7 @@ fun EditProfileDetailScreen(
                         value = user.company,
                         onClick = {
                             editingField = EditField("公司", user.company, 30) { newValue ->
-                                user = user.copy(company = newValue)
+                                viewModel.updateCompany(newValue)
                             }
                         }
                     )
@@ -178,7 +181,7 @@ fun EditProfileDetailScreen(
                         value = user.bio,
                         onClick = {
                             editingField = EditField("简介", user.bio, 100, isMultiLine = true) { newValue ->
-                                user = user.copy(bio = newValue)
+                                viewModel.updateBio(newValue)
                             }
                         }
                     )
@@ -191,7 +194,7 @@ fun EditProfileDetailScreen(
                         value = user.blogUrl,
                         onClick = {
                             editingField = EditField("博客地址", user.blogUrl, 100) { newValue ->
-                                user = user.copy(blogUrl = newValue)
+                                viewModel.updateBlogUrl(newValue)
                             }
                         }
                     )
@@ -204,7 +207,7 @@ fun EditProfileDetailScreen(
                         value = user.github,
                         onClick = {
                             editingField = EditField("GitHub", user.github, 50) { newValue ->
-                                user = user.copy(github = newValue)
+                                viewModel.updateGithub(newValue)
                             }
                         }
                     )
@@ -217,7 +220,7 @@ fun EditProfileDetailScreen(
                         value = user.weibo,
                         onClick = {
                             editingField = EditField("微博", user.weibo, 50) { newValue ->
-                                user = user.copy(weibo = newValue)
+                                viewModel.updateWeibo(newValue)
                             }
                         },
                         isLast = true
@@ -228,8 +231,16 @@ fun EditProfileDetailScreen(
                 item {
                     Button(
                         onClick = {
-                            // TODO: 保存到服务器
-                            println("保存用户资料: $user")
+                            viewModel.saveUserInfo(
+                                onSuccess = {
+                                    println("保存成功")
+                                    // 可以显示 Toast 提示
+                                },
+                                onError = { error ->
+                                    println("保存失败: $error")
+                                    // 可以显示错误提示
+                                }
+                            )
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -237,9 +248,14 @@ fun EditProfileDetailScreen(
                             .height(48.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Colors.primaryBlue
-                        )
+                        ),
+                        enabled = !isLoading
                     ) {
-                        Text("保存", color = Colors.primaryWhite, fontSize = 16.sp)
+                        Text(
+                            if (isLoading) "保存中..." else "保存",
+                            color = Colors.primaryWhite,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }

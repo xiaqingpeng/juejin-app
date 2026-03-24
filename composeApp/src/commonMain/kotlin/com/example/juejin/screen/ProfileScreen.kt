@@ -12,6 +12,8 @@ import androidx.compose.material.icons.automirrored.filled.EventNote
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,12 +34,22 @@ import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
-fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
-    JuejinProfilePage(onSettingsClick = onSettingsClick)
+fun ProfileScreen(
+    onSettingsClick: () -> Unit = {},
+    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
+) {
+    JuejinProfilePage(
+        onSettingsClick = onSettingsClick,
+        userViewModel = userViewModel
+    )
 }
 
 @Composable
-fun JuejinProfilePage(onSettingsClick: () -> Unit = {}, userInfo: UserInfo = UserInfo()) {
+fun JuejinProfilePage(
+    onSettingsClick: () -> Unit = {},
+    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
+) {
+    val user by userViewModel.user.collectAsStateWithLifecycle()
     MaterialTheme(
         colorScheme = lightColorScheme(
             background = Colors.Background.primary,
@@ -61,7 +73,7 @@ fun JuejinProfilePage(onSettingsClick: () -> Unit = {}, userInfo: UserInfo = Use
                     .padding(paddingValues)
             ) {
                 // 用户信息
-                ProfileHeader(userInfo)
+                ProfileHeader(user)
 
                 // 会员横幅
                 MemberBanner()
@@ -80,7 +92,7 @@ fun JuejinProfilePage(onSettingsClick: () -> Unit = {}, userInfo: UserInfo = Use
 }
 
 @Composable
-private fun ProfileHeader(userInfo: UserInfo) {
+private fun ProfileHeader(user: com.example.juejin.model.User) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,14 +108,19 @@ private fun ProfileHeader(userInfo: UserInfo) {
                     .background(Colors.UI.avatar),
                 contentAlignment = Alignment.Center
             ) {
-                Text("QP", color = Colors.Text.darkGray, fontSize = 20.sp)
+                if (user.avatar.isNotEmpty()) {
+                    // TODO: 使用 AsyncImage 加载头像
+                    Text("QP", color = Colors.Text.darkGray, fontSize = 20.sp)
+                } else {
+                    Text("QP", color = Colors.Text.darkGray, fontSize = 20.sp)
+                }
             }
 
             Spacer(Modifier.width(12.dp))
 
             Column {
                 Text(
-                    userInfo.name,
+                    user.username,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -111,13 +128,11 @@ private fun ProfileHeader(userInfo: UserInfo) {
                 Row {
                     Surface(
                         modifier = Modifier.height(20.dp),
-
                         color = Colors.UI.levelBadge,
                         shape = RoundedCornerShape(10.dp),
-
                     ) {
                         Text(
-                            userInfo.level,
+                            user.level,
                             fontSize = 10.sp,
                             color = Colors.UI.levelText,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
@@ -138,9 +153,9 @@ private fun ProfileHeader(userInfo: UserInfo) {
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            ProfileStatItem("点赞", userInfo.likeCount.toString())
-            ProfileStatItem("收藏", userInfo.collectCount.toString())
-            ProfileStatItem("关注", userInfo.followCount.toString())
+            ProfileStatItem("点赞", user.likeCount.toString())
+            ProfileStatItem("收藏", user.collectCount.toString())
+            ProfileStatItem("关注", user.followCount.toString())
         }
     }
 }

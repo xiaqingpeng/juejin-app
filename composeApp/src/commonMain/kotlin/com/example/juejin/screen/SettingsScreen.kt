@@ -47,10 +47,14 @@ import juejin.composeapp.generated.resources.tab_profile_setting
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = SettingViewModel()) {
-    val darkMode by viewModel.darkMode.collectAsStateWithLifecycle()
-    val pushNotification by viewModel.pushNotification.collectAsStateWithLifecycle()
-    val settings by remember { derivedStateOf { viewModel.getUpdatedSettings() } }
+fun SettingsScreen(
+    onBackClick: () -> Unit = {},
+    settingViewModel: SettingViewModel = SettingViewModel(),
+    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
+) {
+    val darkMode by settingViewModel.darkMode.collectAsStateWithLifecycle()
+    val pushNotification by settingViewModel.pushNotification.collectAsStateWithLifecycle()
+    val settings by remember { derivedStateOf { settingViewModel.getUpdatedSettings() } }
     
     // 导航状态
     var selectedSetting by remember { mutableStateOf<SettingItem?>(null) }
@@ -66,7 +70,8 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
         // 显示编辑资料页面
         if (showEditProfile) {
             EditProfileDetailScreen(
-                onBackClick = { showEditProfile = false }
+                onBackClick = { showEditProfile = false },
+                viewModel = userViewModel
             )
         }
         // 显示详情页面
@@ -82,8 +87,8 @@ fun SettingsScreen(onBackClick: () -> Unit = {}, viewModel: SettingViewModel = S
                 settings = settings,
                 darkMode = darkMode,
                 pushNotification = pushNotification,
-                onDarkModeChanged = viewModel::updateDarkMode,
-                onPushNotificationChanged = viewModel::updatePushNotification,
+                onDarkModeChanged = settingViewModel::updateDarkMode,
+                onPushNotificationChanged = settingViewModel::updatePushNotification,
                 onItemClick = { item ->
                     // 特殊处理：编辑资料跳转到专门的编辑页面
                     if (item.title == "编辑资料") {
