@@ -161,5 +161,19 @@ fun registerTestCases() {
         }
     )
     
+    // 测试案例 5：课程列表（导航入口）
+    TestRegistry.register(
+        TestCase(
+            id = "test_course_list",
+            title = "课程列表",
+            description = "完整的课程列表页面，包含多平台标签切换"
+        ) {
+            // 这个测试案例只作为导航入口，实际内容在 CourseListScreen 中
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("正在加载...", fontSize = 16.sp)
+            }
+        }
+    )
+    
     // 可以继续添加更多测试案例...
 }

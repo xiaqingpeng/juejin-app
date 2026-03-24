@@ -98,6 +98,10 @@ fun App() {
         // Test navigation state
         var showTestList by remember { mutableStateOf(false) }
         var selectedTestCase by remember { mutableStateOf<com.example.juejin.test.TestCase?>(null) }
+        
+        // Course navigation state (for test area)
+        var showCourseList by remember { mutableStateOf(false) }
+        var selectedCourse by remember { mutableStateOf<com.example.juejin.model.LogStatsItem?>(null) }
 
         // Privacy policy state
         var showPrivacyDialog by remember { mutableStateOf(false) }
@@ -122,7 +126,7 @@ fun App() {
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
-                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null) {
+                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
                         NavigationBar(containerColor = Colors.primaryWhite, tonalElevation = 8.dp) {
                             tabs.forEachIndexed { index, tab ->
                                 val isSelected = pagerState.currentPage == index
@@ -169,7 +173,7 @@ fun App() {
                 },
                 floatingActionButton = {
                     // 开发环境的测试入口按钮（仅在非生产环境显示）
-                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null) {
+                    if (!showSettings && selectedLogStat == null && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
                         // TODO: 添加环境判断，只在开发环境显示
                         val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
                         
@@ -287,6 +291,32 @@ fun App() {
 
             // Show Settings screen, Course Detail screen, or Main content
             when {
+                selectedCourse != null -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+                        CourseDetailScreen(
+                            logStat = selectedCourse,
+                            onBackClick = { 
+                                selectedCourse = null
+                                showCourseList = true  // 返回到课程列表
+                            }
+                        )
+                    }
+                }
+                
+                showCourseList -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+                        com.example.juejin.test.CourseListScreen(
+                            onBackClick = { 
+                                showCourseList = false
+                                showTestList = true  // 返回到测试列表
+                            },
+                            onItemClick = { logStat ->
+                                selectedCourse = logStat
+                            }
+                        )
+                    }
+                }
+                
                 selectedTestCase != null -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.TestDetailScreen(
@@ -303,8 +333,13 @@ fun App() {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.TestListScreen(
                             onBackClick = { showTestList = false },
-                            onTestClick = { testCase -> 
-                                selectedTestCase = testCase
+                            onTestClick = { testCase ->
+                                // 特殊处理：课程列表测试案例跳转到课程列表页面
+                                if (testCase.id == "test_course_list") {
+                                    showCourseList = true
+                                } else {
+                                    selectedTestCase = testCase
+                                }
                             }
                         )
                     }

@@ -1,148 +1,55 @@
 package com.example.juejin.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.juejin.screen.components.course.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
-import com.example.juejin.ui.components.TabItem
-import com.example.juejin.ui.components.TabPager
-import com.example.juejin.viewmodel.LogStatsViewModel
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.tab_courses
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * 课程页面（简化版，与首页类似）
+ * 完整的课程列表功能已迁移到测试区域
+ */
 @Composable
 fun CourseScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}) {
-    // 平台列表（All 为全平台，null 表示不传 platform 参数）
-    val platforms =
-            listOf(
-                    TabItem(null, "全部"),
-                    TabItem("Android", "谷歌Android"),
-                    TabItem("Harmony", "华为鸿蒙"),
-                    TabItem("iOS", "苹果iOS"),
-                    TabItem("Linux", "嵌入式Linux"),
-                    TabItem("MacOS", "苹果MacOS"),
-                    TabItem("MiniProgram", "微信小程序"),
-                    TabItem("TV", "Android TV"),
-                    TabItem("Web", "Web网页"),
-                    TabItem("Windows", "微软Windows")
-            )
-
-    // 从全局 ViewModel 订阅状态
-    val logStats by LogStatsViewModel.logStats.collectAsState()
-    val isLoading by LogStatsViewModel.isLoading.collectAsState()
-    val hasMoreData by LogStatsViewModel.hasMoreData.collectAsState()
-    val total by LogStatsViewModel.total.collectAsState()
-    val avgDurationMs by LogStatsViewModel.avgDurationMs.collectAsState()
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TabPager<TabItem>(
-            tabs = platforms,
-            onTabSelected = { _, platform -> LogStatsViewModel.refresh(platform = platform) }
-        ) { _, platform ->
-            PlatformLogStatsPage(
-                platform = platform,
-                logStats = logStats,
-                isLoading = isLoading,
-                hasMoreData = hasMoreData,
-                total = total,
-                avgDurationMs = avgDurationMs,
-                onItemClick = onItemClick
-        )
-    }}
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PlatformLogStatsPage(
-        platform: String?,
-        logStats: List<com.example.juejin.model.LogStatsItem>,
-        isLoading: Boolean,
-        hasMoreData: Boolean,
-        total: Int,
-        avgDurationMs: Int,
-        onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}
-) {
-    val listState = rememberLazyListState()
-
-    // Load more on scroll to end
-    LaunchedEffect(listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index, logStats.size) {
-        val lastIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
-        if (logStats.isNotEmpty() && lastIndex == logStats.size - 1 && hasMoreData && !isLoading) {
-            LogStatsViewModel.loadMore(platform = platform)
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        // 统计信息展示
-        if (logStats.isNotEmpty()) {
-            Surface(
-                    color = Colors.primaryBlue.copy(alpha = 0.1f),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(
-                        text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        style = Typography.body,
-                        color = Colors.primaryBlue
-                )
-            }
-        }
-
-        PullToRefreshBox(
-                isLoading && logStats.isNotEmpty(),
-                onRefresh = { LogStatsViewModel.refresh(platform = platform) }
+        Box(
+            modifier =
+                Modifier.size(64.dp)
+                    .background(Colors.primaryBlue, shape = MaterialTheme.shapes.medium)
+                    .padding(16.dp)
         ) {
-            LazyColumn(
-                    state = listState,
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(logStats) { logStat ->
-                    EventCard(logStat = logStat, onClick = { onItemClick(logStat) })
-                }
-
-                if (isLoading && logStats.isNotEmpty()) {
-                    item {
-                        Box(
-                                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                                contentAlignment = Alignment.Center
-                        ) { CircularProgressIndicator(color = Colors.primaryBlue) }
-                    }
-                }
-            }
+            androidx.compose.material3.Icon(
+                imageVector = Icons.Filled.School,
+                contentDescription = stringResource(Res.string.tab_courses),
+                tint = Color.White,
+                modifier = Modifier.size(32.dp)
+            )
         }
-
-        // Loading indicator for initial load
-        if (isLoading && logStats.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Colors.primaryBlue)
-            }
-        }
+        Text(
+            stringResource(Res.string.tab_courses), 
+            style = Typography.largeTitle, 
+            modifier = Modifier.padding(top = 16.dp)
+        )
     }
 }
