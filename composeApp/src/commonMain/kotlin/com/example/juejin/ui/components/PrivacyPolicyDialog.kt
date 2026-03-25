@@ -59,7 +59,7 @@ fun PrivacyPolicyDialog(
         Column(
             modifier = Modifier
                 .background(
-                    color = Color.White,
+                    color = Colors.Background.surface,
                     shape = RoundedCornerShape(4.dp)
                 )
                 .padding(24.dp),
@@ -145,7 +145,7 @@ fun PrivacyPolicyDialog(
                     append(stringResource(Res.string.privacy_dialog_permission_phone))
                 },
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                color = Colors.Text.secondary
             )
 
             Spacer(modifier = Modifier.height(24.dp))

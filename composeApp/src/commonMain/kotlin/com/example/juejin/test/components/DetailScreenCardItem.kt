@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 
 /** 详情项组件 */
@@ -18,7 +19,7 @@ fun DetailScreenCardItem(label: String, value: String) {
             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = "$label:", style = Typography.caption, color = Color.Gray)
-        Text(text = value, style = Typography.body, color = Color.Black)
+        Text(text = "$label:", style = Typography.caption, color = Colors.Text.secondary)
+        Text(text = value, style = Typography.body, color = Colors.Text.primary)
     }
 }

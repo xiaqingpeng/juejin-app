@@ -49,7 +49,7 @@ fun EventCard(logStat: com.example.juejin.model.LogStatsItem, onClick: () -> Uni
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "$label:", style = Typography.caption, color = Color.Gray)
-        Text(text = value, style = Typography.body, color = Color.Black)
+        Text(text = "$label:", style = Typography.caption, color = Colors.Text.secondary)
+        Text(text = value, style = Typography.body, color = Colors.Text.primary)
     }
 }

@@ -39,7 +39,7 @@ fun HotScreen(vm: HotViewModel) {
         val hots by vm.hots.collectAsStateWithLifecycle()
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5)),
+            modifier = Modifier.fillMaxSize().background(Colors.Background.primary),
             contentPadding = PaddingValues(0.dp)
         ) {
             // 顶部间距
@@ -58,7 +58,7 @@ fun HotScreen(vm: HotViewModel) {
                 Spacer(
                     modifier = Modifier.fillMaxWidth()
                         .height(1.dp)
-                        .background(Color(0xFFF5F5F5))
+                        .background(Colors.Background.primary)
                 )
             }
         }
@@ -78,14 +78,14 @@ fun HotScreen(vm: HotViewModel) {
                 ) {
                     Text(
                         text = hot.author.firstOrNull()?.toString() ?: "U",
-                        color = Color.White,
+                        color = Colors.Text.white,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(hot.author, fontWeight = FontWeight.Bold)
-                    Text(hot.time, color = Color.Gray, fontSize = 12.sp)
+                    Text(hot.time, color = Colors.Text.secondary, fontSize = 12.sp)
                 }
             }
 

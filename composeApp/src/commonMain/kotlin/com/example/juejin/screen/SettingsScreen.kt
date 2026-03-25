@@ -126,8 +126,8 @@ private fun SettingsListScreen(
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),
-            surface = Colors.primaryWhite
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
         )
     ) {
         Scaffold(
@@ -142,7 +142,7 @@ private fun SettingsListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Color(0xFFF5F5F5))
+                    .background(Colors.Background.primary)
             ) {
                 // 添加顶部间距
                 item {
@@ -171,7 +171,7 @@ private fun SettingsListScreen(
                     
                     // 在分组之间添加间距
                     if (isGroupEnd) {
-                        HorizontalDivider(color = Color(0xFFF5F5F5), thickness = 8.dp)
+                        HorizontalDivider(color = Colors.Background.primary, thickness = 8.dp)
                     }
                 }
 

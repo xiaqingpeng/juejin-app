@@ -32,6 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.input_placeholder
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 编辑单个字段页面
@@ -48,8 +51,8 @@ fun EditFieldScreen(
     
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),
-            surface = Colors.primaryWhite
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
         )
     ) {
         Scaffold(
@@ -94,7 +97,7 @@ fun EditFieldScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Color(0xFFF5F5F5))
+                    .background(Colors.Background.primary)
             ) {
                 OutlinedTextField(
                     value = text,
@@ -102,7 +105,7 @@ fun EditFieldScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    placeholder = { Text("请输入$title") },
+                    placeholder = { Text(stringResource(Res.string.input_placeholder, title)) },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Colors.primaryBlue,
                         unfocusedBorderColor = Colors.UI.divider,

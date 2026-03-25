@@ -21,6 +21,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.juejin.ui.Colors
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.loading
+import juejin.composeapp.generated.resources.test_click_count
+import juejin.composeapp.generated.resources.test_click_me
+import juejin.composeapp.generated.resources.test_color_blue
+import juejin.composeapp.generated.resources.test_color_green
+import juejin.composeapp.generated.resources.test_color_red
+import juejin.composeapp.generated.resources.test_random_username
+import juejin.composeapp.generated.resources.test_reset_user
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 注册所有测试案例
@@ -38,12 +49,12 @@ fun registerTestCases() {
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("点击次数: $count", fontSize = 24.sp)
+                Text(stringResource(Res.string.test_click_count, count), fontSize = 24.sp)
                 Button(
                     onClick = { count++ },
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text("点击我")
+                    Text(stringResource(Res.string.test_click_me))
                 }
             }
         }
@@ -64,7 +75,7 @@ fun registerTestCases() {
                         .background(Color.Red),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("红色", color = Color.White, fontSize = 20.sp)
+                    Text(stringResource(Res.string.test_color_red), color = Colors.Text.white, fontSize = 20.sp)
                 }
                 Box(
                     modifier = Modifier
@@ -73,7 +84,7 @@ fun registerTestCases() {
                         .background(Color.Green),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("绿色", color = Color.White, fontSize = 20.sp)
+                    Text(stringResource(Res.string.test_color_green), color = Colors.Text.white, fontSize = 20.sp)
                 }
                 Box(
                     modifier = Modifier
@@ -82,7 +93,7 @@ fun registerTestCases() {
                         .background(Color.Blue),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("蓝色", color = Color.White, fontSize = 20.sp)
+                    Text(stringResource(Res.string.test_color_blue), color = Colors.Text.white, fontSize = 20.sp)
                 }
             }
         }
@@ -140,11 +151,11 @@ fun registerTestCases() {
                 
                 Button(
                     onClick = { 
-                        viewModel.updateUsername("测试用户${(0..100).random()}")
+                        viewModel.updateUsername("测试用户${kotlin.random.Random.nextInt(0, 100)}")
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("随机更改用户名")
+                    Text(stringResource(Res.string.test_random_username))
                 }
                 
                 androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(8.dp))
@@ -155,7 +166,7 @@ fun registerTestCases() {
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("重置用户信息")
+                    Text(stringResource(Res.string.test_reset_user))
                 }
             }
         }
@@ -170,7 +181,7 @@ fun registerTestCases() {
         ) {
             // 这个测试案例只作为导航入口，实际内容在 CourseListScreen 中
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("正在加载...", fontSize = 16.sp)
+                Text(stringResource(Res.string.loading), fontSize = 16.sp)
             }
         }
     )

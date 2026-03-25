@@ -42,8 +42,8 @@ fun NotificationPermissionDialog(
         modifier = Modifier
             .fillMaxWidth(0.98f)  // 调宽到 98%
             .padding(8.dp),
-        shape = RoundedCornerShape(8.dp),  // 圆角 8dp
-        color = Color(0xFFF2F2F2),
+        shape = RoundedCornerShape(8.dp),
+        color = Colors.Background.dialog,
         shadowElevation = 8.dp
     ) {
         Column(
@@ -66,7 +66,7 @@ fun NotificationPermissionDialog(
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                color = Color.Black
+                color = Colors.Text.primary
             )
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -80,7 +80,7 @@ fun NotificationPermissionDialog(
                 Surface(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(8.dp),
-                    color = Color(0xFFE5E5E5)
+                    color = Colors.Button.secondary
                 ) {
                     TextButton(
                         onClick = onDeny,

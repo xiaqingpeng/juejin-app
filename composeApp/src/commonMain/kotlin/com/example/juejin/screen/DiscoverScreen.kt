@@ -44,7 +44,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
     val circles by vm.circles.collectAsStateWithLifecycle()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFF5F5F5)),
+        modifier = Modifier.fillMaxSize().background(Colors.Background.primary),
         contentPadding = PaddingValues(0.dp)
     ) {
         // 顶部间距

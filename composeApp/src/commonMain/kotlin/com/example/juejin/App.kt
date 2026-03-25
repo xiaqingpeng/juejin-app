@@ -50,6 +50,8 @@ import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.NotificationPermissionDialog
 import com.example.juejin.ui.components.StatusBarEffect
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.privacy_policy_required
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -212,9 +214,9 @@ fun App() {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "您需要同意隐私政策才能使用本应用",
+                            text = stringResource(Res.string.privacy_policy_required),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = Color.Gray
+                            color = Colors.Text.secondary
                         )
                     }
                 }

@@ -54,7 +54,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onBackCl
         Column(
                 modifier =
                         Modifier.fillMaxSize()
-                                .background(Color(0xFFF5F5F5))
+                                .background(Colors.Background.primary)
                                 .padding(paddingValues)
                                 .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(0.dp)
@@ -121,7 +121,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onBackCl
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
-                ) { Text(text = stringResource(Res.string.no_data), style = Typography.largeTitle, color = Color.Gray) }
+                ) { Text(text = stringResource(Res.string.no_data), style = Typography.largeTitle, color = Colors.Text.secondary) }
             }
         }
     }

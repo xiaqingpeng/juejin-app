@@ -27,8 +27,8 @@ fun SettingDetailScreen(
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),  // 灰色背景
-            surface = Colors.primaryWhite
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
         )
     ) {
         Scaffold(
@@ -43,7 +43,7 @@ fun SettingDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Color(0xFFF5F5F5))  // 灰色背景
+                    .background(Colors.Background.primary)
             ) {
                 item {
                     // 从内容提供者获取详情内容

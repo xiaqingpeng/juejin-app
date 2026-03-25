@@ -69,14 +69,14 @@ fun <T : TabItem> TabPager(
     Scaffold(
         topBar = {
             Surface(
-                color = Color.White,
+                color = Colors.Background.surface,
                 shadowElevation = 0.dp
             ) {
                 Column {
                     ScrollableTabRow(
                         selectedTabIndex = pagerState.currentPage,
                         modifier = Modifier.fillMaxWidth(),
-                        containerColor = Color.White,
+                        containerColor = Colors.Background.surface,
                         contentColor = Colors.primaryBlue,
                         edgePadding = 16.dp,
                         indicator = { tabPositions ->

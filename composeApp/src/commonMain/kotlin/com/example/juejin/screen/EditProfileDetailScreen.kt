@@ -50,7 +50,13 @@ import coil3.compose.AsyncImage
 import com.example.juejin.model.User
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.confirm
+import juejin.composeapp.generated.resources.input_placeholder
+import juejin.composeapp.generated.resources.save
+import juejin.composeapp.generated.resources.saving
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 编辑资料详情页面（底部弹窗编辑版本）
@@ -70,8 +76,8 @@ fun EditProfileDetailScreen(
     
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),
-            surface = Colors.primaryWhite
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
         )
     ) {
         Scaffold(
@@ -86,7 +92,7 @@ fun EditProfileDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Color(0xFFF5F5F5))
+                    .background(Colors.Background.primary)
             ) {
                 // 头像
                 item {
@@ -120,7 +126,7 @@ fun EditProfileDetailScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Color(0xFFE0E0E0))
+                                    .background(Colors.UI.avatar)
                             )
                         }
                         
@@ -132,7 +138,7 @@ fun EditProfileDetailScreen(
                             modifier = Modifier.size(16.dp)
                         )
                     }
-                    HorizontalDivider(color = Color(0xFFF5F5F5), thickness = 8.dp)
+                    HorizontalDivider(color = Colors.Background.primary, thickness = 8.dp)
                 }
                 
                 // 用户名
@@ -252,7 +258,8 @@ fun EditProfileDetailScreen(
                         enabled = !isLoading
                     ) {
                         Text(
-                            if (isLoading) "保存中..." else "保存",
+                            if (isLoading) stringResource(Res.string.saving) 
+                            else stringResource(Res.string.save),
                             color = Colors.primaryWhite,
                             fontSize = 16.sp
                         )
@@ -381,12 +388,12 @@ private fun EditBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(if (field.isMultiLine) 120.dp else 56.dp),
-            placeholder = { Text("请输入${field.label}") },
+            placeholder = { Text(stringResource(Res.string.input_placeholder, field.label)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Colors.primaryBlue,
                 unfocusedBorderColor = Colors.UI.divider,
-                focusedContainerColor = Colors.primaryWhite,
-                unfocusedContainerColor = Color(0xFFF5F5F5)
+                focusedContainerColor = Colors.Background.surface,
+                unfocusedContainerColor = Colors.Background.input
             ),
             maxLines = if (field.isMultiLine) 5 else 1,
             singleLine = !field.isMultiLine
@@ -414,7 +421,7 @@ private fun EditBottomSheet(
                 containerColor = Colors.primaryBlue
             )
         ) {
-            Text("确定", color = Colors.primaryWhite, fontSize = 16.sp)
+            Text(stringResource(Res.string.confirm), color = Colors.primaryWhite, fontSize = 16.sp)
         }
         
         Spacer(modifier = Modifier.height(16.dp))

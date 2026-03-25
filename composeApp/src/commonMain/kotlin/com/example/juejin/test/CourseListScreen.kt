@@ -70,8 +70,8 @@ fun CourseListScreen(
     
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),
-            surface = Colors.primaryWhite
+            background = Colors.Background.primary,
+            surface = Colors.Background.surface
         )
     ) {
         Scaffold(
@@ -155,7 +155,7 @@ private fun PlatformLogStatsPage(
                         Spacer(
                             modifier = Modifier.fillMaxWidth()
                                 .height(8.dp)
-                                .background(Color(0xFFF5F5F5))
+                                .background(Colors.Background.primary)
                         )
                     }
                 }
@@ -167,7 +167,7 @@ private fun PlatformLogStatsPage(
                         Spacer(
                             modifier = Modifier.fillMaxWidth()
                                 .height(1.dp)
-                                .background(Color(0xFFF5F5F5))
+                                .background(Colors.Background.primary)
                         )
                     }
                 }

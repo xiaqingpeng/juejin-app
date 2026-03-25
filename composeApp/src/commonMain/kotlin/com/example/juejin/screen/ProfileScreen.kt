@@ -26,7 +26,13 @@ import com.example.juejin.model.UserInfo
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBar
 import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.learn_more
+import juejin.composeapp.generated.resources.profile_creator_center
+import juejin.composeapp.generated.resources.profile_enter_homepage
+import juejin.composeapp.generated.resources.profile_more_functions
+import juejin.composeapp.generated.resources.profile_personal_homepage
 import juejin.composeapp.generated.resources.tab_profile
+import juejin.composeapp.generated.resources.view_more
 import org.jetbrains.compose.resources.stringResource
 
 // TODO: Implement onSettingsClick functionality
@@ -52,7 +58,7 @@ fun JuejinProfilePage(
     val user by userViewModel.user.collectAsStateWithLifecycle()
     MaterialTheme(
         colorScheme = lightColorScheme(
-            background = Color(0xFFF5F5F5),
+            background = Colors.Background.primary,
             surface = Colors.Background.surface
         )
     ) {
@@ -68,7 +74,7 @@ fun JuejinProfilePage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5F5))
+                    .background(Colors.Background.primary)
                     .verticalScroll(rememberScrollState())
                     .padding(paddingValues)
             ) {
@@ -76,25 +82,25 @@ fun JuejinProfilePage(
                 ProfileHeader(user)
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
 
                 // 会员横幅
                 MemberBanner()
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
 
                 // 快捷功能
                 QuickFunctionSection()
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
 
                 // 创作者中心
                 CreatorCenterSection()
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Color(0xFFF5F5F5)))
+                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
 
                 // 更多功能
                 MoreFunctionSection()
@@ -151,12 +157,12 @@ private fun ProfileHeader(user: com.example.juejin.model.User) {
                         )
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text("查看更多 >", fontSize = 12.sp, color = Colors.Text.secondary)
+                    Text(stringResource(Res.string.view_more), fontSize = 12.sp, color = Colors.Text.secondary)
                 }
             }
 
             Spacer(Modifier.weight(1f))
-            Text("个人主页 >", fontSize = 12.sp, color = Colors.Text.secondary)
+            Text(stringResource(Res.string.profile_personal_homepage), fontSize = 12.sp, color = Colors.Text.secondary)
         }
 
         Spacer(Modifier.height(16.dp))
@@ -211,7 +217,7 @@ private fun MemberBanner() {
                     colors = ButtonDefaults.buttonColors(containerColor = Colors.UI.memberButton),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("了解一下", fontSize = 12.sp, color = Colors.UI.memberButtonText)
+                    Text(stringResource(Res.string.learn_more), fontSize = 12.sp, color = Colors.UI.memberButtonText)
                 }
             }
         }
@@ -260,8 +266,8 @@ private fun CreatorCenterSection() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("创作者中心", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text("进入首页 >", fontSize = 12.sp, color = Colors.Text.secondary)
+            Text(stringResource(Res.string.profile_creator_center), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(Res.string.profile_enter_homepage), fontSize = 12.sp, color = Colors.Text.secondary)
         }
         Spacer(Modifier.height(16.dp))
         Row(
@@ -293,7 +299,7 @@ private fun MoreFunctionSection() {
             .background(Color.White)
             .padding(16.dp)
     ) {
-        Text("更多功能", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(Res.string.profile_more_functions), fontSize = 16.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
 
         Row(
