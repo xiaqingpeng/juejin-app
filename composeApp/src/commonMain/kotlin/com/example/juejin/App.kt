@@ -111,6 +111,9 @@ fun App() {
         // Notification permission state
         var showNotificationDialog by remember { mutableStateOf(false) }
 
+        // 获取当前平台
+        val currentPlatform = remember { getCurrentPlatformType() }
+
         // Check privacy policy on first launch
         LaunchedEffect(Unit) {
             if (!isPrivacyAccepted) {
@@ -226,8 +229,21 @@ fun App() {
                         PrivacyStorage.setPrivacyPolicyAccepted(true)
                         isPrivacyAccepted = true
                         showPrivacyDialog = false
-                        // 显示通知权限弹窗
-                        showNotificationDialog = true
+                        
+                        // 根据平台决定是否显示自定义通知权限弹窗
+                        when (currentPlatform) {
+                            PlatformType.DESKTOP -> {
+                                // Desktop 显示自定义弹窗
+                                showNotificationDialog = true
+                            }
+                            PlatformType.ANDROID, PlatformType.IOS -> {
+                                // Android/iOS 直接请求系统权限
+                                coroutineScope.launch {
+                                    val granted = requestNotificationPermission()
+                                    println("[NotificationPermission] 系统权限结果：${if (granted) "已授予" else "已拒绝"}")
+                                }
+                            }
+                        }
                     },
                     onDecline = {
                         println("[PrivacyDialog] 用户点击退出应用")

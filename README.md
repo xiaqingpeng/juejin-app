@@ -204,6 +204,13 @@ adb logcat -s "juejin-app"
 # 在 Xcode 中查看 Console 输出
 ```
 
+
+### Gradle清理并重新构建
+```bash
+./gradlew clean build --refresh-dependencies
+```
+
+
 ---
 
 ## 🚀 发布流程
