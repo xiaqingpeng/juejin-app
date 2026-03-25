@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
+import com.example.juejin.util.DateTimeUtil
 
 /** 日志统计卡片组件 展示系统日志统计详情信息 */
 @Composable
@@ -40,7 +41,7 @@ fun EventCard(logStat: com.example.juejin.model.LogStatsItem, onClick: () -> Uni
         InfoRow(label = "Platform", value = logStat.platform ?: "N/A")
         InfoRow(label = "Platform Name", value = logStat.platformName ?: "N/A")
         InfoRow(label = "Duration", value = "${logStat.durationMs ?: 0} ms")
-        InfoRow(label = "Request Time", value = logStat.requestTime ?: "N/A")
+        InfoRow(label = "Request Time", value = DateTimeUtil.formatRequestTime(logStat.requestTime))
     }
 }
 

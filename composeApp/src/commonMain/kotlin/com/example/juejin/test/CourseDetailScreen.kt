@@ -23,6 +23,7 @@ import com.example.juejin.test.components.DetailScreenCardItem
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TopNavigationBarWithBack
+import com.example.juejin.util.DateTimeUtil
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.course_detail_basic_info
 import juejin.composeapp.generated.resources.course_detail_id
@@ -75,7 +76,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onBackCl
                         DetailScreenCardItem(label = stringResource(Res.string.course_detail_id), value = "${logStat.id ?: "N/A"}")
                         DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_path), value = logStat.path ?: "N/A")
                         DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_method), value = logStat.method ?: "N/A")
-                        DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_time), value = logStat.requestTime ?: "N/A")
+                        DetailScreenCardItem(label = stringResource(Res.string.course_detail_request_time), value = DateTimeUtil.formatRequestTime(logStat.requestTime))
                     }
                 }
 
