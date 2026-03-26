@@ -1,5 +1,6 @@
 package com.example.juejin.test
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,9 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.juejin.model.LogStatsItem
 import com.example.juejin.test.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.typography.Typography
@@ -36,6 +41,27 @@ import com.example.juejin.ui.components.TabItem
 import com.example.juejin.ui.components.TabPager
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.viewmodel.LogStatsViewModel
+import juejin.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+
+import juejin.composeapp.generated.resources.course_list_title
+import juejin.composeapp.generated.resources.course_list_platform_all
+import juejin.composeapp.generated.resources.course_list_platform_android
+import juejin.composeapp.generated.resources.course_list_platform_harmony
+import juejin.composeapp.generated.resources.course_list_platform_ios
+import juejin.composeapp.generated.resources.course_list_platform_linux
+import juejin.composeapp.generated.resources.course_list_platform_macos
+import juejin.composeapp.generated.resources.course_list_platform_miniprogram
+import juejin.composeapp.generated.resources.course_list_platform_tv
+import juejin.composeapp.generated.resources.course_list_platform_web
+import juejin.composeapp.generated.resources.course_list_platform_windows
+import juejin.composeapp.generated.resources.course_list_error_title
+import juejin.composeapp.generated.resources.course_list_retry_button
+
+import juejin.composeapp.generated.resources.error_404
+
+
 
 /**
  * 课程列表页面（测试区域）
@@ -45,20 +71,20 @@ import com.example.juejin.viewmodel.LogStatsViewModel
 @Composable
 fun CourseListScreen(
     onBackClick: () -> Unit,
-    onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit
+    onItemClick: (LogStatsItem) -> Unit
 ) {
     // 平台列表（All 为全平台，null 表示不传 platform 参数）
     val platforms = listOf(
-        TabItem(null, "全部"),
-        TabItem("Android", "谷歌Android"),
-        TabItem("Harmony", "华为鸿蒙"),
-        TabItem("iOS", "苹果iOS"),
-        TabItem("Linux", "嵌入式Linux"),
-        TabItem("MacOS", "苹果MacOS"),
-        TabItem("MiniProgram", "微信小程序"),
-        TabItem("TV", "Android TV"),
-        TabItem("Web", "Web网页"),
-        TabItem("Windows", "微软Windows")
+        TabItem(null, stringResource(Res.string.course_list_platform_all)),
+        TabItem("Android", stringResource(Res.string.course_list_platform_android)),
+        TabItem("Harmony", stringResource(Res.string.course_list_platform_harmony)),
+        TabItem("iOS", stringResource(Res.string.course_list_platform_ios)),
+        TabItem("Linux", stringResource(Res.string.course_list_platform_linux)),
+        TabItem("MacOS", stringResource(Res.string.course_list_platform_macos)),
+        TabItem("MiniProgram", stringResource(Res.string.course_list_platform_miniprogram)),
+        TabItem("TV", stringResource(Res.string.course_list_platform_tv)),
+        TabItem("Web", stringResource(Res.string.course_list_platform_web)),
+        TabItem("Windows", stringResource(Res.string.course_list_platform_windows))
     )
 
     // 从全局 ViewModel 订阅状态
@@ -67,6 +93,7 @@ fun CourseListScreen(
     val hasMoreData by LogStatsViewModel.hasMoreData.collectAsState()
     val total by LogStatsViewModel.total.collectAsState()
     val avgDurationMs by LogStatsViewModel.avgDurationMs.collectAsState()
+    val errorMessage by LogStatsViewModel.errorMessage.collectAsState()
     
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -77,7 +104,7 @@ fun CourseListScreen(
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
-                    title = "课程列表",
+                    title = stringResource(Res.string.course_list_title),
                     onBackClick = onBackClick
                 )
             }
@@ -94,6 +121,7 @@ fun CourseListScreen(
                         hasMoreData = hasMoreData,
                         total = total,
                         avgDurationMs = avgDurationMs,
+                        errorMessage = errorMessage,
                         onItemClick = onItemClick
                     )
                 }
@@ -106,12 +134,13 @@ fun CourseListScreen(
 @Composable
 private fun PlatformLogStatsPage(
     platform: String?,
-    logStats: List<com.example.juejin.model.LogStatsItem>,
+    logStats: List<LogStatsItem>,
     isLoading: Boolean,
     hasMoreData: Boolean,
     total: Int,
     avgDurationMs: Int,
-    onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit
+    errorMessage: String?,
+    onItemClick: (LogStatsItem) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -143,9 +172,9 @@ private fun PlatformLogStatsPage(
                         ) {
                             Text(
                                 text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                                style = Typography.body,
-                                color = Colors.primaryBlue
+                                modifier = Modifier.padding(16.dp),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Colors.Text.primary
                             )
                         }
                     }
@@ -186,10 +215,69 @@ private fun PlatformLogStatsPage(
         }
 
         // Loading indicator for initial load
-        if (isLoading && logStats.isEmpty()) {
+        if (isLoading && logStats.isEmpty() && errorMessage == null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Colors.primaryBlue)
             }
+        }
+        
+        // Error state
+        if (!isLoading && logStats.isEmpty() && errorMessage != null) {
+            ErrorRetryView(
+                errorMessage = errorMessage,
+                onRetry = { LogStatsViewModel.refresh(platform = platform) }
+            )
+        }
+    }
+}
+
+/**
+ * 加载失败状态组件
+ */
+@Composable
+private fun ErrorRetryView(
+    errorMessage: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // 错误图标
+//        Image(
+//            painter = painterResource(Res.drawable.my_image),
+//            contentDescription = stringResource(Res.string.course_list_error_title),
+//            modifier = Modifier.size(120.dp)
+//        )
+        Image(
+            painter = painterResource(Res.drawable.error_404),
+            contentDescription = stringResource(Res.string.course_list_error_title),
+            modifier = Modifier.size(120.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(Res.string.course_list_error_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = Colors.Text.primary
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+//        Text(
+//            text = errorMessage,
+//            style = Typography.body,
+//            color = Colors.Text.secondary
+//        )
+        Spacer(modifier = Modifier.height(24.dp))
+        // 重试按钮
+        Button(colors = ButtonColors(
+            Colors.primaryBlue,
+            contentColor = Colors.primaryBlue,
+            disabledContainerColor = Colors.primaryBlue,
+            disabledContentColor = Colors.primaryBlue,
+        ),
+            onClick = onRetry) {
+            Text( stringResource(Res.string.course_list_retry_button),color=  Colors.primaryWhite,)
         }
     }
 }

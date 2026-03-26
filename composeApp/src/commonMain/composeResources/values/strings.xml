@@ -89,6 +89,22 @@
     <string name="settings_basic_version">基础版掘金</string>
     <string name="settings_check_update">检查更新</string>
     
+    <!-- ==================== 课程列表页面 ==================== -->
+    <string name="course_list_title">课程列表</string>
+    <string name="course_list_platform_all">全部</string>
+    <string name="course_list_platform_android">谷歌Android</string>
+    <string name="course_list_platform_harmony">华为鸿蒙</string>
+    <string name="course_list_platform_ios">苹果iOS</string>
+    <string name="course_list_platform_linux">嵌入式Linux</string>
+    <string name="course_list_platform_macos">苹果MacOS</string>
+    <string name="course_list_platform_miniprogram">微信小程序</string>
+    <string name="course_list_platform_tv">Android TV</string>
+    <string name="course_list_platform_web">Web网页</string>
+    <string name="course_list_platform_windows">微软Windows</string>
+    <string name="course_list_stats_format">Total: %d | Avg Duration: %dms</string>
+    <string name="course_list_error_title">加载失败</string>
+    <string name="course_list_retry_button">重新加载</string>
+    
     <!-- ==================== 课程详情页面 ==================== -->
     <string name="course_detail_basic_info">基本信息</string>
     <string name="course_detail_id">ID</string>
