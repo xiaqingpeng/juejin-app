@@ -406,7 +406,6 @@ fun App() {
                                 TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
                                 TabItem.Courses -> CourseScreen()
                                 TabItem.Profile -> ProfileScreen(
-                                    onSettingsClick = { showSettings = true },
                                     userViewModel = userViewModel
                                 )
                             }
