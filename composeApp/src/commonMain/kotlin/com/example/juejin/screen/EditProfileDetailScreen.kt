@@ -65,7 +65,7 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileDetailScreen(
-    onBackClick: () -> Unit,
+    onLeftClick: () -> Unit,
     viewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
 ) {
     val user by viewModel.user.collectAsStateWithLifecycle()
@@ -84,7 +84,7 @@ fun EditProfileDetailScreen(
             topBar = {
                 TopNavigationBarWithBack(
                     title = "资料修改",
-                    onBackClick = onBackClick
+                    onLeftClick = onLeftClick
                 )
             }
         ) { padding ->

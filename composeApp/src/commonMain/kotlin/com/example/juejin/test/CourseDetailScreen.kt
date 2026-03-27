@@ -41,12 +41,12 @@ import org.jetbrains.compose.resources.stringResource
 
 /** 课程详情页面（测试区域） 展示单个日志统计项的详细数据 */
 @Composable
-fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onBackClick: () -> Unit = {}) {
+fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onLeftClick: () -> Unit = {}) {
     Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
                         title = "课程详情",
-                        onBackClick = onBackClick,
+                        onLeftClick = onLeftClick,
                         backgroundColor = Colors.primaryWhite
                 )
             }

@@ -54,7 +54,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit = {},
+    onLeftClick: () -> Unit = {},
     settingViewModel: SettingViewModel = SettingViewModel(),
     userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
 ) {
@@ -76,7 +76,7 @@ fun SettingsScreen(
         // 显示编辑资料页面
         if (showEditProfile) {
             EditProfileDetailScreen(
-                onBackClick = { showEditProfile = false },
+                onLeftClick = { showEditProfile = false },
                 viewModel = userViewModel
             )
         }
@@ -84,7 +84,7 @@ fun SettingsScreen(
         else if (selectedSetting != null) {
             SettingDetailScreen(
                 settingItem = selectedSetting!!,
-                onBackClick = { selectedSetting = null }
+                onLeftClick = { selectedSetting = null }
             )
         }
         // 显示列表页面
@@ -108,7 +108,7 @@ fun SettingsScreen(
                         println("执行破坏性操作: ${item.title}")
                     }
                 },
-                onBackClick = onBackClick
+                onLeftClick = onLeftClick
             )
         }
     }
@@ -122,7 +122,7 @@ private fun SettingsListScreen(
     onDarkModeChanged: (String) -> Unit,
     onPushNotificationChanged: (Boolean) -> Unit,
     onItemClick: (SettingItem) -> Unit,
-    onBackClick: () -> Unit
+    onLeftClick: () -> Unit
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -134,7 +134,7 @@ private fun SettingsListScreen(
             topBar = {
                 TopNavigationBarWithBack(
                     title = stringResource(Res.string.tab_profile_setting),
-                    onBackClick = onBackClick
+                    onLeftClick = onLeftClick
                 )
             }
         ) { padding ->

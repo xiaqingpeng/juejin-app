@@ -92,7 +92,7 @@ fun SettingsScreen(...) {
     if (selectedSetting != null) {
         SettingDetailScreen(
             settingItem = selectedSetting!!,
-            onBackClick = { selectedSetting = null }
+            onLeftClick = { selectedSetting = null }
         )
     } else {
         SettingsListScreen(...)
@@ -120,7 +120,7 @@ onItemClick = { item ->
 @Composable
 fun SettingDetailScreen(
     settingItem: SettingItem,
-    onBackClick: () -> Unit
+    onLeftClick: () -> Unit
 ) {
     // 根据不同的设置项显示不同的内容
     when (settingItem.title) {
@@ -250,7 +250,7 @@ when (settingItem.title) {
 
 1. **状态管理**: 当前使用 `remember` 管理导航状态，适合简单场景
 2. **数据持久化**: 详情页面显示的数据目前是静态的，需要连接真实数据源
-3. **返回处理**: 使用 `onBackClick` 回调处理返回操作，确保状态正确重置
+3. **返回处理**: 使用 `onLeftClick` 回调处理返回操作，确保状态正确重置
 4. **类型判断**: 通过 `SettingType` 判断是否跳转，避免不必要的页面跳转
 
 ## 🔗 相关文件

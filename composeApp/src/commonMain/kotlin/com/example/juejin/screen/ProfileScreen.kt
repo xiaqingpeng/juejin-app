@@ -1,19 +1,21 @@
 package com.example.juejin.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.automirrored.filled.EventNote
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,85 +24,142 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.juejin.model.UserInfo
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.juejin.model.User
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBar
+import com.example.juejin.viewmodel.UserViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.learn_more
 import juejin.composeapp.generated.resources.profile_creator_center
 import juejin.composeapp.generated.resources.profile_enter_homepage
 import juejin.composeapp.generated.resources.profile_more_functions
 import juejin.composeapp.generated.resources.profile_personal_homepage
-import juejin.composeapp.generated.resources.tab_profile
 import juejin.composeapp.generated.resources.view_more
 import org.jetbrains.compose.resources.stringResource
 
 // TODO: Implement onSettingsClick functionality
 
-
-
 @Composable
 fun ProfileScreen(
-    onSettingsClick: () -> Unit = {},
-    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
+        onSettingsClick: () -> Unit = {},
+        userViewModel: UserViewModel = UserViewModel()
 ) {
-    JuejinProfilePage(
-        onSettingsClick = onSettingsClick,
-        userViewModel = userViewModel
-    )
+    JuejinProfilePage(onSettingsClick = onSettingsClick, userViewModel = userViewModel)
 }
 
 @Composable
 fun JuejinProfilePage(
-    onSettingsClick: () -> Unit = {},
-    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
+        onSettingsClick: () -> Unit = {},
+        userViewModel: UserViewModel = UserViewModel()
 ) {
     val user by userViewModel.user.collectAsStateWithLifecycle()
     MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
+            colorScheme =
+                    lightColorScheme(
+                            background = Colors.Background.primary,
+                            surface = Colors.Background.surface
+                    )
     ) {
         Scaffold(
-            topBar = {
-                TopNavigationBar(
-                    title = stringResource(Res.string.tab_profile),
-                    onRightClick = { onSettingsClick()  },
-                    rightIcon = Icons.Filled.Settings
-                )
-            }
+                topBar = {
+                    TopNavigationBar(
+                            leftIcon = Icons.Filled.QrCodeScanner,
+                            // 建议重命名参数名为 onLeftClick，因为图标是扫码而非返回
+                            onLeftClick = { println("点击了扫码") },
+                            title = "",
+                            rightContent = {
+                                Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement =
+                                                Arrangement.spacedBy(8.dp) // 直接在这里统一控制图标间的距离
+                                ) {
+                                    val iconTint = Colors.primaryBlack
+                                    // 封装重复的按钮逻辑，减少冗余代码
+                                    val actionButtons =
+                                            listOf(
+                                                    Icons.Filled.ShieldMoon to "防护模式",
+                                                    Icons.Filled.Doorbell to "消息通知",
+                                                    Icons.Filled.Settings to "设置"
+                                            )
+
+                                    actionButtons.forEach { (icon, description) ->
+                                        Icon(
+                                                imageVector = icon,
+                                                contentDescription = null,
+                                                tint = iconTint,
+                                                modifier =
+                                                        Modifier.size(24.dp)
+                                                                .clickable(
+                                                                        onClick = {
+                                                                            println(
+                                                                                    "点击了 $description"
+                                                                            )
+                                                                        },
+                                                                        indication =
+                                                                                null, // 去除水波纹，或自定义
+                                                                        interactionSource =
+                                                                                remember {
+                                                                                    MutableInteractionSource()
+                                                                                }
+                                                                )
+                                        )
+                                    }
+                                }
+                            }
+                    )
+                }
         ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Colors.Background.primary)
-                    .verticalScroll(rememberScrollState())
-                    .padding(paddingValues)
+                    modifier =
+                            Modifier.fillMaxSize()
+                                    .background(Colors.Background.primary)
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(paddingValues)
             ) {
                 // 用户信息
                 ProfileHeader(user)
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
+                Spacer(
+                        modifier =
+                                Modifier.height(8.dp)
+                                        .fillMaxWidth()
+                                        .background(Colors.Background.primary)
+                )
 
                 // 会员横幅
                 MemberBanner()
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
+                Spacer(
+                        modifier =
+                                Modifier.height(8.dp)
+                                        .fillMaxWidth()
+                                        .background(Colors.Background.primary)
+                )
 
                 // 快捷功能
                 QuickFunctionSection()
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
+                Spacer(
+                        modifier =
+                                Modifier.height(8.dp)
+                                        .fillMaxWidth()
+                                        .background(Colors.Background.primary)
+                )
 
                 // 创作者中心
                 CreatorCenterSection()
 
                 // 分组间距
-                Spacer(modifier = Modifier.height(8.dp).fillMaxWidth().background(Colors.Background.primary))
+                Spacer(
+                        modifier =
+                                Modifier.height(8.dp)
+                                        .fillMaxWidth()
+                                        .background(Colors.Background.primary)
+                )
 
                 // 更多功能
                 MoreFunctionSection()
@@ -110,21 +169,15 @@ fun JuejinProfilePage(
 }
 
 @Composable
-private fun ProfileHeader(user: com.example.juejin.model.User) {
+private fun ProfileHeader(user: User) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Colors.Background.surface)
-            .padding(16.dp)
+            modifier = Modifier.fillMaxWidth().background(Colors.Background.surface).padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             // 头像
             Box(
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(CircleShape)
-                    .background(Colors.UI.avatar),
-                contentAlignment = Alignment.Center
+                    modifier = Modifier.size(60.dp).clip(CircleShape).background(Colors.UI.avatar),
+                    contentAlignment = Alignment.Center
             ) {
                 if (user.avatar.isNotEmpty()) {
                     // TODO: 使用 AsyncImage 加载头像
@@ -137,40 +190,41 @@ private fun ProfileHeader(user: com.example.juejin.model.User) {
             Spacer(Modifier.width(12.dp))
 
             Column {
-                Text(
-                    user.username,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Text(user.username, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(4.dp))
                 Row {
                     Surface(
-                        modifier = Modifier.height(20.dp),
-                        color = Colors.UI.levelBadge,
-                        shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.height(20.dp),
+                            color = Colors.UI.levelBadge,
+                            shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
-                            user.level,
-                            fontSize = 10.sp,
-                            color = Colors.UI.levelText,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                user.level,
+                                fontSize = 10.sp,
+                                color = Colors.UI.levelText,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(Res.string.view_more), fontSize = 12.sp, color = Colors.Text.secondary)
+                    Text(
+                            stringResource(Res.string.view_more),
+                            fontSize = 12.sp,
+                            color = Colors.Text.secondary
+                    )
                 }
             }
 
             Spacer(Modifier.weight(1f))
-            Text(stringResource(Res.string.profile_personal_homepage), fontSize = 12.sp, color = Colors.Text.secondary)
+            Text(
+                    stringResource(Res.string.profile_personal_homepage),
+                    fontSize = 12.sp,
+                    color = Colors.Text.secondary
+            )
         }
 
         Spacer(Modifier.height(16.dp))
 
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             ProfileStatItem("点赞", user.likeCount.toString())
             ProfileStatItem("收藏", user.collectCount.toString())
             ProfileStatItem("关注", user.followCount.toString())
@@ -188,36 +242,36 @@ private fun ProfileStatItem(label: String, value: String) {
 
 @Composable
 private fun MemberBanner() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
+    Box(modifier = Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
         Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Colors.UI.memberBanner),
-            shape = RoundedCornerShape(8.dp)
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Colors.UI.memberBanner),
+                shape = RoundedCornerShape(8.dp)
         ) {
             Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    Modifier.fillMaxWidth().padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "年度会员限时五折 领小册周边福利",
-                    fontSize = 14.sp,
-                    color = Colors.Text.white,
-                    modifier = Modifier.weight(1f)
+                        "年度会员限时五折 领小册周边福利",
+                        fontSize = 14.sp,
+                        color = Colors.Text.white,
+                        modifier = Modifier.weight(1f)
                 )
                 Button(
-                    onClick = {},
-                    modifier = Modifier.height(32.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Colors.UI.memberButton),
-                    shape = RoundedCornerShape(16.dp)
+                        onClick = {},
+                        modifier = Modifier.height(32.dp),
+                        colors =
+                                ButtonDefaults.buttonColors(
+                                        containerColor = Colors.UI.memberButton
+                                ),
+                        shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(stringResource(Res.string.learn_more), fontSize = 12.sp, color = Colors.UI.memberButtonText)
+                    Text(
+                            stringResource(Res.string.learn_more),
+                            fontSize = 12.sp,
+                            color = Colors.UI.memberButtonText
+                    )
                 }
             }
         }
@@ -226,16 +280,8 @@ private fun MemberBanner() {
 
 @Composable
 private fun QuickFunctionSection() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
+    Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             QuickFunctionItem(Icons.Default.CheckCircle, "每日签到", Colors.QuickFunctions.checkIn)
             QuickFunctionItem(Icons.Default.Casino, "幸运转盘", Colors.QuickFunctions.luckyWheel)
             QuickFunctionItem(Icons.Default.BugReport, "Bug挑战赛", Colors.QuickFunctions.bugChallenge)
@@ -255,25 +301,25 @@ private fun QuickFunctionItem(icon: ImageVector, label: String, tint: Color) {
 
 @Composable
 private fun CreatorCenterSection() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
+    Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
         Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(stringResource(Res.string.profile_creator_center), fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(stringResource(Res.string.profile_enter_homepage), fontSize = 12.sp, color = Colors.Text.secondary)
+            Text(
+                    stringResource(Res.string.profile_creator_center),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+            )
+            Text(
+                    stringResource(Res.string.profile_enter_homepage),
+                    fontSize = 12.sp,
+                    color = Colors.Text.secondary
+            )
         }
         Spacer(Modifier.height(16.dp))
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             CreatorCenterItem(Icons.Default.BarChart, "内容数据")
             CreatorCenterItem(Icons.Default.People, "粉丝数据")
             CreatorCenterItem(Icons.Default.Campaign, "创作活动")
@@ -293,19 +339,15 @@ private fun CreatorCenterItem(icon: ImageVector, label: String) {
 
 @Composable
 private fun MoreFunctionSection() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
-        Text(stringResource(Res.string.profile_more_functions), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+    Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+        Text(
+                stringResource(Res.string.profile_more_functions),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+        )
         Spacer(Modifier.height(16.dp))
 
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             MoreFunctionItem(Icons.Default.School, "课程中心")
             MoreFunctionItem(Icons.Default.Share, "推广中心")
             MoreFunctionItem(Icons.Default.LocalOffer, "我的优惠券")
@@ -314,10 +356,7 @@ private fun MoreFunctionSection() {
 
         Spacer(Modifier.height(24.dp))
 
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             MoreFunctionItem(Icons.Default.Star, "阅读记录")
             MoreFunctionItem(Icons.AutoMirrored.Filled.Label, "标签管理")
             MoreFunctionItem(Icons.AutoMirrored.Filled.EventNote, "我的报名")

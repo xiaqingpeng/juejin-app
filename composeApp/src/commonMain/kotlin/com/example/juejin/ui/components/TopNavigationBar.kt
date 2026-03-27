@@ -22,8 +22,8 @@ import com.example.juejin.ui.typography.Typography
  * 全局可复用的顶部导航栏组件
  *
  * @param title 中间标题文本
- * @param onBackClick 返回按钮点击回调（为null时不显示返回按钮）
- * @param backIcon 返回按钮图标（默认为空，使用系统返回图标）
+ * @param onLeftClick 返回按钮点击回调（为null时不显示返回按钮）
+ * @param leftIcon 返回按钮图标（默认为空，使用系统返回图标）
  * @param onRightClick 右侧按钮点击回调（为null时不显示右侧按钮）
  * @param rightIcon 右侧按钮图标
  * @param rightContent 右侧自定义内容（优先级高于rightIcon）
@@ -33,8 +33,8 @@ import com.example.juejin.ui.typography.Typography
 @Composable
 fun TopNavigationBar(
     title: String,
-    onBackClick: (() -> Unit)? = null,
-    backIcon: ImageVector? = null,
+    onLeftClick: (() -> Unit)? = null,
+    leftIcon: ImageVector? = null,
     onRightClick: (() -> Unit)? = null,
     rightIcon: ImageVector? = null,
     rightContent: @Composable (() -> Unit)? = null,
@@ -52,15 +52,16 @@ fun TopNavigationBar(
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center
         ) {
-            // 左侧返回按钮
-            if (onBackClick != null) {
+
+
+            if (onLeftClick != null) {
                 IconButton(
-                    onClick = onBackClick,
+                    onClick = onLeftClick,
                     modifier = Modifier.align(Alignment.CenterStart)
                 ) {
-                    if (backIcon != null) {
+                    if (leftIcon != null) {
                         Icon(
-                            imageVector = backIcon,
+                            imageVector = leftIcon,
                             contentDescription = "Back",
                             tint = contentColor
                         )
@@ -129,13 +130,13 @@ fun TopNavigationBarSimple(
 @Composable
 fun TopNavigationBarWithBack(
     title: String,
-    onBackClick: () -> Unit,
+    onLeftClick: () -> Unit,
     backgroundColor: Color = TopAppBarDefaults.topAppBarColors().containerColor,
     contentColor: Color = Color.Unspecified
 ) {
     TopNavigationBar(
         title = title,
-        onBackClick = onBackClick,
+        onLeftClick = onLeftClick,
         backgroundColor = backgroundColor,
         contentColor = contentColor
     )

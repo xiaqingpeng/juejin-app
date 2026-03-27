@@ -35,7 +35,7 @@ import com.example.juejin.ui.components.TopNavigationBarWithBack
  */
 @Composable
 fun TestListScreen(
-    onBackClick: () -> Unit,
+    onLeftClick: () -> Unit,
     onTestClick: (TestCase) -> Unit
 ) {
     val testCases = TestRegistry.getAll()
@@ -50,7 +50,7 @@ fun TestListScreen(
             topBar = {
                 TopNavigationBarWithBack(
                     title = "测试案例列表",
-                    onBackClick = onBackClick
+                    onLeftClick = onLeftClick
                 )
             }
         ) { padding ->

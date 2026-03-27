@@ -20,7 +20,7 @@ import com.example.juejin.ui.components.TopNavigationBarWithBack
 @Composable
 fun TestDetailScreen(
     testCase: TestCase,
-    onBackClick: () -> Unit
+    onLeftClick: () -> Unit
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -32,7 +32,7 @@ fun TestDetailScreen(
             topBar = {
                 TopNavigationBarWithBack(
                     title = testCase.title,
-                    onBackClick = onBackClick
+                    onLeftClick = onLeftClick
                 )
             }
         ) { padding ->

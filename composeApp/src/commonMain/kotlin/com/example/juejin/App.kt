@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.filled.BugReport
@@ -34,22 +34,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.juejin.enums.TabItem
-import com.example.juejin.model.LogStatsItem
+import com.example.juejin.platform.exitApp
+import com.example.juejin.platform.requestNotificationPermission
 import com.example.juejin.screen.CourseScreen
-import com.example.juejin.viewmodel.DiscoverViewModel
-import com.example.juejin.viewmodel.HotViewModel
 import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
 import com.example.juejin.screen.SettingsScreen
-import com.example.juejin.platform.exitApp
-import com.example.juejin.platform.requestNotificationPermission
 import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
-import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.NotificationPermissionDialog
+import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.StatusBarEffect
+import com.example.juejin.viewmodel.DiscoverViewModel
+import com.example.juejin.viewmodel.HotViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.privacy_policy_required
 import kotlinx.coroutines.launch
@@ -311,7 +310,7 @@ fun App() {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.CourseDetailScreen(
                             logStat = selectedCourse,
-                            onBackClick = { 
+                            onLeftClick = { 
                                 selectedCourse = null
                                 showCourseList = true  // 返回到课程列表
                             }
@@ -322,7 +321,7 @@ fun App() {
                 showCourseList -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.CourseListScreen(
-                            onBackClick = { 
+                            onLeftClick = { 
                                 showCourseList = false
                                 showTestList = true  // 返回到测试列表
                             },
@@ -337,7 +336,7 @@ fun App() {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.TestDetailScreen(
                             testCase = selectedTestCase!!,
-                            onBackClick = { 
+                            onLeftClick = { 
                                 selectedTestCase = null
                                 showTestList = true  // 返回到测试列表页
                             }
@@ -348,7 +347,7 @@ fun App() {
                 showTestList -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.TestListScreen(
-                            onBackClick = { showTestList = false },
+                            onLeftClick = { showTestList = false },
                             onTestClick = { testCase ->
                                 // 特殊处理：课程列表测试案例跳转到课程列表页面
                                 if (testCase.id == "test_course_list") {
@@ -364,7 +363,7 @@ fun App() {
                 showSettings -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         SettingsScreen(
-                            onBackClick = { showSettings = false },
+                            onLeftClick = { showSettings = false },
                             userViewModel = userViewModel
                         )
                     }

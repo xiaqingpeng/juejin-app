@@ -70,7 +70,7 @@ import juejin.composeapp.generated.resources.error_404
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourseListScreen(
-    onBackClick: () -> Unit,
+    onLeftClick: () -> Unit,
     onItemClick: (LogStatsItem) -> Unit
 ) {
     // 平台列表（All 为全平台，null 表示不传 platform 参数）
@@ -105,7 +105,7 @@ fun CourseListScreen(
             topBar = {
                 TopNavigationBarWithBack(
                     title = stringResource(Res.string.course_list_title),
-                    onBackClick = onBackClick
+                    onLeftClick = onLeftClick
                 )
             }
         ) { padding ->
