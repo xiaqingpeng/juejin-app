@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.settingdetail
+package com.example.juejin.components.settingdetail
 
 import androidx.compose.runtime.Composable
 import com.example.juejin.model.SettingDetailItem

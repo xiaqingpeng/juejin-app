@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.juejin.model.SettingItem
-import com.example.juejin.screen.components.settingdetail.SettingDetailContentProvider
+import com.example.juejin.components.settingdetail.SettingDetailContentProvider
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 

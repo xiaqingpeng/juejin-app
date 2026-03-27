@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.profile
+package com.example.juejin.components.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,10 +30,26 @@ import com.example.juejin.ui.Colors
 fun QuickFunctionSection() {
     Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            QuickFunctionItem(Icons.Default.CheckCircle, "每日签到", Colors.QuickFunctions.checkIn)
-            QuickFunctionItem(Icons.Default.Casino, "幸运转盘", Colors.QuickFunctions.luckyWheel)
-            QuickFunctionItem(Icons.Default.BugReport, "Bug挑战赛", Colors.QuickFunctions.bugChallenge)
-            QuickFunctionItem(Icons.Default.Star, "福利兑换", Colors.QuickFunctions.welfare)
+            QuickFunctionItem(
+                Icons.Default.CheckCircle,
+                "每日签到",
+                Colors.QuickFunctions.checkIn
+            )
+            QuickFunctionItem(
+                Icons.Default.Casino,
+                "幸运转盘",
+                Colors.QuickFunctions.luckyWheel
+            )
+            QuickFunctionItem(
+                Icons.Default.BugReport,
+                "Bug挑战赛",
+                Colors.QuickFunctions.bugChallenge
+            )
+            QuickFunctionItem(
+                Icons.Default.Star,
+                "福利兑换",
+                Colors.QuickFunctions.welfare
+            )
         }
     }
 }

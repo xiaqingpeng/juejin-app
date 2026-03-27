@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.profile
+package com.example.juejin.components.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,10 +52,22 @@ fun CreatorCenterSection() {
         }
         Spacer(Modifier.height(16.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            CreatorCenterItem(Icons.Default.BarChart, "内容数据")
-            CreatorCenterItem(Icons.Default.People, "粉丝数据")
-            CreatorCenterItem(Icons.Default.Campaign, "创作活动")
-            CreatorCenterItem(Icons.Default.Drafts, "草稿箱")
+            CreatorCenterItem(
+                Icons.Default.BarChart,
+                "内容数据"
+            )
+            CreatorCenterItem(
+                Icons.Default.People,
+                "粉丝数据"
+            )
+            CreatorCenterItem(
+                Icons.Default.Campaign,
+                "创作活动"
+            )
+            CreatorCenterItem(
+                Icons.Default.Drafts,
+                "草稿箱"
+            )
         }
     }
 }

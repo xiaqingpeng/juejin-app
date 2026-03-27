@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.settingdetail
+package com.example.juejin.components.settingdetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

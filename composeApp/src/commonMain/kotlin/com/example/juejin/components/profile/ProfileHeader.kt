@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.profile
+package com.example.juejin.components.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -88,9 +88,18 @@ fun ProfileHeader(user: User) {
         Spacer(Modifier.height(16.dp))
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            ProfileStatItem("点赞", user.likeCount.toString())
-            ProfileStatItem("收藏", user.collectCount.toString())
-            ProfileStatItem("关注", user.followCount.toString())
+            ProfileStatItem(
+                "点赞",
+                user.likeCount.toString()
+            )
+            ProfileStatItem(
+                "收藏",
+                user.collectCount.toString()
+            )
+            ProfileStatItem(
+                "关注",
+                user.followCount.toString()
+            )
         }
     }
 }

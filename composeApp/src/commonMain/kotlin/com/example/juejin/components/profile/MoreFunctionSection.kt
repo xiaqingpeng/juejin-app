@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.profile
+package com.example.juejin.components.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,19 +44,43 @@ fun MoreFunctionSection() {
         Spacer(Modifier.height(16.dp))
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            MoreFunctionItem(Icons.Default.School, "课程中心")
-            MoreFunctionItem(Icons.Default.Share, "推广中心")
-            MoreFunctionItem(Icons.Default.LocalOffer, "我的优惠券")
-            MoreFunctionItem(Icons.Default.Group, "我的圈子")
+            MoreFunctionItem(
+                Icons.Default.School,
+                "课程中心"
+            )
+            MoreFunctionItem(
+                Icons.Default.Share,
+                "推广中心"
+            )
+            MoreFunctionItem(
+                Icons.Default.LocalOffer,
+                "我的优惠券"
+            )
+            MoreFunctionItem(
+                Icons.Default.Group,
+                "我的圈子"
+            )
         }
 
         Spacer(Modifier.height(24.dp))
 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            MoreFunctionItem(Icons.Default.Star, "阅读记录")
-            MoreFunctionItem(Icons.AutoMirrored.Filled.Label, "标签管理")
-            MoreFunctionItem(Icons.AutoMirrored.Filled.EventNote, "我的报名")
-            MoreFunctionItem(Icons.Default.Feedback, "意见反馈")
+            MoreFunctionItem(
+                Icons.Default.Star,
+                "阅读记录"
+            )
+            MoreFunctionItem(
+                Icons.AutoMirrored.Filled.Label,
+                "标签管理"
+            )
+            MoreFunctionItem(
+                Icons.AutoMirrored.Filled.EventNote,
+                "我的报名"
+            )
+            MoreFunctionItem(
+                Icons.Default.Feedback,
+                "意见反馈"
+            )
         }
     }
 }

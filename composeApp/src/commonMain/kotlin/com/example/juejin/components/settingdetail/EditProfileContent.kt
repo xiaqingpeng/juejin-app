@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.settingdetail
+package com.example.juejin.components.settingdetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +33,7 @@ fun EditProfileContent() {
             SettingDetailItem("微博", "未绑定")
         )
     )
-    
+
     DetailSection(section = section)
     
     // 提示信息

@@ -30,11 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.juejin.screen.components.profile.CreatorCenterSection
-import com.example.juejin.screen.components.profile.MemberBanner
-import com.example.juejin.screen.components.profile.MoreFunctionSection
-import com.example.juejin.screen.components.profile.ProfileHeader
-import com.example.juejin.screen.components.profile.QuickFunctionSection
+import com.example.juejin.components.profile.CreatorCenterSection
+import com.example.juejin.components.profile.MemberBanner
+import com.example.juejin.components.profile.MoreFunctionSection
+import com.example.juejin.components.profile.ProfileHeader
+import com.example.juejin.components.profile.QuickFunctionSection
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBar
 import com.example.juejin.viewmodel.UserViewModel

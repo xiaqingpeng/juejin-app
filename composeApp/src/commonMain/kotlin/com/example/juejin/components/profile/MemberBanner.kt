@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.profile
+package com.example.juejin.components.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

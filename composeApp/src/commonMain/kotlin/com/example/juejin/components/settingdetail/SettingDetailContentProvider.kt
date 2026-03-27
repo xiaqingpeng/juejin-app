@@ -1,4 +1,4 @@
-package com.example.juejin.screen.components.settingdetail
+package com.example.juejin.components.settingdetail
 
 import androidx.compose.runtime.Composable
 
@@ -31,7 +31,9 @@ object SettingDetailContentProvider {
             "检查更新" -> CheckUpdateContent()
             "关于" -> AboutUsContent()  // 复用"关于我们"的内容
             
-            else -> DefaultContent(title)
+            else -> DefaultContent(
+                title
+            )
         }
     }
 }
