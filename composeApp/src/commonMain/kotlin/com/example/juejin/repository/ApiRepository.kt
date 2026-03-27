@@ -1,6 +1,9 @@
-package com.example.juejin.network
+package com.example.juejin.repository
 
+import com.example.juejin.model.LogStatsItem
 import com.example.juejin.model.LogStatsResponse
+import com.example.juejin.network.ApiConfig
+import com.example.juejin.network.HttpClientManager
 
 /**
  * API 请求仓库
@@ -38,12 +41,12 @@ object ApiRepository {
                     append("&endTime=$endTime")
                 }
             }
-            
+
             val path = "/system/logs/stats$params"
             val url = ApiConfig.buildUrl(path)
-            
+
             println("[ApiRepository] Request URL: $url")
-            
+
             val response = HttpClientManager.get(url)
             val result: LogStatsResponse = try {
                 HttpClientManager.parseResponse(response)
@@ -52,9 +55,9 @@ object ApiRepository {
                 println("[ApiRepository] Empty response, using mock data")
                 generateMockData(platform)
             }
-            
+
             println("[ApiRepository] Response code: ${result.code}, rows count: ${result.rows.size}, total: ${result.total}")
-            
+
             Result.success(result)
         } catch (e: Exception) {
             println("[ApiRepository] Error: ${e.message}")
@@ -62,7 +65,7 @@ object ApiRepository {
             Result.failure(e)
         }
     }
-    
+
     /**
      * 生成模拟数据
      */
@@ -73,7 +76,7 @@ object ApiRepository {
             total = 3,
             avgDurationMs = 157,
             rows = listOf(
-                com.example.juejin.model.LogStatsItem(
+                LogStatsItem(
                     id = 1,
                     path = "/api/test1",
                     method = "GET",
@@ -83,9 +86,9 @@ object ApiRepository {
                     durationMs = 150,
                     requestTime = "2026-03-23T16:00:00Z"
                 ),
-                com.example.juejin.model.LogStatsItem(
+                LogStatsItem(
                     id = 2,
-                    path = "/api/test2", 
+                    path = "/api/test2",
                     method = "POST",
                     ip = "192.168.1.101",
                     platform = platform ?: "all",
@@ -93,10 +96,10 @@ object ApiRepository {
                     durationMs = 200,
                     requestTime = "2026-03-23T16:01:00Z"
                 ),
-                com.example.juejin.model.LogStatsItem(
+                LogStatsItem(
                     id = 3,
                     path = "/api/test3",
-                    method = "GET", 
+                    method = "GET",
                     ip = "192.168.1.102",
                     platform = platform ?: "all",
                     platformName = "iOS Simulator",

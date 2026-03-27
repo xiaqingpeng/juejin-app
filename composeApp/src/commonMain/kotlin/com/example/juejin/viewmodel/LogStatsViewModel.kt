@@ -1,7 +1,7 @@
 package com.example.juejin.viewmodel
 
 import com.example.juejin.model.LogStatsItem
-import com.example.juejin.network.ApiRepository
+import com.example.juejin.repository.ApiRepository
 import com.example.juejin.store.GlobalState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
