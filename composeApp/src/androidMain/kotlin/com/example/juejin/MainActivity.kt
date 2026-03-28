@@ -47,6 +47,8 @@ class MainActivity : ComponentActivity() {
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Set the correct theme with NoActionBar to avoid duplicate AppBar
+        setTheme(R.style.Theme_App_MainActivity)
         super.onCreate(savedInstanceState)
         instance = this
         

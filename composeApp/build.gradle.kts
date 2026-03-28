@@ -36,6 +36,9 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
+            implementation("androidx.core:core-splashscreen:1.0.1")
+            // 确保版本在 1.5.0 以上，建议使用当前较新的版本
+            implementation("com.google.android.material:material:1.9.0")
         }
         commonMain.dependencies {
         implementation(libs.compose.runtime)

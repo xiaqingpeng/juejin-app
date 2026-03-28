@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- 启动页背景颜色 -->
+        <item name="windowSplashScreenBackground">#ffffff</item>
+        <!-- 启动页图标 -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+
+        <!-- 关键点：设置闪屏结束后恢复的主题 -->
+        <!-- 必须指定一个 NoActionBar 的主题来覆盖默认的 AppBar -->
+        <item name="postSplashScreenTheme">@style/Theme.App.MainActivity</item>
+    </style>
+
+    <!-- 你应用原本的主题 -->
+    <style name="Theme.App.MainActivity" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- 原有的配置 -->
+    </style>
+
+</resources>
