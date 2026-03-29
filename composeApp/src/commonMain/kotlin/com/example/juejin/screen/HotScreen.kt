@@ -29,9 +29,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.juejin.model.Hot
 import com.example.juejin.ui.Colors
 import com.example.juejin.viewmodel.HotViewModel
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.loading
+import juejin.composeapp.generated.resources.loading_error
+import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
@@ -69,19 +77,32 @@ fun HotScreen(vm: HotViewModel) {
         Column(modifier = Modifier.padding(16.dp)) {
             // 头像 + 昵称 + 时间
             Row(verticalAlignment = Alignment.CenterVertically) {
+                // 圈子头像
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Colors.primaryGray),
+                        .size(48.dp)
+//                .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium)
+                        .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = hot.author.firstOrNull()?.toString() ?: "U",
-                        color = Colors.Text.white,
-                        fontWeight = FontWeight.Bold
+//            Text(
+//                text = circle.name.firstOrNull()?.toString() ?: "C",
+//                color = Colors.Text.primary,
+//                style = MaterialTheme.typography.titleMedium
+//            )
+
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalPlatformContext.current)
+                            .data(hot.avatar)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Image",
+                        placeholder = painterResource(Res.drawable.loading),
+                        error = painterResource(Res.drawable.loading_error),
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
+
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(hot.author, fontWeight = FontWeight.Bold)

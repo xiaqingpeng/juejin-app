@@ -23,7 +23,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "1",
                     author = "潜龙勿用之化骨龙",
-                    avatar = "avatar1",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "线程池解决的是“资源问题”，协程解决的是“表达问题”",
                     time = "4分钟前",
@@ -34,7 +34,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "2",
                     author = "北子龙",
-                    avatar = "avatar2",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "开心时大笑，困惑时静思",
                     time = "4分钟前",
@@ -45,7 +45,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "3",
                     author = "塔玛德二等饼干",
-                    avatar = "avatar3",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "ai对软件行业冲击还挺大的，出门找工作都很焦虑",
                     time = "33分钟前",
@@ -56,7 +56,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "4",
                     author = "比考试难考的地瓜",
-                    avatar = "avatar4",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "杭州太子湾赏花",
                     time = "42分钟前",
@@ -68,7 +68,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "5",
                     author = "潜龙勿用之化骨龙",
-                    avatar = "avatar1",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "线程池解决的是“资源问题”，协程解决的是“表达问题”",
                     time = "4分钟前",
@@ -79,7 +79,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "6",
                     author = "北子龙",
-                    avatar = "avatar2",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "开心时大笑，困惑时静思",
                     time = "4分钟前",
@@ -90,7 +90,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "7",
                     author = "塔玛德二等饼干",
-                    avatar = "avatar3",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "ai对软件行业冲击还挺大的，出门找工作都很焦虑",
                     time = "33分钟前",
@@ -101,7 +101,7 @@ class HotViewModel : ViewModel() {
                 Hot(
                     id = "8",
                     author = "比考试难考的地瓜",
-                    avatar = "avatar4",
+                    avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp",
                     title = "",
                     content = "杭州太子湾赏花",
                     time = "42分钟前",

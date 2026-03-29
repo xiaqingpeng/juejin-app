@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Favorite
@@ -28,14 +29,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.juejin.model.Article
 import com.example.juejin.model.Circle
 import com.example.juejin.model.DiscoverModule
 import com.example.juejin.ui.Colors
 import com.example.juejin.viewmodel.DiscoverViewModel
+import juejin.composeapp.generated.resources.Res
+import juejin.composeapp.generated.resources.loading
+import juejin.composeapp.generated.resources.loading_error
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun DiscoverScreen(vm: DiscoverViewModel) {
@@ -240,13 +250,25 @@ fun CircleItem(circle: Circle) {
         Box(
             modifier = Modifier
                 .size(48.dp)
-                .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium),
+//                .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium)
+                .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = circle.name.firstOrNull()?.toString() ?: "C",
-                color = Colors.Text.primary,
-                style = MaterialTheme.typography.titleMedium
+//            Text(
+//                text = circle.name.firstOrNull()?.toString() ?: "C",
+//                color = Colors.Text.primary,
+//                style = MaterialTheme.typography.titleMedium
+//            )
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalPlatformContext.current)
+                    .data("https://p3-passport.byteacctimg.com/img/user-avatar/6124bdab786a9d21e38479c762f37c23~180x180.awebp")
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "Image",
+                placeholder = painterResource(Res.drawable.loading),
+                error = painterResource(Res.drawable.loading_error),
+                modifier = Modifier.fillMaxSize()
             )
         }
         
