@@ -11,7 +11,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.example.juejin.storage.PrivacyStorage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -48,8 +52,22 @@ class MainActivity : ComponentActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         // Set the correct theme with NoActionBar to avoid duplicate AppBar
-        setTheme(R.style.Theme_App_MainActivity)
+//        setTheme(R.style.Theme_App_MainActivity)
         super.onCreate(savedInstanceState)
+
+        var isChecking=true
+
+        lifecycleScope.launch {
+            delay(1000L)
+            isChecking=false
+
+        }
+
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                isChecking
+            }
+        }
         instance = this
         
         // 启用边到边显示，并设置状态栏为白色背景、深色图标

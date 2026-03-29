@@ -1,6 +1,5 @@
 package com.example.juejin.util
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -16,7 +15,7 @@ actual object DateTimeUtil {
         if (isoString == null || isoString.length == 0) return "N/A"
         
         return try {
-            val instant = Instant.parse(isoString)
+            val instant = kotlin.time.Instant.parse(isoString)
             val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
             
             // 手动拼接字符串

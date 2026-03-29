@@ -4,11 +4,11 @@
         <!-- 启动页背景颜色 -->
         <item name="windowSplashScreenBackground">#ffffff</item>
         <!-- 启动页图标 -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/juejin</item>
 
         <!-- 关键点：设置闪屏结束后恢复的主题 -->
         <!-- 必须指定一个 NoActionBar 的主题来覆盖默认的 AppBar -->
-        <item name="postSplashScreenTheme">@style/Theme.App.MainActivity</item>
+        <item name="postSplashScreenTheme">@android:style/Theme.Material.NoActionBar</item>
     </style>
 
     <!-- 你应用原本的主题 -->

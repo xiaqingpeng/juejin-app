@@ -137,7 +137,7 @@ fun App() {
                                             // Use Material Icons with dynamic coloring
                                             val iconColor =
                                                     if (isSelected) Colors.primaryBlue
-                                                    else Colors.unselectedGray
+                                                    else Colors.primaryGray
                                             androidx.compose.material3.Icon(
                                                     imageVector = tab.icon,
                                                     contentDescription = stringResource(tab.title),
@@ -159,11 +159,11 @@ fun App() {
                                                         // selected items
                                                         selectedTextColor = Colors.primaryBlue,
                                                         unselectedIconColor =
-                                                                Colors.unselectedGray, // Gray color
+                                                            Colors.primaryGray, // Gray color
                                                         // for
                                                         // unselected
                                                         // items
-                                                        unselectedTextColor = Colors.unselectedGray,
+                                                        unselectedTextColor = Colors.primaryGray,
                                                         indicatorColor =
                                                                 Color.Transparent // No indicator
                                                         // line
