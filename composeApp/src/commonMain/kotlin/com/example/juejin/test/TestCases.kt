@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.juejin.ui.Colors
+// ColorGridScreen is in the same package, no import needed
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.loading
 import juejin.composeapp.generated.resources.test_click_count
@@ -183,6 +184,17 @@ fun registerTestCases() {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(stringResource(Res.string.loading), fontSize = 16.sp)
             }
+        }
+    )
+    
+    // 测试案例 6：定时颜色变化卡片
+    TestRegistry.register(
+        TestCase(
+            id = "test_color_grid",
+            title = "定时颜色变化卡片",
+            description = "随机改变卡片颜色"
+        ) {
+            ColorGridScreen()
         }
     )
     
