@@ -39,6 +39,17 @@ kotlin {
             implementation("androidx.core:core-splashscreen:1.0.1")
             // 确保版本在 1.5.0 以上，建议使用当前较新的版本
             implementation("com.google.android.material:material:1.9.0")
+
+            // QR/条码扫描（CameraX + ML Kit）
+            implementation("androidx.camera:camera-camera2:1.6.0")
+            implementation("androidx.camera:camera-lifecycle:1.6.0")
+            implementation("androidx.camera:camera-view:1.6.0")
+            implementation("com.google.mlkit:barcode-scanning:17.3.0")
+            // Add concurrent-futures dependency to resolve ListenableFuture issues
+            implementation("androidx.concurrent:concurrent-futures:1.2.0")
+            implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0")
+            // ProcessCameraProvider uses Guava's ListenableFuture
+            implementation("com.google.guava:guava:29.0-android")
         }
         commonMain.dependencies {
         implementation(libs.compose.runtime)

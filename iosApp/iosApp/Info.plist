@@ -15,5 +15,7 @@
 	</dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>用于扫描二维码</string>
 </dict>
 </plist>

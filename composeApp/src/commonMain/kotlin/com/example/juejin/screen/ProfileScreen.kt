@@ -39,18 +39,18 @@ import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBar
 import com.example.juejin.viewmodel.UserViewModel
 
-// TODO: Implement onSettingsClick functionality
-
 @Composable
 fun ProfileScreen(
-    userViewModel: UserViewModel = UserViewModel()
+    userViewModel: UserViewModel = UserViewModel(),
+    onQrScanClick: () -> Unit = {}
 ) {
-    JuejinProfilePage(userViewModel = userViewModel)
+    JuejinProfilePage(userViewModel = userViewModel, onQrScanClick = onQrScanClick)
 }
 
 @Composable
 fun JuejinProfilePage(
-    userViewModel: UserViewModel = UserViewModel()
+    userViewModel: UserViewModel = UserViewModel(),
+    onQrScanClick: () -> Unit
 ) {
     val user by userViewModel.user.collectAsStateWithLifecycle()
     MaterialTheme(
@@ -65,7 +65,7 @@ fun JuejinProfilePage(
                     TopNavigationBar(
                             leftIcon = Icons.Filled.QrCodeScanner,
                             // 建议重命名参数名为 onLeftClick，因为图标是扫码而非返回
-                            onLeftClick = { println("点击了扫码") },
+                            onLeftClick = onQrScanClick,
                             title = "",
                             rightContent = {
                                 Row(

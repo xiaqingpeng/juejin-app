@@ -2,21 +2,34 @@ package com.example.juejin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -28,8 +41,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -41,6 +57,7 @@ import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
+import com.example.juejin.screen.QrScannerScreen
 import com.example.juejin.screen.SettingsScreen
 import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
@@ -102,6 +119,10 @@ fun App() {
         var showCourseList by remember { mutableStateOf(false) }
         var selectedCourse by remember { mutableStateOf<com.example.juejin.model.LogStatsItem?>(null) }
 
+        // QR scanning navigation state
+        var showQrScanner by remember { mutableStateOf(false) }
+        var scannedQrCode by remember { mutableStateOf<String?>(null) }
+
         // Privacy policy state
         var showPrivacyDialog by remember { mutableStateOf(false) }
         var showPrivacyDeclined by remember { mutableStateOf(false) }
@@ -128,7 +149,7 @@ fun App() {
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
-                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
+                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null && !showQrScanner) {
                         NavigationBar(containerColor = Colors.primaryWhite, tonalElevation = 8.dp) {
                             tabs.forEachIndexed { index, tab ->
                                 val isSelected = pagerState.currentPage == index
@@ -138,7 +159,7 @@ fun App() {
                                             val iconColor =
                                                     if (isSelected) Colors.primaryBlue
                                                     else Colors.primaryGray
-                                            androidx.compose.material3.Icon(
+                                            Icon(
                                                     imageVector = tab.icon,
                                                     contentDescription = stringResource(tab.title),
                                                     tint = iconColor
@@ -175,7 +196,7 @@ fun App() {
                 },
                 floatingActionButton = {
                     // 开发环境的测试入口按钮（仅在非生产环境显示）
-                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null) {
+                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null && !showQrScanner) {
                         // TODO: 添加环境判断，只在开发环境显示
                         val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
                         
@@ -185,8 +206,8 @@ fun App() {
                                 containerColor = Colors.primaryBlue,
                                 contentColor = Colors.primaryWhite
                             ) {
-                                androidx.compose.material3.Icon(
-                                    imageVector = androidx.compose.material.icons.Icons.Default.BugReport,
+                                Icon(
+                                    imageVector = Icons.Default.BugReport,
                                     contentDescription = "测试"
                                 )
                             }
@@ -304,6 +325,88 @@ fun App() {
                 }
             }
 
+            // Show QR scan result dialog
+            if (scannedQrCode != null) {
+                Dialog(
+                    onDismissRequest = { scannedQrCode = null },
+                    properties = DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true
+                    )
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                        colors = CardDefaults.cardColors(containerColor = Colors.Background.primary)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(24.dp)
+                        ) {
+                            // Header with title and close button
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "二维码结果",
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = Colors.primaryBlue,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                IconButton(
+                                    onClick = { scannedQrCode = null },
+                                    modifier = Modifier.size(28.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "关闭",
+                                        tint = Colors.Text.secondary
+                                    )
+                                }
+                            }
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // QR code content
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(8.dp),
+                                color = Colors.Background.secondary
+                            ) {
+                                Text(
+                                    text = scannedQrCode.orEmpty(),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Colors.Text.primary,
+                                    modifier = Modifier.padding(16.dp),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            
+                            Spacer(modifier = Modifier.height(24.dp))
+                            
+                            // Action button
+                            Button(
+                                onClick = { scannedQrCode = null },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Text(
+                                    text = "确定",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
             // Show Settings screen, Course Detail screen, or Main content
             when {
                 selectedCourse != null -> {
@@ -368,6 +471,18 @@ fun App() {
                         )
                     }
                 }
+                
+                showQrScanner -> {
+                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+                        QrScannerScreen(
+                            onBack = { showQrScanner = false },
+                            onQrCodeScanned = { code ->
+                                scannedQrCode = code
+                                showQrScanner = false
+                            }
+                        )
+                    }
+                }
 
                 else -> {
                     // Horizontal Pager with gesture support
@@ -406,7 +521,8 @@ fun App() {
                                 TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
                                 TabItem.Courses -> CourseScreen()
                                 TabItem.Profile -> ProfileScreen(
-                                    userViewModel = userViewModel
+                                    userViewModel = userViewModel,
+                                    onQrScanClick = { showQrScanner = true }
                                 )
                             }
                         }
