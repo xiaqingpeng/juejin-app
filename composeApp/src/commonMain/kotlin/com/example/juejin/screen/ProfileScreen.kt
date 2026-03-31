@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShieldMoon
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.lightColorScheme
@@ -42,15 +43,17 @@ import com.example.juejin.viewmodel.UserViewModel
 @Composable
 fun ProfileScreen(
     userViewModel: UserViewModel = UserViewModel(),
-    onQrScanClick: () -> Unit = {}
+    onQrScanClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {}
 ) {
-    JuejinProfilePage(userViewModel = userViewModel, onQrScanClick = onQrScanClick)
+    JuejinProfilePage(userViewModel = userViewModel, onQrScanClick = onQrScanClick, onSettingsClick = onSettingsClick)
 }
 
 @Composable
 fun JuejinProfilePage(
     userViewModel: UserViewModel = UserViewModel(),
-    onQrScanClick: () -> Unit
+    onQrScanClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val user by userViewModel.user.collectAsStateWithLifecycle()
     MaterialTheme(
@@ -83,26 +86,21 @@ fun JuejinProfilePage(
                                             )
 
                                     actionButtons.forEach { (icon, description) ->
-                                        Icon(
+                                        val clickAction = when (icon) {
+                                            Icons.Filled.Settings -> onSettingsClick
+                                            else -> { { println("点击了 $description") } }
+                                        }
+                                        IconButton(
+                                            onClick = clickAction,
+                                            modifier = Modifier.size(32.dp)
+                                        ) {
+                                            Icon(
                                                 imageVector = icon,
-                                                contentDescription = null,
+                                                contentDescription = description,
                                                 tint = iconTint,
-                                                modifier =
-                                                        Modifier.size(24.dp)
-                                                                .clickable(
-                                                                        onClick = {
-                                                                            println(
-                                                                                    "点击了 $description"
-                                                                            )
-                                                                        },
-                                                                        indication =
-                                                                                null, // 去除水波纹，或自定义
-                                                                        interactionSource =
-                                                                                remember {
-                                                                                    MutableInteractionSource()
-                                                                                }
-                                                                )
-                                        )
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }

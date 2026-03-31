@@ -522,7 +522,8 @@ fun App() {
                                 TabItem.Courses -> CourseScreen()
                                 TabItem.Profile -> ProfileScreen(
                                     userViewModel = userViewModel,
-                                    onQrScanClick = { showQrScanner = true }
+                                    onQrScanClick = { showQrScanner = true },
+                                    onSettingsClick = { showSettings = true }
                                 )
                             }
                         }
