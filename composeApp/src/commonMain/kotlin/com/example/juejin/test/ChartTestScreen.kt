@@ -46,10 +46,6 @@ import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.viewmodel.LogStatsViewModel
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Duration.Companion.days
 
 enum class TimeRange(val label: String, val days: Int) {
     WEEK("0-7天", 7),
@@ -70,28 +66,16 @@ fun ChartTestScreen(
     val errorMessage by LogStatsViewModel.errorMessage.collectAsState()
     var selectedTimeRange by remember { mutableStateOf(TimeRange.WEEK) }
     
-    // 根据时间范围计算开始和结束时间
+    // 根据时间范围计算开始和结束时间（简化版本，不使用实际时间戳）
     val (startTime, endTime) = remember(selectedTimeRange) {
-        val now = Clock.System.now()
-        val timeZone = TimeZone.currentSystemDefault()
-        
-        val end = now
-        val start = when (selectedTimeRange) {
-            TimeRange.WEEK -> now - 7.days
-            TimeRange.TWO_WEEKS -> now - 14.days
-            TimeRange.MONTH -> now - 30.days
-        }
-        
-        // 转换为 ISO 8601 格式字符串
-        val startStr = start.toLocalDateTime(timeZone).toString()
-        val endStr = end.toLocalDateTime(timeZone).toString()
-        
-        startStr to endStr
+        // 使用 null 表示不限制时间范围，让后端返回所有数据
+        // 实际项目中可以使用 kotlinx-datetime 库来处理跨平台时间
+        Pair<String?, String?>(null, null)
     }
     
     // 加载数据 - 当时间范围改变时重新加载
     LaunchedEffect(selectedTimeRange) {
-        println("[ChartTestScreen] Loading data for range: ${selectedTimeRange.label}, start: $startTime, end: $endTime")
+        println("[ChartTestScreen] Loading data for range: ${selectedTimeRange.label}")
         LogStatsViewModel.refresh(
             platform = null,  // null 表示全平台
             startTime = startTime,

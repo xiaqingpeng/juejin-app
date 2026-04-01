@@ -290,11 +290,32 @@ fun App() {
             }
 
             // Show Settings screen, Course Detail screen, or Main content
-            AppNavGraph(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                userViewModel = userViewModel,
-                navigationState = navigationState,
-                mainContent = { onNavigateToSettings, onNavigateToQrScanner, onNavigateToTestList ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .then(
+                        // 只在主页面时添加右滑退出手势
+                        if (isMainScreen) {
+                            Modifier.pointerInput(Unit) {
+                                detectHorizontalDragGestures { change, dragAmount ->
+                                    // 右滑手势：dragAmount > 0 表示向右滑动
+                                    if (dragAmount > 100) {
+                                        println("[App] 检测到右滑手势，退出应用")
+                                        exitApp()
+                                    }
+                                }
+                            }
+                        } else {
+                            Modifier
+                        }
+                    )
+            ) {
+                AppNavGraph(
+                    modifier = Modifier.fillMaxSize(),
+                    userViewModel = userViewModel,
+                    navigationState = navigationState,
+                    mainContent = { onNavigateToSettings, onNavigateToQrScanner, onNavigateToTestList ->
                     // Horizontal Pager with gesture support
                     HorizontalPager(
                             state = pagerState,
@@ -352,4 +373,4 @@ fun App() {
             )
         }
     }
-}
+}}

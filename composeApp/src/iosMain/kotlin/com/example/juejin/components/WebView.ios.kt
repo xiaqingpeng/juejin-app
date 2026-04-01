@@ -24,14 +24,20 @@ actual fun WebView(
 ) {
     val navigationDelegate = remember {
         object : NSObject(), WKNavigationDelegateProtocol {
+            @OptIn(kotlinx.cinterop.BetaInteropApi::class)
+            @kotlinx.cinterop.ObjCSignatureOverride
             override fun webView(webView: WKWebView, didStartProvisionalNavigation: platform.WebKit.WKNavigation?) {
                 onLoadingChanged?.invoke(true)
             }
             
+            @OptIn(kotlinx.cinterop.BetaInteropApi::class)
+            @kotlinx.cinterop.ObjCSignatureOverride
             override fun webView(webView: WKWebView, didFinishNavigation: platform.WebKit.WKNavigation?) {
                 onLoadingChanged?.invoke(false)
             }
             
+            @OptIn(kotlinx.cinterop.BetaInteropApi::class)
+            @kotlinx.cinterop.ObjCSignatureOverride
             override fun webView(
                 webView: WKWebView,
                 didFailNavigation: platform.WebKit.WKNavigation?,
