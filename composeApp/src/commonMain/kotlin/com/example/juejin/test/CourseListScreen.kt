@@ -190,6 +190,11 @@ private fun PlatformLogStatsPage(
                 }
                 
                 items(logStats) { logStat ->
+                    // 注册课程到 TestRegistry 以便导航使用
+                    LaunchedEffect(logStat.id) {
+                        TestRegistry.registerCourse(logStat)
+                    }
+                    
                     Column {
                         EventCard(logStat = logStat, onClick = { onItemClick(logStat) })
                         // 卡片之间的细间距

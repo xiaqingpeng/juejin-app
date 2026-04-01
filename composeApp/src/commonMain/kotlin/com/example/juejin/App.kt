@@ -49,7 +49,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.juejin.enums.TabItem
+import com.example.juejin.navigation.AppNavGraph
+import com.example.juejin.navigation.NavRoutes
 import com.example.juejin.platform.exitApp
 import com.example.juejin.platform.requestNotificationPermission
 import com.example.juejin.screen.CourseScreen
@@ -57,8 +61,6 @@ import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
-import com.example.juejin.screen.QrScannerScreen
-import com.example.juejin.screen.SettingsScreen
 import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.NotificationPermissionDialog
@@ -78,6 +80,11 @@ fun App() {
     val discoverViewModel = DiscoverViewModel()
     val hotViewModel = HotViewModel()
     val userViewModel = remember { com.example.juejin.viewmodel.UserViewModel() }
+    
+    // Navigation controller
+    val navController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     // 注册测试案例
     LaunchedEffect(Unit) { com.example.juejin.test.registerTestCases() }
@@ -107,21 +114,7 @@ fun App() {
 
         val coroutineScope = rememberCoroutineScope()
 
-        // Navigation state
-        var showSettings by remember { mutableStateOf(false) }
-
-        // Test navigation state
-        var showTestList by remember { mutableStateOf(false) }
-        var selectedTestCase by remember { mutableStateOf<com.example.juejin.test.TestCase?>(null) }
-
-        // Course navigation state (for test area)
-        var showCourseList by remember { mutableStateOf(false) }
-        var selectedCourse by remember {
-            mutableStateOf<com.example.juejin.model.LogStatsItem?>(null)
-        }
-
-        // QR scanning navigation state
-        var showQrScanner by remember { mutableStateOf(false) }
+        // QR scan result state
         var scannedQrCode by remember { mutableStateOf<String?>(null) }
 
         // Privacy policy state
@@ -136,6 +129,9 @@ fun App() {
 
         // 获取当前平台
         val currentPlatform = remember { getCurrentPlatformType() }
+        
+        // 判断是否在主页面（显示底部导航栏）
+        val isMainRoute = currentRoute == null || currentRoute.contains("NavRoutes.Main")
 
         // Check privacy policy on first launch
         LaunchedEffect(Unit) {
@@ -149,14 +145,8 @@ fun App() {
                 modifier = Modifier.fillMaxSize(),
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
-                    // Bottom Navigation Bar - hide when showing settings or detail
-                    if (!showSettings &&
-                                    !showTestList &&
-                                    selectedTestCase == null &&
-                                    !showCourseList &&
-                                    selectedCourse == null &&
-                                    !showQrScanner
-                    ) {
+                    // Bottom Navigation Bar - 只在主页面显示
+                    if (isMainRoute) {
                         Surface(
                                 shadowElevation = 8.dp, // 传统的物理阴影
                                 color = Colors.primaryWhite
@@ -215,19 +205,13 @@ fun App() {
                 },
                 floatingActionButton = {
                     // 开发环境的测试入口按钮（仅在非生产环境显示）
-                    if (!showSettings &&
-                                    !showTestList &&
-                                    selectedTestCase == null &&
-                                    !showCourseList &&
-                                    selectedCourse == null &&
-                                    !showQrScanner
-                    ) {
+                    if (isMainRoute) {
                         // TODO: 添加环境判断，只在开发环境显示
                         val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
 
                         if (isDevelopment) {
                             androidx.compose.material3.FloatingActionButton(
-                                    onClick = { showTestList = true },
+                                    onClick = { navController.navigate(NavRoutes.TestList) },
                                     containerColor = Colors.primaryBlue,
                                     contentColor = Colors.primaryWhite
                             ) {
@@ -428,82 +412,18 @@ fun App() {
             }
 
             // Show Settings screen, Course Detail screen, or Main content
-            when {
-                selectedCourse != null -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        com.example.juejin.test.CourseDetailScreen(
-                                logStat = selectedCourse,
-                                onLeftClick = {
-                                    selectedCourse = null
-                                    showCourseList = true // 返回到课程列表
-                                }
-                        )
-                    }
-                }
-                showCourseList -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        com.example.juejin.test.CourseListScreen(
-                                onLeftClick = {
-                                    showCourseList = false
-                                    showTestList = true // 返回到测试列表
-                                },
-                                onItemClick = { logStat -> selectedCourse = logStat }
-                        )
-                    }
-                }
-                selectedTestCase != null -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        com.example.juejin.test.TestDetailScreen(
-                                testCase = selectedTestCase!!,
-                                onLeftClick = {
-                                    selectedTestCase = null
-                                    showTestList = true // 返回到测试列表页
-                                }
-                        )
-                    }
-                }
-                showTestList -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        com.example.juejin.test.TestListScreen(
-                                onLeftClick = { showTestList = false },
-                                onTestClick = { testCase ->
-                                    // 特殊处理：课程列表测试案例跳转到课程列表页面
-                                    if (testCase.id == "test_course_list") {
-                                        showCourseList = true
-                                    } else {
-                                        selectedTestCase = testCase
-                                    }
-                                }
-                        )
-                    }
-                }
-                showSettings -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        SettingsScreen(
-                                onLeftClick = { showSettings = false },
-                                userViewModel = userViewModel
-                        )
-                    }
-                }
-                showQrScanner -> {
-                    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                        QrScannerScreen(
-                                onBack = { showQrScanner = false },
-                                onQrCodeScanned = { code ->
-                                    scannedQrCode = code
-                                    showQrScanner = false
-                                }
-                        )
-                    }
-                }
-                else -> {
+            AppNavGraph(
+                navController = navController,
+                modifier = Modifier.fillMaxSize().padding(padding),
+                userViewModel = userViewModel,
+                onQrCodeScanned = { code -> scannedQrCode = code },
+                mainContent = {
                     // Horizontal Pager with gesture support
                     HorizontalPager(
                             state = pagerState,
                             beyondViewportPageCount = 0, // 禁用预加载，只加载当前页面
                             modifier =
                                     Modifier.fillMaxSize()
-                                            .padding(padding)
                                             .background(MaterialTheme.colorScheme.background)
                                             // Add additional drag gesture support for better UX
                                             .pointerInput(Unit) {
@@ -545,14 +465,14 @@ fun App() {
                                 TabItem.Profile ->
                                         ProfileScreen(
                                                 userViewModel = userViewModel,
-                                                onQrScanClick = { showQrScanner = true },
-                                                onSettingsClick = { showSettings = true }
+                                                onQrScanClick = { navController.navigate(NavRoutes.QrScanner) },
+                                                onSettingsClick = { navController.navigate(NavRoutes.Settings) }
                                         )
                             }
                         }
                     }
                 }
-            }
+            )
         }
     }
 }

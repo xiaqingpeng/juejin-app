@@ -56,62 +56,35 @@ import org.jetbrains.compose.resources.stringResource
 fun SettingsScreen(
     onLeftClick: () -> Unit = {},
     settingViewModel: SettingViewModel = SettingViewModel(),
-    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
+    userViewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel(),
+    onNavigateToDetail: (String) -> Unit = {},
+    onNavigateToEditProfile: () -> Unit = {}
 ) {
     val darkMode by settingViewModel.darkMode.collectAsStateWithLifecycle()
     val pushNotification by settingViewModel.pushNotification.collectAsStateWithLifecycle()
     val settings by remember { derivedStateOf { settingViewModel.getUpdatedSettings() } }
     
-    // 导航状态
-    var selectedSetting by remember { mutableStateOf<SettingItem?>(null) }
-    var showEditProfile by remember { mutableStateOf(false) }
-    
-    MaterialTheme(
-            colorScheme =
-                    lightColorScheme(
-                            background = Colors.primaryWhite,
-                            surface = Colors.primaryWhite
-                    )
-    ) {
-        // 显示编辑资料页面
-        if (showEditProfile) {
-            EditProfileDetailScreen(
-                onLeftClick = { showEditProfile = false },
-                viewModel = userViewModel
-            )
-        }
-        // 显示详情页面
-        else if (selectedSetting != null) {
-            SettingDetailScreen(
-                settingItem = selectedSetting!!,
-                onLeftClick = { selectedSetting = null }
-            )
-        }
-        // 显示列表页面
-        else {
-            SettingsListScreen(
-                settings = settings,
-                darkMode = darkMode,
-                pushNotification = pushNotification,
-                onDarkModeChanged = settingViewModel::updateDarkMode,
-                onPushNotificationChanged = settingViewModel::updatePushNotification,
-                onItemClick = { item ->
-                    // 特殊处理：编辑资料跳转到专门的编辑页面
-                    if (item.title == "编辑资料") {
-                        showEditProfile = true
-                    }
-                    // 只有 NORMAL 类型的设置项才跳转到详情页
-                    else if (item.type == SettingType.NORMAL && !item.isDestructive) {
-                        selectedSetting = item
-                    } else if (item.isDestructive) {
-                        // 处理退出登录等破坏性操作
-                        println("执行破坏性操作: ${item.title}")
-                    }
-                },
-                onLeftClick = onLeftClick
-            )
-        }
-    }
+    SettingsListScreen(
+        settings = settings,
+        darkMode = darkMode,
+        pushNotification = pushNotification,
+        onDarkModeChanged = settingViewModel::updateDarkMode,
+        onPushNotificationChanged = settingViewModel::updatePushNotification,
+        onItemClick = { item ->
+            // 特殊处理：编辑资料跳转到专门的编辑页面
+            if (item.title == "编辑资料") {
+                onNavigateToEditProfile()
+            }
+            // 只有 NORMAL 类型的设置项才跳转到详情页
+            else if (item.type == SettingType.NORMAL && !item.isDestructive) {
+                onNavigateToDetail(item.title)
+            } else if (item.isDestructive) {
+                // 处理退出登录等破坏性操作
+                println("执行破坏性操作: ${item.title}")
+            }
+        },
+        onLeftClick = onLeftClick
+    )
 }
 
 @Composable
