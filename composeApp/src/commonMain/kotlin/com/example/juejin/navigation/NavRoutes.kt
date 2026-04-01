@@ -33,4 +33,7 @@ sealed interface NavRoutes {
     
     @Serializable
     data class CourseDetail(val courseId: String) : NavRoutes
+    
+    @Serializable
+    data object ChartTest : NavRoutes
 }

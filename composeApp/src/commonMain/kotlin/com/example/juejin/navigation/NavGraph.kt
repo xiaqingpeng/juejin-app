@@ -88,10 +88,10 @@ fun AppNavGraph(
                 com.example.juejin.test.TestListScreen(
                     onLeftClick = { navController.navigateUp() },
                     onTestClick = { testCase ->
-                        if (testCase.id == "test_course_list") {
-                            navController.navigate(NavRoutes.CourseList)
-                        } else {
-                            navController.navigate(NavRoutes.TestDetail(testCase.id))
+                        when (testCase.id) {
+                            "test_course_list" -> navController.navigate(NavRoutes.CourseList)
+                            "test_charts" -> navController.navigate(NavRoutes.ChartTest)
+                            else -> navController.navigate(NavRoutes.TestDetail(testCase.id))
                         }
                     }
                 )
@@ -140,6 +140,15 @@ fun AppNavGraph(
                         onLeftClick = { navController.navigateUp() }
                     )
                 }
+            }
+        }
+        
+        // 图表测试页面
+        composable<NavRoutes.ChartTest> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                com.example.juejin.test.ChartTestScreen(
+                    onLeftClick = { navController.navigateUp() }
+                )
             }
         }
     }

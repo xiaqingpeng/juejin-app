@@ -198,5 +198,19 @@ fun registerTestCases() {
         }
     )
     
+    // 测试案例 7：图表数据展示
+    TestRegistry.register(
+        TestCase(
+            id = "test_charts",
+            title = "图表数据展示",
+            description = "展示多种图表类型：柱状图、饼图、折线图，数据来源于课程列表接口"
+        ) {
+            // 这个测试案例只作为导航入口，实际内容在 ChartTestScreen 中
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(stringResource(Res.string.loading), fontSize = 16.sp)
+            }
+        }
+    )
+    
     // 可以继续添加更多测试案例...
 }
