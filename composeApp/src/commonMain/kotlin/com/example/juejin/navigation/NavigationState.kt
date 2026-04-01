@@ -22,6 +22,7 @@ sealed class Screen {
     data class CourseDetail(val courseId: String) : Screen()
     object ChartTest : Screen()
     object WebViewTest : Screen()
+    data class WebView(val title: String, val url: String) : Screen()
 }
 
 class NavigationState {

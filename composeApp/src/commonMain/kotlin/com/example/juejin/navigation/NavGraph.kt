@@ -125,6 +125,14 @@ fun AppNavGraph(
                     onLeftClick = { navigationState.popBackStack() }
                 )
             }
+            
+            is Screen.WebView -> {
+                com.example.juejin.ui.components.WebViewScreen(
+                    title = screen.title,
+                    url = screen.url,
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
         }
     }
 }

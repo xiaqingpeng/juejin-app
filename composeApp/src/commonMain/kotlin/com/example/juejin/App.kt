@@ -215,8 +215,8 @@ fun App() {
                 return@Scaffold
             }
 
-            // Show Privacy Policy Dialog
-            if (showPrivacyDialog) {
+            // Show Privacy Policy Dialog - 只在主页面显示
+            if (showPrivacyDialog && isMainScreen) {
                 PrivacyPolicyDialog(
                         onAccept = {
                             println("[PrivacyDialog] 用户点击同意")
@@ -247,9 +247,9 @@ fun App() {
                             showPrivacyDeclined = true
                             exitApp()
                         },
-                        onUserAgreementClick = { println("[PrivacyDialog] 用户点击《用户协议》") },
-                        onPrivacyPolicyClick = { println("[PrivacyDialog] 用户点击《隐私政策》") },
-                        onBasicVersionClick = { println("[PrivacyDialog] 用户点击设置 - 基础版掘金") }
+                        onNavigateToWebView = { title, url ->
+                            navigationState.navigate(com.example.juejin.navigation.Screen.WebView(title, url))
+                        }
                 )
             }
 

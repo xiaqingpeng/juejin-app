@@ -45,7 +45,7 @@ actual fun WebView(
     UIKitView(
         factory = {
             WKWebView().apply {
-                navigationDelegate = navigationDelegate
+                this.navigationDelegate = navigationDelegate
                 opaque = false
                 backgroundColor = platform.UIKit.UIColor.whiteColor
                 val nsUrl = NSURL.URLWithString(url)

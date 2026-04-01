@@ -21,7 +21,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.juejin.platform.openUrl
 import com.example.juejin.ui.Colors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.privacy_dialog_agree
@@ -44,9 +43,7 @@ import org.jetbrains.compose.resources.stringResource
 fun PrivacyPolicyDialog(
     onAccept: () -> Unit,
     onDecline: () -> Unit,
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {},
-    onBasicVersionClick: () -> Unit = {}
+    onNavigateToWebView: (title: String, url: String) -> Unit = { _, _ -> }
 ) {
     val linkColor = Colors.primaryBlue
     
@@ -98,10 +95,10 @@ fun PrivacyPolicyDialog(
                     
                     if (offset in uaStart..uaEnd) {
                         println("[PrivacyDialog] 用户点击《用户协议》")
-                        openUrl(userAgreementUrl)
+                        onNavigateToWebView("用户协议", userAgreementUrl)
                     } else if (offset in ppStart..ppEnd) {
                         println("[PrivacyDialog] 用户点击《隐私政策》")
-                        openUrl(privacyPolicyUrl)
+                        onNavigateToWebView("隐私政策", privacyPolicyUrl)
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium
@@ -129,7 +126,7 @@ fun PrivacyPolicyDialog(
                     
                     if (offset in bvStart..bvEnd) {
                         println("[PrivacyDialog] 用户点击设置 - 基础版掘金")
-                        onBasicVersionClick()
+                        // 基础版掘金暂不处理
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium
