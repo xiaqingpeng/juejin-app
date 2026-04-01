@@ -77,6 +77,7 @@ fun AppNavGraph(
                         when (testCase.id) {
                             "test_course_list" -> navigationState.navigate(Screen.CourseList)
                             "test_charts" -> navigationState.navigate(Screen.ChartTest)
+                            "test_webview" -> navigationState.navigate(Screen.WebViewTest)
                             else -> navigationState.navigate(Screen.TestDetail(testCase.id))
                         }
                     }
@@ -115,6 +116,12 @@ fun AppNavGraph(
             
             is Screen.ChartTest -> {
                 com.example.juejin.test.ChartTestScreen(
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.WebViewTest -> {
+                com.example.juejin.test.WebViewTestScreen(
                     onLeftClick = { navigationState.popBackStack() }
                 )
             }

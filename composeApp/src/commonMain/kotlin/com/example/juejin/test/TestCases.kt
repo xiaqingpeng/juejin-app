@@ -212,5 +212,19 @@ fun registerTestCases() {
         }
     )
     
+    // 测试案例 8：WebView 测试
+    TestRegistry.register(
+        TestCase(
+            id = "test_webview",
+            title = "WebView 测试",
+            description = "使用 WebView 打开网页，测试跨平台 WebView 组件"
+        ) {
+            // 这个测试案例只作为导航入口，实际内容在 WebViewTestScreen 中
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(stringResource(Res.string.loading), fontSize = 16.sp)
+            }
+        }
+    )
+    
     // 可以继续添加更多测试案例...
 }

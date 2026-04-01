@@ -21,6 +21,7 @@ sealed class Screen {
     object CourseList : Screen()
     data class CourseDetail(val courseId: String) : Screen()
     object ChartTest : Screen()
+    object WebViewTest : Screen()
 }
 
 class NavigationState {
