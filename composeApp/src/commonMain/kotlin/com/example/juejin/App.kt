@@ -78,20 +78,19 @@ fun App() {
     val discoverViewModel = DiscoverViewModel()
     val hotViewModel = HotViewModel()
     val userViewModel = remember { com.example.juejin.viewmodel.UserViewModel() }
-    
+
     // 注册测试案例
-    LaunchedEffect(Unit) {
-        com.example.juejin.test.registerTestCases()
-    }
-    
+    LaunchedEffect(Unit) { com.example.juejin.test.registerTestCases() }
+
     // 设置状态栏为浅色模式（深色文字/图标）
     StatusBarEffect(isDark = false, color = Colors.primaryWhite)
-    
+
     MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.primaryWhite,
-            surface = Colors.primaryWhite
-        )
+            colorScheme =
+                    lightColorScheme(
+                            background = Colors.primaryWhite,
+                            surface = Colors.primaryWhite
+                    )
     ) {
         val tabs =
                 listOf(
@@ -110,14 +109,16 @@ fun App() {
 
         // Navigation state
         var showSettings by remember { mutableStateOf(false) }
-        
+
         // Test navigation state
         var showTestList by remember { mutableStateOf(false) }
         var selectedTestCase by remember { mutableStateOf<com.example.juejin.test.TestCase?>(null) }
-        
+
         // Course navigation state (for test area)
         var showCourseList by remember { mutableStateOf(false) }
-        var selectedCourse by remember { mutableStateOf<com.example.juejin.model.LogStatsItem?>(null) }
+        var selectedCourse by remember {
+            mutableStateOf<com.example.juejin.model.LogStatsItem?>(null)
+        }
 
         // QR scanning navigation state
         var showQrScanner by remember { mutableStateOf(false) }
@@ -129,7 +130,7 @@ fun App() {
         var isPrivacyAccepted by remember {
             mutableStateOf(PrivacyStorage.isPrivacyPolicyAccepted())
         }
-        
+
         // Notification permission state
         var showNotificationDialog by remember { mutableStateOf(false) }
 
@@ -149,66 +150,90 @@ fun App() {
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - hide when showing settings or detail
-                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null && !showQrScanner) {
-                        NavigationBar(containerColor = Colors.primaryWhite, tonalElevation = 8.dp) {
-                            tabs.forEachIndexed { index, tab ->
-                                val isSelected = pagerState.currentPage == index
-                                NavigationBarItem(
-                                        icon = {
-                                            // Use Material Icons with dynamic coloring
-                                            val iconColor =
-                                                    if (isSelected) Colors.primaryBlue
-                                                    else Colors.primaryGray
-                                            Icon(
-                                                    imageVector = tab.icon,
-                                                    contentDescription = stringResource(tab.title),
-                                                    tint = iconColor
-                                            )
-                                        },
-                                        label = { Text(stringResource(tab.title)) },
-                                        selected = isSelected,
-                                        onClick = {
-                                            coroutineScope.launch {
-                                                pagerState.animateScrollToPage(index)
-                                            }
-                                        },
-                                        colors =
-                                                NavigationBarItemDefaults.colors(
-                                                        selectedIconColor =
-                                                                Colors.primaryBlue, // Blue color
-                                                        // for
-                                                        // selected items
-                                                        selectedTextColor = Colors.primaryBlue,
-                                                        unselectedIconColor =
-                                                            Colors.primaryGray, // Gray color
-                                                        // for
-                                                        // unselected
-                                                        // items
-                                                        unselectedTextColor = Colors.primaryGray,
-                                                        indicatorColor =
-                                                                Color.Transparent // No indicator
-                                                        // line
-                                                        )
-                                )
+                    if (!showSettings &&
+                                    !showTestList &&
+                                    selectedTestCase == null &&
+                                    !showCourseList &&
+                                    selectedCourse == null &&
+                                    !showQrScanner
+                    ) {
+                        Surface(
+                                shadowElevation = 8.dp, // 传统的物理阴影
+                                color = Colors.primaryWhite
+                        ) {
+                            NavigationBar(
+                                    containerColor = Colors.primaryWhite,
+                                    tonalElevation = 0.dp
+                            ) {
+                                tabs.forEachIndexed { index, tab ->
+                                    val isSelected = pagerState.currentPage == index
+                                    NavigationBarItem(
+                                            icon = {
+                                                // Use Material Icons with dynamic coloring
+                                                val iconColor =
+                                                        if (isSelected) Colors.primaryBlue
+                                                        else Colors.primaryGray
+                                                Icon(
+                                                        imageVector = tab.icon,
+                                                        contentDescription =
+                                                                stringResource(tab.title),
+                                                        tint = iconColor
+                                                )
+                                            },
+                                            label = { Text(stringResource(tab.title)) },
+                                            selected = isSelected,
+                                            onClick = {
+                                                coroutineScope.launch {
+                                                    pagerState.animateScrollToPage(index)
+                                                }
+                                            },
+                                            colors =
+                                                    NavigationBarItemDefaults.colors(
+                                                            selectedIconColor =
+                                                                    Colors.primaryBlue, // Blue
+                                                            // color
+                                                            // for
+                                                            // selected items
+                                                            selectedTextColor = Colors.primaryBlue,
+                                                            unselectedIconColor =
+                                                                    Colors.primaryGray, // Gray
+                                                            // color
+                                                            // for
+                                                            // unselected
+                                                            // items
+                                                            unselectedTextColor =
+                                                                    Colors.primaryGray,
+                                                            indicatorColor = Color.Transparent // No
+                                                            // indicator
+                                                            // line
+                                                            )
+                                    )
+                                }
                             }
                         }
                     }
                 },
                 floatingActionButton = {
                     // 开发环境的测试入口按钮（仅在非生产环境显示）
-                    if (!showSettings && !showTestList && selectedTestCase == null && !showCourseList && selectedCourse == null && !showQrScanner) {
+                    if (!showSettings &&
+                                    !showTestList &&
+                                    selectedTestCase == null &&
+                                    !showCourseList &&
+                                    selectedCourse == null &&
+                                    !showQrScanner
+                    ) {
                         // TODO: 添加环境判断，只在开发环境显示
                         val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
-                        
+
                         if (isDevelopment) {
                             androidx.compose.material3.FloatingActionButton(
-                                onClick = { showTestList = true },
-                                containerColor = Colors.primaryBlue,
-                                contentColor = Colors.primaryWhite
+                                    onClick = { showTestList = true },
+                                    containerColor = Colors.primaryBlue,
+                                    contentColor = Colors.primaryWhite
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.BugReport,
-                                    contentDescription = "测试"
+                                        imageVector = Icons.Default.BugReport,
+                                        contentDescription = "测试"
                                 )
                             }
                         }
@@ -221,22 +246,20 @@ fun App() {
             // Show Privacy Declined Screen
             if (showPrivacyDeclined) {
                 Box(
-                    modifier = Modifier.fillMaxSize().padding(padding),
-                    contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxSize().padding(padding),
+                        contentAlignment = Alignment.Center
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "无法继续使用",
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = Colors.primaryBlue
+                                text = "无法继续使用",
+                                style = MaterialTheme.typography.headlineMedium,
+                                color = Colors.primaryBlue
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = stringResource(Res.string.privacy_policy_required),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = Colors.Text.secondary
+                                text = stringResource(Res.string.privacy_policy_required),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Colors.Text.secondary
                         )
                     }
                 }
@@ -246,80 +269,72 @@ fun App() {
             // Show Privacy Policy Dialog
             if (showPrivacyDialog) {
                 PrivacyPolicyDialog(
-                    onAccept = {
-                        println("[PrivacyDialog] 用户点击同意")
-                        PrivacyStorage.setPrivacyPolicyAccepted(true)
-                        isPrivacyAccepted = true
-                        showPrivacyDialog = false
-                        
-                        // 根据平台决定是否显示自定义通知权限弹窗
-                        when (currentPlatform) {
-                            PlatformType.DESKTOP -> {
-                                // Desktop 显示自定义弹窗
-                                showNotificationDialog = true
-                            }
-                            PlatformType.ANDROID, PlatformType.IOS -> {
-                                // Android/iOS 直接请求系统权限
-                                coroutineScope.launch {
-                                    val granted = requestNotificationPermission()
-                                    println("[NotificationPermission] 系统权限结果：${if (granted) "已授予" else "已拒绝"}")
+                        onAccept = {
+                            println("[PrivacyDialog] 用户点击同意")
+                            PrivacyStorage.setPrivacyPolicyAccepted(true)
+                            isPrivacyAccepted = true
+                            showPrivacyDialog = false
+
+                            // 根据平台决定是否显示自定义通知权限弹窗
+                            when (currentPlatform) {
+                                PlatformType.DESKTOP -> {
+                                    // Desktop 显示自定义弹窗
+                                    showNotificationDialog = true
+                                }
+                                PlatformType.ANDROID, PlatformType.IOS -> {
+                                    // Android/iOS 直接请求系统权限
+                                    coroutineScope.launch {
+                                        val granted = requestNotificationPermission()
+                                        println(
+                                                "[NotificationPermission] 系统权限结果：${if (granted) "已授予" else "已拒绝"}"
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    },
-                    onDecline = {
-                        println("[PrivacyDialog] 用户点击退出应用")
-                        showPrivacyDialog = false
-                        showPrivacyDeclined = true
-                        exitApp()
-                    },
-                    onUserAgreementClick = {
-                        println("[PrivacyDialog] 用户点击《用户协议》")
-                    },
-                    onPrivacyPolicyClick = {
-                        println("[PrivacyDialog] 用户点击《隐私政策》")
-                    },
-                    onBasicVersionClick = {
-                        println("[PrivacyDialog] 用户点击设置 - 基础版掘金")
-                    }
+                        },
+                        onDecline = {
+                            println("[PrivacyDialog] 用户点击退出应用")
+                            showPrivacyDialog = false
+                            showPrivacyDeclined = true
+                            exitApp()
+                        },
+                        onUserAgreementClick = { println("[PrivacyDialog] 用户点击《用户协议》") },
+                        onPrivacyPolicyClick = { println("[PrivacyDialog] 用户点击《隐私政策》") },
+                        onBasicVersionClick = { println("[PrivacyDialog] 用户点击设置 - 基础版掘金") }
                 )
             }
 
             // Show Notification Permission Dialog (after privacy accepted)
             if (showNotificationDialog) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                     // 底部间距
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                    )
-                    
+                    Spacer(modifier = Modifier.fillMaxWidth().height(100.dp))
+
                     Dialog(
-                        onDismissRequest = { showNotificationDialog = false },
-                        properties = DialogProperties(
-                            dismissOnBackPress = true,
-                            dismissOnClickOutside = true
-                        )
+                            onDismissRequest = { showNotificationDialog = false },
+                            properties =
+                                    DialogProperties(
+                                            dismissOnBackPress = true,
+                                            dismissOnClickOutside = true
+                                    )
                     ) {
                         NotificationPermissionDialog(
-                            onDismiss = { showNotificationDialog = false },
-                            onAllow = {
-                                println("[NotificationDialog] 用户点击始终允许")
-                                showNotificationDialog = false
-                                // 请求通知权限
-                                coroutineScope.launch {
-                                    val granted = requestNotificationPermission()
-                                    println("[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}")
+                                onDismiss = { showNotificationDialog = false },
+                                onAllow = {
+                                    println("[NotificationDialog] 用户点击始终允许")
+                                    showNotificationDialog = false
+                                    // 请求通知权限
+                                    coroutineScope.launch {
+                                        val granted = requestNotificationPermission()
+                                        println(
+                                                "[NotificationDialog] 权限结果：${if (granted) "已授予" else "已拒绝"}"
+                                        )
+                                    }
+                                },
+                                onDeny = {
+                                    println("[NotificationDialog] 用户点击禁止")
+                                    showNotificationDialog = false
                                 }
-                            },
-                            onDeny = {
-                                println("[NotificationDialog] 用户点击禁止")
-                                showNotificationDialog = false
-                            }
                         )
                     }
                 }
@@ -328,78 +343,83 @@ fun App() {
             // Show QR scan result dialog
             if (scannedQrCode != null) {
                 Dialog(
-                    onDismissRequest = { scannedQrCode = null },
-                    properties = DialogProperties(
-                        dismissOnBackPress = true,
-                        dismissOnClickOutside = true
-                    )
+                        onDismissRequest = { scannedQrCode = null },
+                        properties =
+                                DialogProperties(
+                                        dismissOnBackPress = true,
+                                        dismissOnClickOutside = true
+                                )
                 ) {
                     Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp)
-                            .clip(RoundedCornerShape(16.dp)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                        colors = CardDefaults.cardColors(containerColor = Colors.Background.primary)
+                            modifier =
+                                    Modifier.fillMaxWidth()
+                                            .padding(24.dp)
+                                            .clip(RoundedCornerShape(16.dp)),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                            colors =
+                                    CardDefaults.cardColors(
+                                            containerColor = Colors.Background.primary
+                                    )
                     ) {
-                        Column(
-                            modifier = Modifier.padding(24.dp)
-                        ) {
+                        Column(modifier = Modifier.padding(24.dp)) {
                             // Header with title and close button
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "二维码结果",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    color = Colors.primaryBlue,
-                                    fontWeight = FontWeight.Bold
+                                        text = "二维码结果",
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        color = Colors.primaryBlue,
+                                        fontWeight = FontWeight.Bold
                                 )
                                 IconButton(
-                                    onClick = { scannedQrCode = null },
-                                    modifier = Modifier.size(28.dp)
+                                        onClick = { scannedQrCode = null },
+                                        modifier = Modifier.size(28.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = "关闭",
-                                        tint = Colors.Text.secondary
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "关闭",
+                                            tint = Colors.Text.secondary
                                     )
                                 }
                             }
-                            
+
                             Spacer(modifier = Modifier.height(16.dp))
-                            
+
                             // QR code content
                             Surface(
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(8.dp),
-                                color = Colors.Background.secondary
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = Colors.Background.secondary
                             ) {
                                 Text(
-                                    text = scannedQrCode.orEmpty(),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = Colors.Text.primary,
-                                    modifier = Modifier.padding(16.dp),
-                                    textAlign = TextAlign.Center
+                                        text = scannedQrCode.orEmpty(),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = Colors.Text.primary,
+                                        modifier = Modifier.padding(16.dp),
+                                        textAlign = TextAlign.Center
                                 )
                             }
-                            
+
                             Spacer(modifier = Modifier.height(24.dp))
-                            
+
                             // Action button
                             Button(
-                                onClick = { scannedQrCode = null },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue),
-                                shape = RoundedCornerShape(8.dp)
+                                    onClick = { scannedQrCode = null },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors =
+                                            ButtonDefaults.buttonColors(
+                                                    containerColor = Colors.primaryBlue
+                                            ),
+                                    shape = RoundedCornerShape(8.dp)
                             ) {
                                 Text(
-                                    text = "确定",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = FontWeight.Medium,
-                                    color = Color.White
+                                        text = "确定",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Medium,
+                                        color = Color.White
                                 )
                             }
                         }
@@ -412,119 +432,122 @@ fun App() {
                 selectedCourse != null -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.CourseDetailScreen(
-                            logStat = selectedCourse,
-                            onLeftClick = { 
-                                selectedCourse = null
-                                showCourseList = true  // 返回到课程列表
-                            }
+                                logStat = selectedCourse,
+                                onLeftClick = {
+                                    selectedCourse = null
+                                    showCourseList = true // 返回到课程列表
+                                }
                         )
                     }
                 }
-                
                 showCourseList -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.CourseListScreen(
-                            onLeftClick = { 
-                                showCourseList = false
-                                showTestList = true  // 返回到测试列表
-                            },
-                            onItemClick = { logStat ->
-                                selectedCourse = logStat
-                            }
+                                onLeftClick = {
+                                    showCourseList = false
+                                    showTestList = true // 返回到测试列表
+                                },
+                                onItemClick = { logStat -> selectedCourse = logStat }
                         )
                     }
                 }
-                
                 selectedTestCase != null -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.TestDetailScreen(
-                            testCase = selectedTestCase!!,
-                            onLeftClick = { 
-                                selectedTestCase = null
-                                showTestList = true  // 返回到测试列表页
-                            }
+                                testCase = selectedTestCase!!,
+                                onLeftClick = {
+                                    selectedTestCase = null
+                                    showTestList = true // 返回到测试列表页
+                                }
                         )
                     }
                 }
-                
                 showTestList -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         com.example.juejin.test.TestListScreen(
-                            onLeftClick = { showTestList = false },
-                            onTestClick = { testCase ->
-                                // 特殊处理：课程列表测试案例跳转到课程列表页面
-                                if (testCase.id == "test_course_list") {
-                                    showCourseList = true
-                                } else {
-                                    selectedTestCase = testCase
+                                onLeftClick = { showTestList = false },
+                                onTestClick = { testCase ->
+                                    // 特殊处理：课程列表测试案例跳转到课程列表页面
+                                    if (testCase.id == "test_course_list") {
+                                        showCourseList = true
+                                    } else {
+                                        selectedTestCase = testCase
+                                    }
                                 }
-                            }
                         )
                     }
                 }
-                
                 showSettings -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         SettingsScreen(
-                            onLeftClick = { showSettings = false },
-                            userViewModel = userViewModel
+                                onLeftClick = { showSettings = false },
+                                userViewModel = userViewModel
                         )
                     }
                 }
-                
                 showQrScanner -> {
                     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                         QrScannerScreen(
-                            onBack = { showQrScanner = false },
-                            onQrCodeScanned = { code ->
-                                scannedQrCode = code
-                                showQrScanner = false
-                            }
+                                onBack = { showQrScanner = false },
+                                onQrCodeScanned = { code ->
+                                    scannedQrCode = code
+                                    showQrScanner = false
+                                }
                         )
                     }
                 }
-
                 else -> {
                     // Horizontal Pager with gesture support
                     HorizontalPager(
-                        state = pagerState,
-                        beyondViewportPageCount = 0, // 禁用预加载，只加载当前页面
-                        modifier =
-                            Modifier.fillMaxSize()
-                                .padding(padding)
-                                .background(MaterialTheme.colorScheme.background)
-                                // Add additional drag gesture support for better UX
-                                .pointerInput(Unit) {
-                                    detectHorizontalDragGestures { _, dragAmount ->
-                                        coroutineScope.launch {
-                                            // Use scrollToPage with threshold for better
-                                            // compatibility
-                                            if (kotlin.math.abs(dragAmount) > size.width * 0.25) {
-                                                val targetPage =
-                                                    (pagerState.currentPage +
-                                                            (if (dragAmount < 0) 1 else -1))
-                                                        .coerceIn(0, tabs.size - 1)
-                                                pagerState.scrollToPage(targetPage)
+                            state = pagerState,
+                            beyondViewportPageCount = 0, // 禁用预加载，只加载当前页面
+                            modifier =
+                                    Modifier.fillMaxSize()
+                                            .padding(padding)
+                                            .background(MaterialTheme.colorScheme.background)
+                                            // Add additional drag gesture support for better UX
+                                            .pointerInput(Unit) {
+                                                detectHorizontalDragGestures { _, dragAmount ->
+                                                    coroutineScope.launch {
+                                                        // Use scrollToPage with threshold for
+                                                        // better
+                                                        // compatibility
+                                                        if (kotlin.math.abs(dragAmount) >
+                                                                        size.width * 0.25
+                                                        ) {
+                                                            val targetPage =
+                                                                    (pagerState.currentPage +
+                                                                                    (if (dragAmount <
+                                                                                                    0
+                                                                                    )
+                                                                                            1
+                                                                                    else -1))
+                                                                            .coerceIn(
+                                                                                    0,
+                                                                                    tabs.size - 1
+                                                                            )
+                                                            pagerState.scrollToPage(targetPage)
+                                                        }
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
-                                }
                     ) { page ->
                         // Content for each tab
                         Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
                         ) {
                             when (tabs[page]) {
                                 TabItem.Home -> HomeScreen()
                                 TabItem.Hot -> HotScreen(vm = hotViewModel)
                                 TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
                                 TabItem.Courses -> CourseScreen()
-                                TabItem.Profile -> ProfileScreen(
-                                    userViewModel = userViewModel,
-                                    onQrScanClick = { showQrScanner = true },
-                                    onSettingsClick = { showSettings = true }
-                                )
+                                TabItem.Profile ->
+                                        ProfileScreen(
+                                                userViewModel = userViewModel,
+                                                onQrScanClick = { showQrScanner = true },
+                                                onSettingsClick = { showSettings = true }
+                                        )
                             }
                         }
                     }
