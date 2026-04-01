@@ -36,11 +36,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.juejin.enums.TabItem
 import com.example.juejin.navigation.AppNavGraph
-import com.example.juejin.navigation.NavRoutes
 import com.example.juejin.platform.exitApp
 import com.example.juejin.platform.requestNotificationPermission
 import com.example.juejin.screen.CourseScreen
@@ -67,11 +64,7 @@ fun App() {
     val discoverViewModel = DiscoverViewModel()
     val hotViewModel = HotViewModel()
     val userViewModel = remember { com.example.juejin.viewmodel.UserViewModel() }
-    
-    // Navigation controller
-    val navController = rememberNavController()
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
+    val navigationState = com.example.juejin.navigation.rememberNavigationState()
 
     // 注册测试案例
     LaunchedEffect(Unit) { com.example.juejin.test.registerTestCases() }
@@ -113,9 +106,6 @@ fun App() {
 
         // 获取当前平台
         val currentPlatform = remember { getCurrentPlatformType() }
-        
-        // 判断是否在主页面（显示底部导航栏）
-        val isMainRoute = currentRoute == null || currentRoute.contains("NavRoutes.Main")
 
         // Check privacy policy on first launch
         LaunchedEffect(Unit) {
@@ -129,81 +119,67 @@ fun App() {
                 modifier = Modifier.fillMaxSize(),
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
-                    // Bottom Navigation Bar - 只在主页面显示
-                    if (isMainRoute) {
-                        Surface(
-                                shadowElevation = 8.dp, // 传统的物理阴影
-                                color = Colors.primaryWhite
+                    // Bottom Navigation Bar - 始终显示
+                    Surface(
+                            shadowElevation = 8.dp, // 传统的物理阴影
+                            color = Colors.primaryWhite
+                    ) {
+                        NavigationBar(
+                                containerColor = Colors.primaryWhite,
+                                tonalElevation = 0.dp
                         ) {
-                            NavigationBar(
-                                    containerColor = Colors.primaryWhite,
-                                    tonalElevation = 0.dp
-                            ) {
-                                tabs.forEachIndexed { index, tab ->
-                                    val isSelected = pagerState.currentPage == index
-                                    NavigationBarItem(
-                                            icon = {
-                                                // Use Material Icons with dynamic coloring
-                                                val iconColor =
-                                                        if (isSelected) Colors.primaryBlue
-                                                        else Colors.primaryGray
-                                                Icon(
-                                                        imageVector = tab.icon,
-                                                        contentDescription =
-                                                                stringResource(tab.title),
-                                                        tint = iconColor
-                                                )
-                                            },
-                                            label = { Text(stringResource(tab.title)) },
-                                            selected = isSelected,
-                                            onClick = {
-                                                coroutineScope.launch {
-                                                    pagerState.animateScrollToPage(index)
-                                                }
-                                            },
-                                            colors =
-                                                    NavigationBarItemDefaults.colors(
-                                                            selectedIconColor =
-                                                                    Colors.primaryBlue, // Blue
-                                                            // color
-                                                            // for
-                                                            // selected items
-                                                            selectedTextColor = Colors.primaryBlue,
-                                                            unselectedIconColor =
-                                                                    Colors.primaryGray, // Gray
-                                                            // color
-                                                            // for
-                                                            // unselected
-                                                            // items
-                                                            unselectedTextColor =
-                                                                    Colors.primaryGray,
-                                                            indicatorColor = Color.Transparent // No
-                                                            // indicator
-                                                            // line
-                                                            )
-                                    )
-                                }
+                            tabs.forEachIndexed { index, tab ->
+                                val isSelected = pagerState.currentPage == index
+                                NavigationBarItem(
+                                        icon = {
+                                            // Use Material Icons with dynamic coloring
+                                            val iconColor =
+                                                    if (isSelected) Colors.primaryBlue
+                                                    else Colors.primaryGray
+                                            Icon(
+                                                    imageVector = tab.icon,
+                                                    contentDescription =
+                                                            stringResource(tab.title),
+                                                    tint = iconColor
+                                            )
+                                        },
+                                        label = { Text(stringResource(tab.title)) },
+                                        selected = isSelected,
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                pagerState.animateScrollToPage(index)
+                                            }
+                                        },
+                                        colors =
+                                                NavigationBarItemDefaults.colors(
+                                                        selectedIconColor =
+                                                                Colors.primaryBlue,
+                                                        selectedTextColor = Colors.primaryBlue,
+                                                        unselectedIconColor =
+                                                                Colors.primaryGray,
+                                                        unselectedTextColor =
+                                                                Colors.primaryGray,
+                                                        indicatorColor = Color.Transparent
+                                                        )
+                                )
                             }
                         }
                     }
                 },
                 floatingActionButton = {
                     // 开发环境的测试入口按钮（仅在非生产环境显示）
-                    if (isMainRoute) {
-                        // TODO: 添加环境判断，只在开发环境显示
-                        val isDevelopment = true // 可以从 BuildConfig 或环境变量读取
+                    val isDevelopment = true
 
-                        if (isDevelopment) {
-                            androidx.compose.material3.FloatingActionButton(
-                                    onClick = { navController.navigate(NavRoutes.TestList) },
-                                    containerColor = Colors.primaryBlue,
-                                    contentColor = Colors.primaryWhite
-                            ) {
-                                Icon(
-                                        imageVector = Icons.Default.BugReport,
-                                        contentDescription = "测试"
-                                )
-                            }
+                    if (isDevelopment) {
+                        androidx.compose.material3.FloatingActionButton(
+                            onClick = { navigationState.navigate(com.example.juejin.navigation.Screen.TestList) },
+                            containerColor = Colors.primaryBlue,
+                            contentColor = Color.White
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.BugReport,
+                                contentDescription = "测试入口"
+                            )
                         }
                     }
                 }
@@ -310,10 +286,10 @@ fun App() {
 
             // Show Settings screen, Course Detail screen, or Main content
             AppNavGraph(
-                navController = navController,
                 modifier = Modifier.fillMaxSize().padding(padding),
                 userViewModel = userViewModel,
-                mainContent = {
+                navigationState = navigationState,
+                mainContent = { onNavigateToSettings, onNavigateToQrScanner, onNavigateToTestList ->
                     // Horizontal Pager with gesture support
                     HorizontalPager(
                             state = pagerState,
@@ -361,8 +337,8 @@ fun App() {
                                 TabItem.Profile ->
                                         ProfileScreen(
                                                 userViewModel = userViewModel,
-                                                onQrScanClick = { navController.navigate(NavRoutes.QrScanner) },
-                                                onSettingsClick = { navController.navigate(NavRoutes.Settings) }
+                                                onQrScanClick = onNavigateToQrScanner,
+                                                onSettingsClick = onNavigateToSettings
                                         )
                             }
                         }

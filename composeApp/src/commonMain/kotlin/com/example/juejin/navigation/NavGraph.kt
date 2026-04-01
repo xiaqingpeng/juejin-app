@@ -4,150 +4,118 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.example.juejin.screen.QrScannerScreen
 import com.example.juejin.screen.SettingsScreen
 import com.example.juejin.viewmodel.UserViewModel
 
 /**
  * 应用导航图
+ * 使用简单的状态管理来避免 Navigation Compose 在 iOS 上的兼容性问题
  */
 @Composable
 fun AppNavGraph(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
     userViewModel: UserViewModel,
-    mainContent: @Composable () -> Unit
+    navigationState: NavigationState,
+    mainContent: @Composable (
+        onNavigateToSettings: () -> Unit,
+        onNavigateToQrScanner: () -> Unit,
+        onNavigateToTestList: () -> Unit
+    ) -> Unit
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = NavRoutes.Main,
-        modifier = modifier
-    ) {
-        // 主页面（包含底部导航的 Tab 页面）
-        composable<NavRoutes.Main> {
-            mainContent()
-        }
-        
-        // 设置页面
-        composable<NavRoutes.Settings> {
-            Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier) {
+        when (val screen = navigationState.currentScreen) {
+            is Screen.Main -> {
+                mainContent(
+                    { navigationState.navigate(Screen.Settings) },
+                    { navigationState.navigate(Screen.QrScanner) },
+                    { navigationState.navigate(Screen.TestList) }
+                )
+            }
+            
+            is Screen.Settings -> {
                 SettingsScreen(
-                    onLeftClick = { navController.navigateUp() },
+                    onLeftClick = { navigationState.popBackStack() },
                     userViewModel = userViewModel,
                     onNavigateToDetail = { settingTitle ->
-                        navController.navigate(NavRoutes.SettingDetail(settingTitle))
+                        navigationState.navigate(Screen.SettingDetail(settingTitle))
                     },
                     onNavigateToEditProfile = {
-                        navController.navigate(NavRoutes.EditProfile)
+                        navigationState.navigate(Screen.EditProfile)
                     }
                 )
             }
-        }
-        
-        // 设置详情页面
-        composable<NavRoutes.SettingDetail> { backStackEntry ->
-            val args = backStackEntry.toRoute<NavRoutes.SettingDetail>()
-            Box(modifier = Modifier.fillMaxSize()) {
+            
+            is Screen.SettingDetail -> {
                 com.example.juejin.screen.SettingDetailScreen(
                     settingItem = com.example.juejin.model.SettingItem(
-                        title = args.settingTitle,
+                        title = screen.settingTitle,
                         type = com.example.juejin.model.SettingType.NORMAL
                     ),
-                    onLeftClick = { navController.navigateUp() }
+                    onLeftClick = { navigationState.popBackStack() }
                 )
             }
-        }
-        
-        // 编辑资料页面
-        composable<NavRoutes.EditProfile> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            
+            is Screen.EditProfile -> {
                 com.example.juejin.screen.EditProfileDetailScreen(
-                    onLeftClick = { navController.navigateUp() },
+                    onLeftClick = { navigationState.popBackStack() },
                     viewModel = userViewModel
                 )
             }
-        }
-        
-        // 二维码扫描页面
-        composable<NavRoutes.QrScanner> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            
+            is Screen.QrScanner -> {
                 QrScannerScreen(
-                    onBack = { navController.navigateUp() },
+                    onBack = { navigationState.popBackStack() },
                     onQrCodeScanned = { /* 扫码结果在 QrScannerScreen 内部处理 */ }
                 )
             }
-        }
-        
-        // 测试列表页面
-        composable<NavRoutes.TestList> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            
+            is Screen.TestList -> {
                 com.example.juejin.test.TestListScreen(
-                    onLeftClick = { navController.navigateUp() },
+                    onLeftClick = { navigationState.popBackStack() },
                     onTestClick = { testCase ->
                         when (testCase.id) {
-                            "test_course_list" -> navController.navigate(NavRoutes.CourseList)
-                            "test_charts" -> navController.navigate(NavRoutes.ChartTest)
-                            else -> navController.navigate(NavRoutes.TestDetail(testCase.id))
+                            "test_course_list" -> navigationState.navigate(Screen.CourseList)
+                            "test_charts" -> navigationState.navigate(Screen.ChartTest)
+                            else -> navigationState.navigate(Screen.TestDetail(testCase.id))
                         }
                     }
                 )
             }
-        }
-        
-        // 测试详情页面
-        composable<NavRoutes.TestDetail> { backStackEntry ->
-            val args = backStackEntry.toRoute<NavRoutes.TestDetail>()
-            val testCase = com.example.juejin.test.TestRegistry.getTestCase(args.testId)
             
-            if (testCase != null) {
-                Box(modifier = Modifier.fillMaxSize()) {
+            is Screen.TestDetail -> {
+                val testCase = com.example.juejin.test.TestRegistry.getTestCase(screen.testId)
+                if (testCase != null) {
                     com.example.juejin.test.TestDetailScreen(
                         testCase = testCase,
-                        onLeftClick = { navController.navigateUp() }
+                        onLeftClick = { navigationState.popBackStack() }
                     )
                 }
             }
-        }
-        
-        // 课程列表页面
-        composable<NavRoutes.CourseList> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            
+            is Screen.CourseList -> {
                 com.example.juejin.test.CourseListScreen(
-                    onLeftClick = { navController.navigateUp() },
+                    onLeftClick = { navigationState.popBackStack() },
                     onItemClick = { logStat ->
-                        // 使用 id 作为课程标识
                         val courseId = logStat.id?.toString() ?: "0"
-                        navController.navigate(NavRoutes.CourseDetail(courseId))
+                        navigationState.navigate(Screen.CourseDetail(courseId))
                     }
                 )
             }
-        }
-        
-        // 课程详情页面
-        composable<NavRoutes.CourseDetail> { backStackEntry ->
-            val args = backStackEntry.toRoute<NavRoutes.CourseDetail>()
-            // 从 TestRegistry 获取课程数据
-            val course = com.example.juejin.test.TestRegistry.getCourse(args.courseId)
             
-            if (course != null) {
-                Box(modifier = Modifier.fillMaxSize()) {
+            is Screen.CourseDetail -> {
+                val course = com.example.juejin.test.TestRegistry.getCourse(screen.courseId)
+                if (course != null) {
                     com.example.juejin.test.CourseDetailScreen(
                         logStat = course,
-                        onLeftClick = { navController.navigateUp() }
+                        onLeftClick = { navigationState.popBackStack() }
                     )
                 }
             }
-        }
-        
-        // 图表测试页面
-        composable<NavRoutes.ChartTest> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            
+            is Screen.ChartTest -> {
                 com.example.juejin.test.ChartTestScreen(
-                    onLeftClick = { navController.navigateUp() }
+                    onLeftClick = { navigationState.popBackStack() }
                 )
             }
         }
