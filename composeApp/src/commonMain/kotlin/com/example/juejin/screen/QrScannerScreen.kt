@@ -1,6 +1,5 @@
 package com.example.juejin.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,35 +47,30 @@ fun QrScannerScreen(
     // 扫码结果状态
     var scannedQrCode by remember { mutableStateOf<String?>(null) }
     
-    Scaffold(
-        topBar = {
-            TopNavigationBar(
-                title = "二维码扫描",
-                onLeftClick = onBack
-            )
-        }
-    ) { padding ->
-        Box(
-            modifier =
-                Modifier.fillMaxSize()
-                    .padding(padding)
-                    .background(Colors.Background.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            QrScannerPreview(
-                modifier = Modifier.fillMaxSize(),
-                onQrCodeScanned = { code ->
-                    scannedQrCode = code
-                    onQrCodeScanned(code)
-                }
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 全屏扫码预览
+        QrScannerPreview(
+            modifier = Modifier.fillMaxSize(),
+            onQrCodeScanned = { code ->
+                scannedQrCode = code
+                onQrCodeScanned(code)
+            }
+        )
+        
+        // 顶部导航栏（浮动在扫码界面上方）
+        TopNavigationBar(
+            title = "二维码扫描",
+            onLeftClick = onBack,
+            backgroundColor = Color.Transparent,
+            contentColor = Color.White
+        )
 
-            Text(
-                text = "将二维码放入取景框内自动识别",
-                color = Color.White,
-                modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)
-            )
-        }
+        // 底部提示文字
+        Text(
+            text = "将二维码放入取景框内自动识别",
+            color = Color.White,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)
+        )
         
         // 扫码结果弹窗
         if (scannedQrCode != null) {
