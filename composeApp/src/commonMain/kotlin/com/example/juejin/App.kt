@@ -114,63 +114,68 @@ fun App() {
             }
         }
 
+        // 判断是否在主页面
+        val isMainScreen = navigationState.currentScreen is com.example.juejin.navigation.Screen.Main
+
         // Scaffold provides proper layout structure
         Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 containerColor = Colors.primaryWhite,
                 bottomBar = {
-                    // Bottom Navigation Bar - 始终显示
-                    Surface(
-                            shadowElevation = 8.dp, // 传统的物理阴影
-                            color = Colors.primaryWhite
-                    ) {
-                        NavigationBar(
-                                containerColor = Colors.primaryWhite,
-                                tonalElevation = 0.dp
+                    // Bottom Navigation Bar - 只在主页面显示
+                    if (isMainScreen) {
+                        Surface(
+                                shadowElevation = 8.dp, // 传统的物理阴影
+                                color = Colors.primaryWhite
                         ) {
-                            tabs.forEachIndexed { index, tab ->
-                                val isSelected = pagerState.currentPage == index
-                                NavigationBarItem(
-                                        icon = {
-                                            // Use Material Icons with dynamic coloring
-                                            val iconColor =
-                                                    if (isSelected) Colors.primaryBlue
-                                                    else Colors.primaryGray
-                                            Icon(
-                                                    imageVector = tab.icon,
-                                                    contentDescription =
-                                                            stringResource(tab.title),
-                                                    tint = iconColor
-                                            )
-                                        },
-                                        label = { Text(stringResource(tab.title)) },
-                                        selected = isSelected,
-                                        onClick = {
-                                            coroutineScope.launch {
-                                                pagerState.animateScrollToPage(index)
-                                            }
-                                        },
-                                        colors =
-                                                NavigationBarItemDefaults.colors(
-                                                        selectedIconColor =
-                                                                Colors.primaryBlue,
-                                                        selectedTextColor = Colors.primaryBlue,
-                                                        unselectedIconColor =
-                                                                Colors.primaryGray,
-                                                        unselectedTextColor =
-                                                                Colors.primaryGray,
-                                                        indicatorColor = Color.Transparent
-                                                        )
-                                )
+                            NavigationBar(
+                                    containerColor = Colors.primaryWhite,
+                                    tonalElevation = 0.dp
+                            ) {
+                                tabs.forEachIndexed { index, tab ->
+                                    val isSelected = pagerState.currentPage == index
+                                    NavigationBarItem(
+                                            icon = {
+                                                // Use Material Icons with dynamic coloring
+                                                val iconColor =
+                                                        if (isSelected) Colors.primaryBlue
+                                                        else Colors.primaryGray
+                                                Icon(
+                                                        imageVector = tab.icon,
+                                                        contentDescription =
+                                                                stringResource(tab.title),
+                                                        tint = iconColor
+                                                )
+                                            },
+                                            label = { Text(stringResource(tab.title)) },
+                                            selected = isSelected,
+                                            onClick = {
+                                                coroutineScope.launch {
+                                                    pagerState.animateScrollToPage(index)
+                                                }
+                                            },
+                                            colors =
+                                                    NavigationBarItemDefaults.colors(
+                                                            selectedIconColor =
+                                                                    Colors.primaryBlue,
+                                                            selectedTextColor = Colors.primaryBlue,
+                                                            unselectedIconColor =
+                                                                    Colors.primaryGray,
+                                                            unselectedTextColor =
+                                                                    Colors.primaryGray,
+                                                            indicatorColor = Color.Transparent
+                                                            )
+                                    )
+                                }
                             }
                         }
                     }
                 },
                 floatingActionButton = {
-                    // 开发环境的测试入口按钮（仅在非生产环境显示）
+                    // 开发环境的测试入口按钮（仅在主页面显示）
                     val isDevelopment = true
 
-                    if (isDevelopment) {
+                    if (isDevelopment && isMainScreen) {
                         androidx.compose.material3.FloatingActionButton(
                             onClick = { navigationState.navigate(com.example.juejin.navigation.Screen.TestList) },
                             containerColor = Colors.primaryBlue,
