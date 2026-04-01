@@ -2,28 +2,18 @@ package com.example.juejin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -41,11 +31,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -113,9 +100,6 @@ fun App() {
                 rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { tabs.size }
 
         val coroutineScope = rememberCoroutineScope()
-
-        // QR scan result state
-        var scannedQrCode by remember { mutableStateOf<String?>(null) }
 
         // Privacy policy state
         var showPrivacyDialog by remember { mutableStateOf(false) }
@@ -324,99 +308,11 @@ fun App() {
                 }
             }
 
-            // Show QR scan result dialog
-            if (scannedQrCode != null) {
-                Dialog(
-                        onDismissRequest = { scannedQrCode = null },
-                        properties =
-                                DialogProperties(
-                                        dismissOnBackPress = true,
-                                        dismissOnClickOutside = true
-                                )
-                ) {
-                    Card(
-                            modifier =
-                                    Modifier.fillMaxWidth()
-                                            .padding(24.dp)
-                                            .clip(RoundedCornerShape(16.dp)),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                            colors =
-                                    CardDefaults.cardColors(
-                                            containerColor = Colors.Background.primary
-                                    )
-                    ) {
-                        Column(modifier = Modifier.padding(24.dp)) {
-                            // Header with title and close button
-                            Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                        text = "二维码结果",
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        color = Colors.primaryBlue,
-                                        fontWeight = FontWeight.Bold
-                                )
-                                IconButton(
-                                        onClick = { scannedQrCode = null },
-                                        modifier = Modifier.size(28.dp)
-                                ) {
-                                    Icon(
-                                            imageVector = Icons.Default.Close,
-                                            contentDescription = "关闭",
-                                            tint = Colors.Text.secondary
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            // QR code content
-                            Surface(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    shape = RoundedCornerShape(8.dp),
-                                    color = Colors.Background.secondary
-                            ) {
-                                Text(
-                                        text = scannedQrCode.orEmpty(),
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = Colors.Text.primary,
-                                        modifier = Modifier.padding(16.dp),
-                                        textAlign = TextAlign.Center
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(24.dp))
-
-                            // Action button
-                            Button(
-                                    onClick = { scannedQrCode = null },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors =
-                                            ButtonDefaults.buttonColors(
-                                                    containerColor = Colors.primaryBlue
-                                            ),
-                                    shape = RoundedCornerShape(8.dp)
-                            ) {
-                                Text(
-                                        text = "确定",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        fontWeight = FontWeight.Medium,
-                                        color = Color.White
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
             // Show Settings screen, Course Detail screen, or Main content
             AppNavGraph(
                 navController = navController,
                 modifier = Modifier.fillMaxSize().padding(padding),
                 userViewModel = userViewModel,
-                onQrCodeScanned = { code -> scannedQrCode = code },
                 mainContent = {
                     // Horizontal Pager with gesture support
                     HorizontalPager(

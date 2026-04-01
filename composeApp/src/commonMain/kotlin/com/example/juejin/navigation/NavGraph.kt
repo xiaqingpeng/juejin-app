@@ -20,8 +20,7 @@ fun AppNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     userViewModel: UserViewModel,
-    mainContent: @Composable () -> Unit,
-    onQrCodeScanned: (String) -> Unit
+    mainContent: @Composable () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -78,10 +77,7 @@ fun AppNavGraph(
             Box(modifier = Modifier.fillMaxSize()) {
                 QrScannerScreen(
                     onBack = { navController.navigateUp() },
-                    onQrCodeScanned = { code ->
-                        onQrCodeScanned(code)
-                        navController.navigateUp()
-                    }
+                    onQrCodeScanned = { /* 扫码结果在 QrScannerScreen 内部处理 */ }
                 )
             }
         }
