@@ -52,7 +52,10 @@ fun AppNavGraph(
                         title = screen.settingTitle,
                         type = com.example.juejin.model.SettingType.NORMAL
                     ),
-                    onLeftClick = { navigationState.popBackStack() }
+                    onLeftClick = { navigationState.popBackStack() },
+                    onNavigateToDeviceInfo = {
+                        navigationState.navigate(Screen.DeviceInfo)
+                    }
                 )
             }
             
@@ -130,6 +133,12 @@ fun AppNavGraph(
                 com.example.juejin.ui.components.WebViewScreen(
                     title = screen.title,
                     url = screen.url,
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.DeviceInfo -> {
+                com.example.juejin.screen.DeviceInfoScreen(
                     onLeftClick = { navigationState.popBackStack() }
                 )
             }

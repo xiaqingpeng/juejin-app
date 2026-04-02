@@ -37,57 +37,66 @@ fun DetailSection(section: SettingDetailSection) {
         modifier = Modifier.fillMaxWidth()
     ) {
         // 顶部间距
-        Spacer(modifier = Modifier.height(8.dp))
-        
+
+        if (section.title.length > 0 || section.description != null){
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+
+
         // 白色卡片容器
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Colors.primaryWhite)
-        ) {
-            // 如果有标题或描述，显示在卡片内部
-            if (section.title.length > 0 || section.description != null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    if (section.title.length > 0) {
-                        Text(
-                            text = section.title,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Colors.Text.primary
-                        )
+
+        if (section.title.length > 0 || section.description != null){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Colors.primaryWhite)
+            ) {
+                // 如果有标题或描述，显示在卡片内部
+                if (section.title.length > 0 || section.description != null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        if (section.title.length > 0) {
+                            Text(
+                                text = section.title,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Colors.Text.primary
+                            )
+                        }
+
+                        section.description?.let { desc ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = desc,
+                                fontSize = 14.sp,
+                                color = Colors.Text.secondary,
+                                lineHeight = 20.sp
+                            )
+                        }
                     }
-                    
-                    section.description?.let { desc ->
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = desc,
-                            fontSize = 14.sp,
-                            color = Colors.Text.secondary,
-                            lineHeight = 20.sp
+
+                    if (section.items.size > 0) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            color = Colors.UI.divider
                         )
                     }
                 }
-                
-                if (section.items.size > 0) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        color = Colors.UI.divider
+
+                // 详情项列表
+                section.items.forEachIndexed { index, item ->
+                    DetailItemRow(
+                        item = item,
+                        isLast = index == section.items.size - 1
                     )
                 }
             }
-            
-            // 详情项列表
-            section.items.forEachIndexed { index, item ->
-                DetailItemRow(
-                    item = item,
-                    isLast = index == section.items.size - 1
-                )
-            }
         }
+
         
         // 底部灰色分隔
         Spacer(
@@ -129,13 +138,13 @@ fun DetailItemRow(
             )
             
             // 值
-            val displayValue = if (item.value.length == 0) "未设置" else item.value
+//            val displayValue = if (item.value.length == 0) "未设置" else item.value
             val textColor = if (item.isHighlight) Colors.primaryBlue 
                            else if (item.value.length == 0) Colors.Text.secondary 
                            else Colors.Text.primary
             
             Text(
-                text = displayValue,
+                text = item.value,
                 color = textColor,
                 fontSize = 14.sp,
                 maxLines = 1

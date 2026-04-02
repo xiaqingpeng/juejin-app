@@ -23,7 +23,8 @@ import com.example.juejin.ui.components.TopNavigationBarWithBack
 @Composable
 fun SettingDetailScreen(
     settingItem: SettingItem,
-    onLeftClick: () -> Unit
+    onLeftClick: () -> Unit,
+    onNavigateToDeviceInfo: () -> Unit = {}
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -47,7 +48,10 @@ fun SettingDetailScreen(
             ) {
                 item {
                     // 从内容提供者获取详情内容
-                    SettingDetailContentProvider.GetContentForSetting(settingItem.title)
+                    SettingDetailContentProvider.GetContentForSetting(
+                        title = settingItem.title,
+                        onNavigateToDeviceInfo = onNavigateToDeviceInfo
+                    )
                 }
             }
         }

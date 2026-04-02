@@ -8,19 +8,37 @@ import com.example.juejin.model.SettingDetailSection
  * 个人信息查阅与管理详情内容
  */
 @Composable
-fun PersonalInfoManagementContent() {
+fun PersonalInfoManagementContent(
+    onNavigateToDeviceInfo: () -> Unit = {}
+) {
     val section = SettingDetailSection(
         title = "个人信息查阅与管理",
         description = "查看和管理您在掘金的所有个人信息",
         items = listOf(
-            SettingDetailItem("基本信息", "姓名、头像、简介等"),
-            SettingDetailItem("账号信息", "手机号、邮箱、密码"),
-            SettingDetailItem("内容数据", "文章、沸点、评论"),
-            SettingDetailItem("互动数据", "点赞、收藏、关注"),
-            SettingDetailItem("浏览记录", "查看浏览历史"),
-            SettingDetailItem("设备信息", "登录设备和位置"),
-            SettingDetailItem("导出数据", "导出您的所有数据"),
-            SettingDetailItem("删除数据", "永久删除特定数据")
+            SettingDetailItem("账号信息", "",onClick = {
+
+            }),
+            SettingDetailItem("个人信息", "",onClick = {
+
+            }),
+            SettingDetailItem("内容及互动", "",onClick = {
+
+            }),
+            SettingDetailItem("社交及关系", "",onClick = {
+
+            }),
+            SettingDetailItem("搜索记录", "",onClick = {
+
+            }),
+            SettingDetailItem("已购列表", "",onClick = {
+
+            }),
+            SettingDetailItem("当前设备信息", "", onClick = {
+                onNavigateToDeviceInfo()
+            }),
+            SettingDetailItem("应用信息", "",onClick = {
+
+            })
         )
     )
     DetailSection(section = section)

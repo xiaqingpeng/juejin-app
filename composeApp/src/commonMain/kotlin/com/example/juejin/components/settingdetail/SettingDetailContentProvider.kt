@@ -9,7 +9,10 @@ import androidx.compose.runtime.Composable
 object SettingDetailContentProvider {
     
     @Composable
-    fun GetContentForSetting(title: String) {
+    fun GetContentForSetting(
+        title: String,
+        onNavigateToDeviceInfo: () -> Unit = {}
+    ) {
         when (title) {
             // 原有的页面
             "账号与安全" -> AccountSecurityContent()
@@ -26,7 +29,9 @@ object SettingDetailContentProvider {
             "消息设置" -> MessageSettingsContent()
             "屏蔽管理" -> BlockManagementContent()
             "个性化推荐设置" -> PersonalizedRecommendContent()
-            "个人信息查阅与管理" -> PersonalInfoManagementContent()
+            "个人信息查阅与管理" -> PersonalInfoManagementContent(
+                onNavigateToDeviceInfo = onNavigateToDeviceInfo
+            )
             "基础版掘金" -> BasicVersionContent()
             "检查更新" -> CheckUpdateContent()
             "关于" -> AboutUsContent()  // 复用"关于我们"的内容

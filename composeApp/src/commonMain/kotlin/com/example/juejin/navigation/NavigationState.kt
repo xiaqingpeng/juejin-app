@@ -23,6 +23,7 @@ sealed class Screen {
     object ChartTest : Screen()
     object WebViewTest : Screen()
     data class WebView(val title: String, val url: String) : Screen()
+    object DeviceInfo : Screen()
 }
 
 class NavigationState {
