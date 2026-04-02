@@ -55,6 +55,9 @@ fun AppNavGraph(
                     onLeftClick = { navigationState.popBackStack() },
                     onNavigateToDeviceInfo = {
                         navigationState.navigate(Screen.DeviceInfo)
+                    },
+                    onNavigateToWebView = { title, url ->
+                        navigationState.navigate(Screen.WebView(title, url))
                     }
                 )
             }

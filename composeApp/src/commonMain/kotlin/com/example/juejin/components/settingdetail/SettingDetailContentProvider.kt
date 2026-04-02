@@ -11,7 +11,8 @@ object SettingDetailContentProvider {
     @Composable
     fun GetContentForSetting(
         title: String,
-        onNavigateToDeviceInfo: () -> Unit = {}
+        onNavigateToDeviceInfo: () -> Unit = {},
+        onNavigateToWebView: (String, String) -> Unit = { _, _ -> }
     ) {
         when (title) {
             // 原有的页面
@@ -20,7 +21,9 @@ object SettingDetailContentProvider {
             "通用设置" -> GeneralSettingsContent()
             "消息通知" -> NotificationSettingsContent()
             "清除缓存" -> ClearCacheContent()
-            "关于我们" -> AboutUsContent()
+            "关于我们" -> AboutUsContent(
+                onNavigateToWebView = onNavigateToWebView
+            )
             "帮助与反馈" -> HelpFeedbackContent()
             
             // 新增的页面
@@ -34,7 +37,9 @@ object SettingDetailContentProvider {
             )
             "基础版掘金" -> BasicVersionContent()
             "检查更新" -> CheckUpdateContent()
-            "关于" -> AboutUsContent()  // 复用"关于我们"的内容
+            "关于" -> AboutUsContent(
+                onNavigateToWebView = onNavigateToWebView
+            )  // 复用"关于我们"的内容
             
             else -> DefaultContent(
                 title

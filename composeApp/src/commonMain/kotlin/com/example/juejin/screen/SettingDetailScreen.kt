@@ -24,7 +24,8 @@ import com.example.juejin.ui.components.TopNavigationBarWithBack
 fun SettingDetailScreen(
     settingItem: SettingItem,
     onLeftClick: () -> Unit,
-    onNavigateToDeviceInfo: () -> Unit = {}
+    onNavigateToDeviceInfo: () -> Unit = {},
+    onNavigateToWebView: (String, String) -> Unit = { _, _ -> }
 ) {
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -50,7 +51,8 @@ fun SettingDetailScreen(
                     // 从内容提供者获取详情内容
                     SettingDetailContentProvider.GetContentForSetting(
                         title = settingItem.title,
-                        onNavigateToDeviceInfo = onNavigateToDeviceInfo
+                        onNavigateToDeviceInfo = onNavigateToDeviceInfo,
+                        onNavigateToWebView = onNavigateToWebView
                     )
                 }
             }
