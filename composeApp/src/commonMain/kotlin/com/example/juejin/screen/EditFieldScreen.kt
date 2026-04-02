@@ -105,7 +105,7 @@ fun EditFieldScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    placeholder = { Text(stringResource(Res.string.input_placeholder, title)) },
+                    placeholder = { Text("请输入$title") },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Colors.primaryBlue,
                         unfocusedBorderColor = Colors.UI.divider,

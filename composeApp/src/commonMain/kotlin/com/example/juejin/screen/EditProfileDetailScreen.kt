@@ -388,7 +388,7 @@ private fun EditBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(if (field.isMultiLine) 120.dp else 56.dp),
-            placeholder = { Text(stringResource(Res.string.input_placeholder, field.label)) },
+            placeholder = { Text("请输入${field.label}") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Colors.primaryBlue,
                 unfocusedBorderColor = Colors.UI.divider,

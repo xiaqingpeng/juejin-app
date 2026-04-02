@@ -1,6 +1,7 @@
 package com.example.juejin.test
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,9 +49,10 @@ fun registerTestCases() {
             var count by remember { mutableStateOf(0) }
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement=Arrangement.Center
             ) {
-                Text(stringResource(Res.string.test_click_count, count), fontSize = 24.sp)
+                Text("点击次数: $count", fontSize = 24.sp)
                 Button(
                     onClick = { count++ },
                     modifier = Modifier.padding(16.dp)
