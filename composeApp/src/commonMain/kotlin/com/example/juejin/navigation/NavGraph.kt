@@ -65,6 +65,13 @@ fun AppNavGraph(
             is Screen.EditProfile -> {
                 com.example.juejin.screen.EditProfileDetailScreen(
                     onLeftClick = { navigationState.popBackStack() },
+                    onSaveSuccess = {
+                        // 保存成功后返回到"我的"页面（主页面）
+                        // 清空导航栈，回到主页面
+                        while (navigationState.popBackStack()) {
+                            // 持续返回直到回到主页面
+                        }
+                    },
                     viewModel = userViewModel
                 )
             }

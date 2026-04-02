@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,9 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.juejin.model.User
 
 import com.example.juejin.ui.Colors
@@ -43,10 +46,20 @@ fun ProfileHeader(user: User) {
                 contentAlignment = Alignment.Center
             ) {
                 if (user.avatar.isNotEmpty()) {
-                    // TODO: 使用 AsyncImage 加载头像
-                    Text("QP", color = Colors.Text.darkGray, fontSize = 20.sp)
+                    AsyncImage(
+                        model = user.avatar,
+                        contentDescription = "用户头像",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
                 } else {
-                    Text("QP", color = Colors.Text.darkGray, fontSize = 20.sp)
+                    // 默认显示用户名首字母
+                    val initials = if (user.username.isNotEmpty()) {
+                        user.username.take(2).uppercase()
+                    } else {
+                        "QP"
+                    }
+                    Text(initials, color = Colors.Text.darkGray, fontSize = 20.sp)
                 }
             }
 

@@ -67,6 +67,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun EditProfileDetailScreen(
     onLeftClick: () -> Unit,
+    onSaveSuccess: () -> Unit = {},
     viewModel: com.example.juejin.viewmodel.UserViewModel = com.example.juejin.viewmodel.UserViewModel()
 ) {
     val user by viewModel.user.collectAsStateWithLifecycle()
@@ -150,7 +151,12 @@ fun EditProfileDetailScreen(
                         label = "用户名",
                         value = user.username,
                         onClick = {
-                            editingField = EditField("用户名", user.username, 20) { newValue ->
+                            editingField = EditField(
+                                label = "用户名",
+                                initialValue = user.username,
+                                maxLength = 20,
+                                validate = com.example.juejin.util.ValidationUtil::validateUsername
+                            ) { newValue ->
                                 viewModel.updateUsername(newValue)
                             }
                         }
@@ -163,7 +169,12 @@ fun EditProfileDetailScreen(
                         label = "职位",
                         value = user.position,
                         onClick = {
-                            editingField = EditField("职位", user.position, 30) { newValue ->
+                            editingField = EditField(
+                                label = "职位",
+                                initialValue = user.position,
+                                maxLength = 30,
+                                validate = com.example.juejin.util.ValidationUtil::validatePosition
+                            ) { newValue ->
                                 viewModel.updatePosition(newValue)
                             }
                         }
@@ -176,7 +187,12 @@ fun EditProfileDetailScreen(
                         label = "公司",
                         value = user.company,
                         onClick = {
-                            editingField = EditField("公司", user.company, 30) { newValue ->
+                            editingField = EditField(
+                                label = "公司",
+                                initialValue = user.company,
+                                maxLength = 30,
+                                validate = com.example.juejin.util.ValidationUtil::validateCompany
+                            ) { newValue ->
                                 viewModel.updateCompany(newValue)
                             }
                         }
@@ -189,7 +205,13 @@ fun EditProfileDetailScreen(
                         label = "简介",
                         value = user.bio,
                         onClick = {
-                            editingField = EditField("简介", user.bio, 100, isMultiLine = true) { newValue ->
+                            editingField = EditField(
+                                label = "简介",
+                                initialValue = user.bio,
+                                maxLength = 100,
+                                isMultiLine = true,
+                                validate = com.example.juejin.util.ValidationUtil::validateBio
+                            ) { newValue ->
                                 viewModel.updateBio(newValue)
                             }
                         }
@@ -202,7 +224,12 @@ fun EditProfileDetailScreen(
                         label = "博客地址",
                         value = user.blogUrl,
                         onClick = {
-                            editingField = EditField("博客地址", user.blogUrl, 100) { newValue ->
+                            editingField = EditField(
+                                label = "博客地址",
+                                initialValue = user.blogUrl,
+                                maxLength = 100,
+                                validate = com.example.juejin.util.ValidationUtil::validateBlogUrl
+                            ) { newValue ->
                                 viewModel.updateBlogUrl(newValue)
                             }
                         }
@@ -215,7 +242,12 @@ fun EditProfileDetailScreen(
                         label = "GitHub",
                         value = user.github,
                         onClick = {
-                            editingField = EditField("GitHub", user.github, 50) { newValue ->
+                            editingField = EditField(
+                                label = "GitHub",
+                                initialValue = user.github,
+                                maxLength = 50,
+                                validate = com.example.juejin.util.ValidationUtil::validateGithub
+                            ) { newValue ->
                                 viewModel.updateGithub(newValue)
                             }
                         }
@@ -228,7 +260,12 @@ fun EditProfileDetailScreen(
                         label = "微博",
                         value = user.weibo,
                         onClick = {
-                            editingField = EditField("微博", user.weibo, 50) { newValue ->
+                            editingField = EditField(
+                                label = "微博",
+                                initialValue = user.weibo,
+                                maxLength = 50,
+                                validate = com.example.juejin.util.ValidationUtil::validateWeibo
+                            ) { newValue ->
                                 viewModel.updateWeibo(newValue)
                             }
                         },
@@ -243,7 +280,8 @@ fun EditProfileDetailScreen(
                             viewModel.saveUserInfo(
                                 onSuccess = {
                                     println("保存成功")
-                                    // 可以显示 Toast 提示
+                                    // 保存成功后跳转回"我的"页面
+                                    onSaveSuccess()
                                 },
                                 onError = { error ->
                                     println("保存失败: $error")
@@ -386,6 +424,7 @@ private fun EditBottomSheet(
     onDismiss: () -> Unit
 ) {
     var text by remember { mutableStateOf(field.initialValue) }
+    var errorMessage by remember { mutableStateOf("") }
     val charCount = text.length
     
     Column(
@@ -409,6 +448,8 @@ private fun EditBottomSheet(
             onValueChange = { 
                 if (it.length <= field.maxLength) {
                     text = it
+                    // 实时验证
+                    errorMessage = field.validate(it).errorMessage
                 }
             },
             modifier = Modifier
@@ -416,36 +457,54 @@ private fun EditBottomSheet(
                 .height(if (field.isMultiLine) 120.dp else 56.dp),
             placeholder = { Text("请输入${field.label}") },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Colors.primaryBlue,
-                unfocusedBorderColor = Colors.UI.divider,
+                focusedBorderColor = if (errorMessage.isNotEmpty()) Color.Red else Colors.primaryBlue,
+                unfocusedBorderColor = if (errorMessage.isNotEmpty()) Color.Red else Colors.UI.divider,
                 focusedContainerColor = Colors.Background.surface,
                 unfocusedContainerColor = Colors.Background.input
             ),
             maxLines = if (field.isMultiLine) 5 else 1,
-            singleLine = !field.isMultiLine
+            singleLine = !field.isMultiLine,
+            isError = errorMessage.isNotEmpty()
         )
         
-        // 字数统计
-        Text(
-            text = "$charCount/${field.maxLength}",
-            fontSize = 12.sp,
-            color = if (charCount >= field.maxLength) Color.Red else Colors.Text.secondary,
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(top = 4.dp)
-        )
+        // 错误提示或字数统计
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                fontSize = 12.sp,
+                color = Color.Red,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        } else {
+            Text(
+                text = "$charCount/${field.maxLength}",
+                fontSize = 12.sp,
+                color = if (charCount >= field.maxLength) Color.Red else Colors.Text.secondary,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(top = 4.dp)
+            )
+        }
         
         Spacer(modifier = Modifier.height(16.dp))
         
         // 确定按钮
         Button(
-            onClick = { onConfirm(text) },
+            onClick = { 
+                val validationResult = field.validate(text)
+                if (validationResult.isValid) {
+                    onConfirm(text)
+                } else {
+                    errorMessage = validationResult.errorMessage
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Colors.primaryBlue
-            )
+            ),
+            enabled = errorMessage.isEmpty()
         ) {
             Text(stringResource(Res.string.confirm), color = Colors.primaryWhite, fontSize = 16.sp)
         }
@@ -462,5 +521,6 @@ private data class EditField(
     val initialValue: String,
     val maxLength: Int,
     val isMultiLine: Boolean = false,
+    val validate: (String) -> com.example.juejin.util.ValidationResult = { com.example.juejin.util.ValidationResult(true) },
     val onValueChange: (String) -> Unit
 )
