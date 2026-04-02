@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.juejin.model.User
+import com.example.juejin.platform.rememberImagePicker
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import juejin.composeapp.generated.resources.Res
@@ -71,8 +72,10 @@ fun EditProfileDetailScreen(
     val user by viewModel.user.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     var editingField by remember { mutableStateOf<EditField?>(null) }
+    var showImageSourceSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val imagePicker = rememberImagePicker()
     
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -102,7 +105,7 @@ fun EditProfileDetailScreen(
                             .fillMaxWidth()
                             .background(Colors.primaryWhite)
                             .padding(16.dp)
-                            .clickable { /* TODO: 选择头像 */ },
+                            .clickable { showImageSourceSheet = true },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -293,6 +296,29 @@ fun EditProfileDetailScreen(
                     }
                 )
             }
+        }
+        
+        // 图片来源选择弹窗
+        if (showImageSourceSheet) {
+            com.example.juejin.ui.components.ImageSourceBottomSheet(
+                onDismiss = { 
+                    println("[EditProfile] 关闭图片来源选择弹窗")
+                    showImageSourceSheet = false 
+                },
+                onSourceSelected = { sourceType ->
+                    println("[EditProfile] 选择了图片来源: $sourceType")
+                    imagePicker.pickImage(
+                        sourceType = sourceType,
+                        onImageSelected = { imageUri ->
+                            println("[EditProfile] 选择的图片: $imageUri")
+                            viewModel.updateAvatar(imageUri)
+                        },
+                        onError = { error ->
+                            println("[EditProfile] 选择图片失败: $error")
+                        }
+                    )
+                }
+            )
         }
     }
 }

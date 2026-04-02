@@ -140,7 +140,7 @@ fun DetailItemRow(
             // 值
 //            val displayValue = if (item.value.length == 0) "未设置" else item.value
             val textColor = if (item.isHighlight) Colors.primaryBlue 
-                           else if (item.value.length == 0) Colors.Text.secondary 
+                           else if (item.value.isEmpty()) Colors.Text.secondary
                            else Colors.Text.primary
             
             Text(
