@@ -253,6 +253,17 @@ echo $ANDROID_HOME
 
 # 重新构建
 ./gradlew assembleDebug
+
+ # 安装到设备/模拟器
+./gradlew :composeApp:installDebug
+
+# 查看日志（过滤 ImagePicker）
+adb logcat | grep ImagePicker
+
+# 查看日志（过滤 EditProfile）
+adb logcat | grep EditProfile
+
+
 ```
 
 #### Desktop 构建失败

@@ -2,6 +2,7 @@ package com.example.juejin.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.example.juejin.util.Logger
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIApplication
 import platform.UIKit.UIImagePickerController
@@ -9,6 +10,8 @@ import platform.UIKit.UIImagePickerControllerDelegateProtocol
 import platform.UIKit.UIImagePickerControllerSourceType
 import platform.UIKit.UINavigationControllerDelegateProtocol
 import platform.darwin.NSObject
+
+private const val TAG = "ImagePicker"
 
 /**
  * iOS 平台图片选择器实现
@@ -26,6 +29,21 @@ actual class ImagePicker {
         onImageSelectedCallback = onImageSelected
         onErrorCallback = onError
         
+        // 检查相机是否可用（模拟器不支持相机）
+        if (sourceType == ImageSourceType.CAMERA) {
+            val isCameraAvailable = UIImagePickerController.isSourceTypeAvailable(
+                UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera
+            )
+            
+            if (!isCameraAvailable) {
+                Logger.w(TAG, "相机不可用（可能是在模拟器上运行）")
+                onError("相机不可用，请在真机上测试拍照功能")
+                return
+            }
+        }
+        
+        Logger.d(TAG, "启动图片选择器: $sourceType")
+        
         val picker = UIImagePickerController()
         picker.sourceType = when (sourceType) {
             ImageSourceType.CAMERA -> UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera
@@ -37,7 +55,13 @@ actual class ImagePicker {
         // 由于 Kotlin/Native 的限制，这部分需要更复杂的实现
         
         val rootViewController = UIApplication.sharedApplication.keyWindow?.rootViewController
-        rootViewController?.presentViewController(picker, animated = true, completion = null)
+        if (rootViewController != null) {
+            rootViewController.presentViewController(picker, animated = true, completion = null)
+            Logger.d(TAG, "图片选择器已显示")
+        } else {
+            Logger.e(TAG, "无法获取 rootViewController")
+            onError("无法打开图片选择器")
+        }
     }
 }
 

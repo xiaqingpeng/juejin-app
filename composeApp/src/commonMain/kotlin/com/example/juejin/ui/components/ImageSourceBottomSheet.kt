@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.platform.ImageSourceType
 import com.example.juejin.ui.Colors
+import com.example.juejin.util.Logger
 
 /**
  * 图片来源选择底部弹窗
@@ -52,7 +53,7 @@ fun ImageSourceBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        println("[ImageSourceBottomSheet] 点击了拍照选项")
+                        Logger.d("ImageSourceBottomSheet", "点击了拍照选项")
                         onSourceSelected(ImageSourceType.CAMERA)
                         onDismiss()
                     }
@@ -70,7 +71,7 @@ fun ImageSourceBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        println("[ImageSourceBottomSheet] 点击了相册选项")
+                        Logger.d("ImageSourceBottomSheet", "点击了相册选项")
                         onSourceSelected(ImageSourceType.GALLERY)
                         onDismiss()
                     }

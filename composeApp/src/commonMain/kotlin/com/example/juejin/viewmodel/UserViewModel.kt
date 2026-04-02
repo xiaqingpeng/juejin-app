@@ -2,6 +2,7 @@ package com.example.juejin.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.juejin.model.User
+import com.example.juejin.util.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -121,7 +122,7 @@ class UserViewModel : ViewModel() {
         try {
             // TODO: 实际项目中这里应该调用 API 保存数据
             // 模拟保存成功
-            println("保存用户信息: ${_user.value}")
+            Logger.d("UserViewModel", "保存用户信息: ${_user.value}")
             onSuccess()
         } catch (e: Exception) {
             onError(e.message ?: "保存失败")

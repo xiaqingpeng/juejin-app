@@ -2,7 +2,6 @@ package com.example.juejin.platform
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import com.example.juejin.util.Logger
 import java.io.File
 
 private const val TAG = "ImagePicker"
@@ -36,16 +36,16 @@ actual class ImagePicker(
         
         when (sourceType) {
             ImageSourceType.GALLERY -> {
-                Log.d(TAG, "启动相册选择")
+                Logger.d(TAG, "启动相册选择")
                 try {
                     galleryLauncher?.launch("image/*")
                 } catch (e: Exception) {
-                    Log.e(TAG, "启动相册失败", e)
+                    Logger.e(TAG, "启动相册失败", e)
                     onError("启动相册失败: ${e.message}")
                 }
             }
             ImageSourceType.CAMERA -> {
-                Log.d(TAG, "准备启动相机")
+                Logger.d(TAG, "准备启动相机")
                 try {
                     // 创建临时文件用于存储拍照结果
                     val photoFile = File.createTempFile(
@@ -60,18 +60,18 @@ actual class ImagePicker(
                         photoFile
                     )
                     
-                    Log.d(TAG, "临时文件创建成功: ${photoFile.absolutePath}")
-                    Log.d(TAG, "URI: $tempPhotoUri")
+                    Logger.d(TAG, "临时文件创建成功: ${photoFile.absolutePath}")
+                    Logger.d(TAG, "URI: $tempPhotoUri")
                     
                     tempPhotoUri?.let { uri ->
                         cameraLauncher?.launch(uri)
-                        Log.d(TAG, "相机启动器已调用")
+                        Logger.d(TAG, "相机启动器已调用")
                     } ?: run {
-                        Log.e(TAG, "URI 为空")
+                        Logger.e(TAG, "URI 为空")
                         onError("创建临时文件失败")
                     }
                 } catch (e: Exception) {
-                    Log.e(TAG, "启动相机异常", e)
+                    Logger.e(TAG, "启动相机异常", e)
                     onError("启动相机失败: ${e.message}")
                 }
             }
@@ -79,7 +79,7 @@ actual class ImagePicker(
     }
     
     fun handleGalleryResult(uri: Uri?) {
-        Log.d(TAG, "相册选择结果: $uri")
+        Logger.d(TAG, "相册选择结果: $uri")
         if (uri != null) {
             onImageSelectedCallback?.invoke(uri.toString())
         } else {
@@ -88,7 +88,7 @@ actual class ImagePicker(
     }
     
     fun handleCameraResult(success: Boolean) {
-        Log.d(TAG, "拍照结果: success=$success, tempPhotoUri=$tempPhotoUri")
+        Logger.d(TAG, "拍照结果: success=$success, tempPhotoUri=$tempPhotoUri")
         if (success && tempPhotoUri != null) {
             onImageSelectedCallback?.invoke(tempPhotoUri.toString())
         } else {
@@ -105,13 +105,13 @@ actual fun rememberImagePicker(): ImagePicker {
     val context = LocalContext.current
     val picker = remember { ImagePicker(context) }
     
-    Log.d(TAG, "创建 ImagePicker 实例")
+    Logger.d(TAG, "创建 ImagePicker 实例")
     
     // 相册选择器
     picker.galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        Log.d(TAG, "相册 launcher 回调: $uri")
+        Logger.d(TAG, "相册 launcher 回调: $uri")
         picker.handleGalleryResult(uri)
     }
     
@@ -119,7 +119,7 @@ actual fun rememberImagePicker(): ImagePicker {
     picker.cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
-        Log.d(TAG, "相机 launcher 回调: $success")
+        Logger.d(TAG, "相机 launcher 回调: $success")
         picker.handleCameraResult(success)
     }
     
