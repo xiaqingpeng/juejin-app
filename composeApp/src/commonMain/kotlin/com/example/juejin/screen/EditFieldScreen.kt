@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.input_placeholder
 import org.jetbrains.compose.resources.stringResource
@@ -49,19 +50,14 @@ fun EditFieldScreen(
 ) {
     var text by remember { mutableStateOf(initialValue) }
     
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { 
                         Text(
                             title,
-                            color = Colors.Text.primary,
+                            color = ThemeColors.Text.primary,
                             fontSize = 18.sp
                         ) 
                     },
@@ -70,7 +66,7 @@ fun EditFieldScreen(
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "返回",
-                                tint = Colors.Text.primary
+                                tint = ThemeColors.Text.primary
                             )
                         }
                     },
@@ -82,13 +78,13 @@ fun EditFieldScreen(
                         ) {
                             Text(
                                 "保存",
-                                color = Colors.primaryBlue,
+                                color = ThemeColors.primaryBlue,
                                 fontSize = 16.sp
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Colors.primaryWhite
+                        containerColor = ThemeColors.primaryWhite
                     )
                 )
             }
@@ -97,7 +93,7 @@ fun EditFieldScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Colors.Background.primary)
+                    .background(ThemeColors.Background.primary)
             ) {
                 OutlinedTextField(
                     value = text,
@@ -105,12 +101,21 @@ fun EditFieldScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    placeholder = { Text("请输入$title") },
+                    placeholder = { 
+                        Text(
+                            "请输入$title",
+                            color = ThemeColors.Text.placeholder
+                        ) 
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Colors.primaryBlue,
-                        unfocusedBorderColor = Colors.UI.divider,
-                        focusedContainerColor = Colors.primaryWhite,
-                        unfocusedContainerColor = Colors.primaryWhite
+                        focusedTextColor = ThemeColors.Text.primary,
+                        unfocusedTextColor = ThemeColors.Text.primary,
+                        focusedBorderColor = ThemeColors.primaryBlue,
+                        unfocusedBorderColor = ThemeColors.UI.divider,
+                        focusedContainerColor = ThemeColors.primaryWhite,
+                        unfocusedContainerColor = ThemeColors.primaryWhite,
+                        focusedPlaceholderColor = ThemeColors.Text.placeholder,
+                        unfocusedPlaceholderColor = ThemeColors.Text.placeholder
                     ),
                     maxLines = if (title == "简介") 5 else 1,
                     minLines = if (title == "简介") 3 else 1

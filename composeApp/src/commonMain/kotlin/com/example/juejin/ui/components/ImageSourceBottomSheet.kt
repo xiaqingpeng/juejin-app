@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.platform.ImageSourceType
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.util.Logger
 
 /**
@@ -35,7 +36,7 @@ fun ImageSourceBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = Colors.primaryWhite,
+        containerColor = ThemeColors.primaryWhite,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
         Column(
@@ -48,7 +49,7 @@ fun ImageSourceBottomSheet(
             Text(
                 text = "拍照",
                 fontSize = 18.sp,
-                color = Colors.Text.primary,
+                color = ThemeColors.Text.primary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -60,13 +61,13 @@ fun ImageSourceBottomSheet(
                     .padding(vertical = 16.dp)
             )
             
-            HorizontalDivider(color = Colors.UI.divider)
+            HorizontalDivider(color = ThemeColors.UI.divider)
             
             // 从相册选择
             Text(
                 text = "从相册选择",
                 fontSize = 18.sp,
-                color = Colors.Text.primary,
+                color = ThemeColors.Text.primary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -79,7 +80,7 @@ fun ImageSourceBottomSheet(
             )
             
             HorizontalDivider(
-                color = Colors.Background.primary,
+                color = ThemeColors.Background.primary,
                 thickness = 8.dp
             )
             
@@ -87,7 +88,7 @@ fun ImageSourceBottomSheet(
             Text(
                 text = "取消",
                 fontSize = 18.sp,
-                color = Colors.Text.secondary,
+                color = ThemeColors.Text.secondary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()

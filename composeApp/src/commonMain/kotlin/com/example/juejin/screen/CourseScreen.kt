@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.typography.Typography
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.tab_courses
@@ -29,26 +30,27 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CourseScreen(onItemClick: (com.example.juejin.model.LogStatsItem) -> Unit = {}) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(ThemeColors.Background.primary),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier =
                 Modifier.size(64.dp)
-                    .background(Colors.primaryBlue, shape = MaterialTheme.shapes.medium)
+                    .background(ThemeColors.primaryBlue, shape = MaterialTheme.shapes.medium)
                     .padding(16.dp)
         ) {
             androidx.compose.material3.Icon(
                 imageVector = Icons.Filled.School,
                 contentDescription = stringResource(Res.string.tab_courses),
-                tint = Color.White,
+                tint = ThemeColors.Text.white,
                 modifier = Modifier.size(32.dp)
             )
         }
         Text(
             stringResource(Res.string.tab_courses), 
-            style = Typography.largeTitle, 
+            style = Typography.largeTitle,
+            color = ThemeColors.Text.primary,
             modifier = Modifier.padding(top = 16.dp)
         )
     }

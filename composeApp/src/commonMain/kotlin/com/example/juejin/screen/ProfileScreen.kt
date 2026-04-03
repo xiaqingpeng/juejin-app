@@ -33,8 +33,9 @@ import com.example.juejin.components.profile.MemberBanner
 import com.example.juejin.components.profile.MoreFunctionSection
 import com.example.juejin.components.profile.ProfileHeader
 import com.example.juejin.components.profile.QuickFunctionSection
-import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBar
+import com.example.juejin.util.Logger
 import com.example.juejin.viewmodel.UserViewModel
 
 @Composable
@@ -53,13 +54,10 @@ fun JuejinProfilePage(
     onSettingsClick: () -> Unit
 ) {
     val user by userViewModel.user.collectAsStateWithLifecycle()
-    MaterialTheme(
-            colorScheme =
-                    lightColorScheme(
-                            background = Colors.Background.primary,
-                            surface = Colors.Background.surface
-                    )
-    ) {
+    val backgroundColor = ThemeColors.Background.primary
+    val textColor = ThemeColors.Text.primary
+    
+    com.example.juejin.theme.AppTheme {
         Scaffold(
                 topBar = {
                     TopNavigationBar(
@@ -73,7 +71,7 @@ fun JuejinProfilePage(
                                         horizontalArrangement =
                                                 Arrangement.spacedBy(8.dp) // 直接在这里统一控制图标间的距离
                                 ) {
-                                    val iconTint = Colors.primaryBlack
+                                    val iconTint = textColor
                                     // 封装重复的按钮逻辑，减少冗余代码
                                     val actionButtons =
                                             listOf(
@@ -92,13 +90,19 @@ fun JuejinProfilePage(
                                             }
                                             Icons.Filled.QrCodeScanner -> {
                                                 {
-                                                    com.example.juejin.util.Logger.d("ProfileScreen", "点击扫码按钮")
+                                                    Logger.d("ProfileScreen", "点击扫码按钮")
                                                     onQrScanClick()
+                                                }
+                                            }
+                                            Icons.Filled.ShieldMoon -> {
+                                                {
+                                                    Logger.d("ProfileScreen", "切换主题模式")
+                                                    com.example.juejin.theme.ThemeManager.toggleTheme()
                                                 }
                                             }
                                             else -> {
                                                 {
-                                                    com.example.juejin.util.Logger.d("ProfileScreen", "点击了 $description")
+                                                    Logger.d("ProfileScreen", "点击了 $description")
                                                 }
                                             }
                                         }
@@ -122,7 +126,7 @@ fun JuejinProfilePage(
             Column(
                     modifier =
                             Modifier.fillMaxSize()
-                                    .background(Colors.Background.primary)
+                                    .background(backgroundColor)
                                     .verticalScroll(rememberScrollState())
                                     .padding(paddingValues)
             ) {
@@ -134,7 +138,7 @@ fun JuejinProfilePage(
                         modifier =
                                 Modifier.height(8.dp)
                                         .fillMaxWidth()
-                                        .background(Colors.Background.primary)
+                                        .background(backgroundColor)
                 )
 
                 // 会员横幅
@@ -145,7 +149,7 @@ fun JuejinProfilePage(
                         modifier =
                                 Modifier.height(8.dp)
                                         .fillMaxWidth()
-                                        .background(Colors.Background.primary)
+                                        .background(backgroundColor)
                 )
 
                 // 快捷功能
@@ -156,7 +160,7 @@ fun JuejinProfilePage(
                         modifier =
                                 Modifier.height(8.dp)
                                         .fillMaxWidth()
-                                        .background(Colors.Background.primary)
+                                        .background(backgroundColor)
                 )
 
                 // 创作者中心
@@ -167,7 +171,7 @@ fun JuejinProfilePage(
                         modifier =
                                 Modifier.height(8.dp)
                                         .fillMaxWidth()
-                                        .background(Colors.Background.primary)
+                                        .background(backgroundColor)
                 )
 
                 // 更多功能

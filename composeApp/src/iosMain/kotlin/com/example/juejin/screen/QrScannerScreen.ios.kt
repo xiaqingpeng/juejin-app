@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import platform.AVFoundation.AVCaptureDevice
 import platform.AVFoundation.AVCaptureDeviceInput
 import platform.AVFoundation.AVCaptureMetadataOutput
@@ -169,7 +170,7 @@ actual fun QrScannerPreview(
 
     if (!hasPermission) {
         Box(
-            modifier = modifier.fillMaxSize().background(Colors.Background.primary),
+            modifier = modifier.fillMaxSize().background(ThemeColors.Background.primary),
             contentAlignment = Alignment.Center
         ) {
             Text(text = "需要相机权限以扫描二维码")

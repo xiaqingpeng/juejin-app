@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBar
 
 @Composable
@@ -62,13 +63,13 @@ fun QrScannerScreen(
             title = "二维码扫描",
             onLeftClick = onBack,
             backgroundColor = Color.Transparent,
-            contentColor = Color.White
+            contentColor = ThemeColors.Text.white
         )
 
         // 底部提示文字
         Text(
             text = "将二维码放入取景框内自动识别",
-            color = Color.White,
+            color = ThemeColors.Text.white,
             modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)
         )
         
@@ -88,7 +89,7 @@ fun QrScannerScreen(
                         .clip(RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Colors.Background.primary
+                        containerColor = ThemeColors.Background.primary
                     )
                 ) {
                     Column(modifier = Modifier.padding(24.dp)) {
@@ -101,7 +102,7 @@ fun QrScannerScreen(
                             Text(
                                 text = "二维码结果",
                                 style = MaterialTheme.typography.headlineMedium,
-                                color = Colors.primaryBlue,
+                                color = ThemeColors.primaryBlue,
                                 fontWeight = FontWeight.Bold
                             )
                             IconButton(
@@ -111,7 +112,7 @@ fun QrScannerScreen(
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "关闭",
-                                    tint = Colors.Text.secondary
+                                    tint = ThemeColors.Text.secondary
                                 )
                             }
                         }
@@ -122,12 +123,12 @@ fun QrScannerScreen(
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(8.dp),
-                            color = Colors.Background.secondary
+                            color = ThemeColors.Background.secondary
                         ) {
                             Text(
                                 text = scannedQrCode.orEmpty(),
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Colors.Text.primary,
+                                color = ThemeColors.Text.primary,
                                 modifier = Modifier.padding(16.dp),
                                 textAlign = TextAlign.Center
                             )
@@ -140,7 +141,7 @@ fun QrScannerScreen(
                             onClick = { scannedQrCode = null },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Colors.primaryBlue
+                                containerColor = ThemeColors.primaryBlue
                             ),
                             shape = RoundedCornerShape(8.dp)
                         ) {
@@ -148,7 +149,7 @@ fun QrScannerScreen(
                                 text = "确定",
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Medium,
-                                color = Color.White
+                                color = ThemeColors.Text.white
                             )
                         }
                     }

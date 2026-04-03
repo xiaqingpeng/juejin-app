@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import kotlin.random.Random
 import kotlinx.coroutines.delay
 
@@ -94,7 +95,7 @@ fun ColorCardComposable(card: ColorCard) {
     ) {
         Text(
             text = "卡片 ${card.id + 1}",
-            color = Color.White,
+            color = ThemeColors.Text.white,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )

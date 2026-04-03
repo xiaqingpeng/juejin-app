@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.profile_creator_center
 import juejin.composeapp.generated.resources.profile_enter_homepage
@@ -33,7 +34,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CreatorCenterSection() {
-    Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().background(ThemeColors.primaryWhite).padding(16.dp)) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -42,12 +43,13 @@ fun CreatorCenterSection() {
             Text(
                 stringResource(Res.string.profile_creator_center),
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = ThemeColors.Text.primary
             )
             Text(
                 stringResource(Res.string.profile_enter_homepage),
                 fontSize = 12.sp,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
         }
         Spacer(Modifier.height(16.dp))
@@ -75,9 +77,9 @@ fun CreatorCenterSection() {
 @Composable
 private fun CreatorCenterItem(icon: ImageVector, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable(onClick = { println("点击了 $label") })) {
-        Icon(icon, label, Modifier.size(24.dp))
+        Icon(icon, label, Modifier.size(24.dp), tint = ThemeColors.Text.primary)
         Spacer(Modifier.height(4.dp))
-        Text(label, fontSize = 12.sp)
+        Text(label, fontSize = 12.sp, color = ThemeColors.Text.primary)
     }
 }
 

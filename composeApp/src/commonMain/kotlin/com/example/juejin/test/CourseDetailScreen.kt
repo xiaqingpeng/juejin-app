@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.juejin.test.components.DetailScreenCard
 import com.example.juejin.test.components.DetailScreenCardItem
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.util.DateTimeUtil
@@ -47,14 +48,14 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onLeftCl
                 TopNavigationBarWithBack(
                         title = "课程详情",
                         onLeftClick = onLeftClick,
-                        backgroundColor = Colors.primaryWhite
+                        backgroundColor = ThemeColors.primaryWhite
                 )
             }
     ) { paddingValues ->
         Column(
                 modifier =
                         Modifier.fillMaxSize()
-                                .background(Colors.Background.primary)
+                                .background(ThemeColors.Background.primary)
                                 .padding(paddingValues)
                                 .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(0.dp)
@@ -69,7 +70,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onLeftCl
                 // 基本信息卡片
                 Box(
                     modifier = Modifier.fillMaxWidth()
-                        .background(Colors.primaryWhite)
+                        .background(ThemeColors.primaryWhite)
                         .padding(16.dp)
                 ) {
                     DetailScreenCard(title = stringResource(Res.string.course_detail_basic_info)) {
@@ -89,7 +90,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onLeftCl
                 // 网络信息卡片
                 Box(
                     modifier = Modifier.fillMaxWidth()
-                        .background(Colors.primaryWhite)
+                        .background(ThemeColors.primaryWhite)
                         .padding(16.dp)
                 ) {
                     DetailScreenCard(title = stringResource(Res.string.course_detail_network_info)) {
@@ -108,7 +109,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onLeftCl
                 // 性能信息卡片
                 Box(
                     modifier = Modifier.fillMaxWidth()
-                        .background(Colors.primaryWhite)
+                        .background(ThemeColors.primaryWhite)
                         .padding(16.dp)
                 ) {
                     DetailScreenCard(title = stringResource(Res.string.course_detail_performance_info)) {
@@ -121,7 +122,7 @@ fun CourseDetailScreen(logStat: com.example.juejin.model.LogStatsItem?, onLeftCl
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
-                ) { Text(text = stringResource(Res.string.no_data), style = Typography.largeTitle, color = Colors.Text.secondary) }
+                ) { Text(text = stringResource(Res.string.no_data), style = Typography.largeTitle, color = ThemeColors.Text.secondary) }
             }
         }
     }

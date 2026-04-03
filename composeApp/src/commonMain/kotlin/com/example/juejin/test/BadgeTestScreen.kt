@@ -29,6 +29,7 @@ import com.example.juejin.platform.BadgeManager
 import com.example.juejin.platform.getDeviceManufacturer
 import com.example.juejin.platform.getDeviceModel
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 
 /**
@@ -46,12 +47,7 @@ fun BadgeTestScreen(
         "${getDeviceManufacturer()} ${getDeviceModel()}"
     }
     
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -75,7 +71,7 @@ fun BadgeTestScreen(
                     Text(
                         text = "设备: $deviceInfo",
                         fontSize = 12.sp,
-                        color = Colors.Text.secondary,
+                        color = ThemeColors.Text.secondary,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -86,7 +82,7 @@ fun BadgeTestScreen(
                         Text(
                             text = statusMessage,
                             fontSize = 12.sp,
-                            color = Colors.primaryBlue,
+                            color = ThemeColors.primaryBlue,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -98,13 +94,13 @@ fun BadgeTestScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("当前角标数量", fontSize = 16.sp, color = Colors.Text.secondary)
+                        Text("当前角标数量", fontSize = 16.sp, color = ThemeColors.Text.secondary)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "$currentCount",
                             fontSize = 64.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Colors.primaryBlue
+                            color = ThemeColors.primaryBlue
                         )
                     }
                 }
@@ -113,7 +109,7 @@ fun BadgeTestScreen(
                 
                 // 快捷设置
                 item {
-                    Text("快捷设置", fontSize = 14.sp, color = Colors.Text.secondary, modifier = Modifier.fillMaxWidth())
+                    Text("快捷设置", fontSize = 14.sp, color = ThemeColors.Text.secondary, modifier = Modifier.fillMaxWidth())
                 }
                 
                 item {
@@ -129,9 +125,9 @@ fun BadgeTestScreen(
                                     statusMessage = "已设置为 $count"
                                 },
                                 modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue)
+                                colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.primaryBlue)
                             ) {
-                                Text("$count", color = Colors.primaryWhite)
+                                Text("$count", color = ThemeColors.primaryWhite)
                             }
                         }
                     }
@@ -139,7 +135,7 @@ fun BadgeTestScreen(
                 
                 // 手动调整
                 item {
-                    Text("手动调整", fontSize = 14.sp, color = Colors.Text.secondary, modifier = Modifier.fillMaxWidth())
+                    Text("手动调整", fontSize = 14.sp, color = ThemeColors.Text.secondary, modifier = Modifier.fillMaxWidth())
                 }
                 
                 item {
@@ -156,9 +152,9 @@ fun BadgeTestScreen(
                                 }
                             },
                             modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.buttonColors(containerColor = Colors.Text.secondary)
+                            colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Text.secondary)
                         ) {
-                            Text("-1", color = Colors.primaryWhite, fontSize = 20.sp)
+                            Text("-1", color = ThemeColors.primaryWhite, fontSize = 20.sp)
                         }
                         
                         Button(
@@ -168,9 +164,9 @@ fun BadgeTestScreen(
                                 statusMessage = "已更新为 $currentCount"
                             },
                             modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue)
+                            colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.primaryBlue)
                         ) {
-                            Text("+1", color = Colors.primaryWhite, fontSize = 20.sp)
+                            Text("+1", color = ThemeColors.primaryWhite, fontSize = 20.sp)
                         }
                     }
                 }
@@ -184,9 +180,9 @@ fun BadgeTestScreen(
                             statusMessage = "已清除"
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Colors.Button.danger)
+                        colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Button.danger)
                     ) {
-                        Text("清除角标", color = Colors.primaryWhite, fontSize = 16.sp)
+                        Text("清除角标", color = ThemeColors.primaryWhite, fontSize = 16.sp)
                     }
                 }
                 
@@ -201,9 +197,9 @@ fun BadgeTestScreen(
                             com.example.juejin.util.Logger.d("BadgeTest", "=== 角标测试完成 ===")
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue)
+                        colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.primaryBlue)
                     ) {
-                        Text("测试角标 (88)", color = Colors.primaryWhite, fontSize = 16.sp)
+                        Text("测试角标 (88)", color = ThemeColors.primaryWhite, fontSize = 16.sp)
                     }
                 }
                 
@@ -212,12 +208,12 @@ fun BadgeTestScreen(
                 // 使用说明
                 item {
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        Text("使用说明：", fontSize = 14.sp, color = Colors.Text.primary)
+                        Text("使用说明：", fontSize = 14.sp, color = ThemeColors.Text.primary)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             "1. 点击按钮设置角标\n2. 按 Home 键查看桌面图标\n3. 部分设备需在系统设置中开启角标权限",
                             fontSize = 12.sp,
-                            color = Colors.Text.secondary
+                            color = ThemeColors.Text.secondary
                         )
                     }
                 }

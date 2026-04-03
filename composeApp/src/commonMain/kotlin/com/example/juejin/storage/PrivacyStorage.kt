@@ -14,4 +14,14 @@ expect object PrivacyStorage {
      * 设置用户同意隐私政策
      */
     fun setPrivacyPolicyAccepted(accepted: Boolean)
+    
+    /**
+     * 存储字符串值
+     */
+    fun putString(key: String, value: String)
+    
+    /**
+     * 获取字符串值
+     */
+    fun getString(key: String, defaultValue: String): String
 }

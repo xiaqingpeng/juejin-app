@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.notification_bell
 import juejin.composeapp.generated.resources.notification_dialog_allow
@@ -43,7 +44,7 @@ fun NotificationPermissionDialog(
             .fillMaxWidth(0.98f)  // 调宽到 98%
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        color = Colors.Background.dialog,
+        color = ThemeColors.Background.dialog,
         shadowElevation = 8.dp
     ) {
         Column(
@@ -66,7 +67,7 @@ fun NotificationPermissionDialog(
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                color = Colors.Text.primary
+                color = ThemeColors.Text.primary
             )
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -80,12 +81,12 @@ fun NotificationPermissionDialog(
                 Surface(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(8.dp),
-                    color = Colors.Button.secondary
+                    color = ThemeColors.Button.secondary
                 ) {
                     TextButton(
                         onClick = onDeny,
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.textButtonColors(contentColor = Colors.primaryBlue)
+                        colors = ButtonDefaults.textButtonColors(contentColor = ThemeColors.primaryBlue)
                     ) {
                         Text(
                             text = stringResource(Res.string.notification_dialog_deny),
@@ -101,12 +102,12 @@ fun NotificationPermissionDialog(
                 Surface(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(8.dp),
-                    color = Colors.primaryGrey
+                    color = ThemeColors.primaryGray
                 ) {
                     TextButton(
                         onClick = onAllow,
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.textButtonColors(contentColor = Colors.primaryBlue)
+                        colors = ButtonDefaults.textButtonColors(contentColor = ThemeColors.primaryBlue)
                     ) {
                         Text(
                             text = stringResource(Res.string.notification_dialog_allow),

@@ -50,6 +50,7 @@ import coil3.compose.AsyncImage
 import com.example.juejin.model.User
 import com.example.juejin.platform.rememberImagePicker
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.util.Logger
 import juejin.composeapp.generated.resources.Res
@@ -79,12 +80,7 @@ fun EditProfileDetailScreen(
     val scope = rememberCoroutineScope()
     val imagePicker = rememberImagePicker()
     
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -97,7 +93,7 @@ fun EditProfileDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Colors.Background.primary)
+                    .background(ThemeColors.Background.primary)
             ) {
                 // 头像
                 item {
@@ -105,7 +101,7 @@ fun EditProfileDetailScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Colors.primaryWhite)
+                            .background(ThemeColors.primaryWhite)
                             .padding(16.dp)
                             .clickable { showImageSourceSheet = true },
                         verticalAlignment = Alignment.CenterVertically
@@ -114,7 +110,7 @@ fun EditProfileDetailScreen(
                             "头像",
                             modifier = Modifier.weight(1f),
                             fontSize = 16.sp,
-                            color = Colors.Text.primary
+                            color = ThemeColors.Text.primary
                         )
                         
                         if (user.avatar.isNotEmpty()) {
@@ -131,7 +127,7 @@ fun EditProfileDetailScreen(
                                 modifier = Modifier
                                     .size(48.dp)
                                     .clip(CircleShape)
-                                    .background(Colors.UI.avatar)
+                                    .background(ThemeColors.UI.avatar)
                             )
                         }
                         
@@ -139,11 +135,11 @@ fun EditProfileDetailScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowForwardIos,
                             contentDescription = null,
-                            tint = Colors.Text.secondary,
+                            tint = ThemeColors.Text.secondary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
-                    HorizontalDivider(color = Colors.Background.primary, thickness = 8.dp)
+                    HorizontalDivider(color = ThemeColors.Background.primary, thickness = 8.dp)
                 }
                 
                 // 用户名
@@ -295,14 +291,14 @@ fun EditProfileDetailScreen(
                             .padding(24.dp)
                             .height(48.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Colors.primaryBlue
+                            containerColor = ThemeColors.primaryBlue
                         ),
                         enabled = !isLoading
                     ) {
                         Text(
                             if (isLoading) stringResource(Res.string.saving) 
                             else stringResource(Res.string.save),
-                            color = Colors.primaryWhite,
+                            color = ThemeColors.primaryWhite,
                             fontSize = 16.sp
                         )
                     }
@@ -315,7 +311,7 @@ fun EditProfileDetailScreen(
             ModalBottomSheet(
                 onDismissRequest = { editingField = null },
                 sheetState = sheetState,
-                containerColor = Colors.primaryWhite,
+                containerColor = ThemeColors.primaryWhite,
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
             ) {
                 EditBottomSheet(
@@ -376,7 +372,7 @@ private fun ProfileItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Colors.primaryWhite)
+                .background(ThemeColors.primaryWhite)
                 .padding(16.dp)
                 .clickable(onClick = onClick),
             verticalAlignment = Alignment.CenterVertically,
@@ -385,13 +381,13 @@ private fun ProfileItem(
             Text(
                 label,
                 fontSize = 16.sp,
-                color = Colors.Text.primary,
+                color = ThemeColors.Text.primary,
                 modifier = Modifier.weight(1f)
             )
             
             Text(
                 value.ifEmpty { "未填写" },
-                color = if (value.isEmpty()) Colors.Text.secondary else Colors.Text.primary,
+                color = if (value.isEmpty()) ThemeColors.Text.secondary else ThemeColors.Text.primary,
                 fontSize = 14.sp,
                 maxLines = 1
             )
@@ -401,7 +397,7 @@ private fun ProfileItem(
             Icon(
                 Icons.AutoMirrored.Filled.ArrowForwardIos,
                 contentDescription = null,
-                tint = Colors.Text.secondary,
+                tint = ThemeColors.Text.secondary,
                 modifier = Modifier.size(16.dp)
             )
         }
@@ -409,7 +405,7 @@ private fun ProfileItem(
         if (!isLast) {
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
         }
     }
@@ -439,7 +435,7 @@ private fun EditBottomSheet(
             text = "编辑${field.label}",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Colors.Text.primary,
+            color = ThemeColors.Text.primary,
             modifier = Modifier.padding(bottom = 16.dp)
         )
         
@@ -456,12 +452,21 @@ private fun EditBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(if (field.isMultiLine) 120.dp else 56.dp),
-            placeholder = { Text("请输入${field.label}") },
+            placeholder = { 
+                Text(
+                    "请输入${field.label}",
+                    color = ThemeColors.Text.placeholder
+                ) 
+            },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = if (errorMessage.isNotEmpty()) Color.Red else Colors.primaryBlue,
-                unfocusedBorderColor = if (errorMessage.isNotEmpty()) Color.Red else Colors.UI.divider,
-                focusedContainerColor = Colors.Background.surface,
-                unfocusedContainerColor = Colors.Background.input
+                focusedTextColor = ThemeColors.Text.primary,
+                unfocusedTextColor = ThemeColors.Text.primary,
+                focusedBorderColor = if (errorMessage.isNotEmpty()) Color.Red else ThemeColors.primaryBlue,
+                unfocusedBorderColor = if (errorMessage.isNotEmpty()) Color.Red else ThemeColors.UI.divider,
+                focusedContainerColor = ThemeColors.Background.surface,
+                unfocusedContainerColor = ThemeColors.Background.input,
+                focusedPlaceholderColor = ThemeColors.Text.placeholder,
+                unfocusedPlaceholderColor = ThemeColors.Text.placeholder
             ),
             maxLines = if (field.isMultiLine) 5 else 1,
             singleLine = !field.isMultiLine,
@@ -480,7 +485,7 @@ private fun EditBottomSheet(
             Text(
                 text = "$charCount/${field.maxLength}",
                 fontSize = 12.sp,
-                color = if (charCount >= field.maxLength) Color.Red else Colors.Text.secondary,
+                color = if (charCount >= field.maxLength) Color.Red else ThemeColors.Text.secondary,
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(top = 4.dp)
@@ -503,11 +508,11 @@ private fun EditBottomSheet(
                 .fillMaxWidth()
                 .height(48.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Colors.primaryBlue
+                containerColor = ThemeColors.primaryBlue
             ),
             enabled = errorMessage.isEmpty()
         ) {
-            Text(stringResource(Res.string.confirm), color = Colors.primaryWhite, fontSize = 16.sp)
+            Text(stringResource(Res.string.confirm), color = ThemeColors.primaryWhite, fontSize = 16.sp)
         }
         
         Spacer(modifier = Modifier.height(16.dp))

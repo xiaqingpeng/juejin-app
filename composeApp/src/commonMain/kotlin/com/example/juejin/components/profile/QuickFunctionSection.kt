@@ -25,30 +25,31 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 
 @Composable
 fun QuickFunctionSection() {
-    Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().background(ThemeColors.primaryWhite).padding(16.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
             QuickFunctionItem(
                 Icons.Default.CheckCircle,
                 "每日签到",
-                Colors.QuickFunctions.checkIn
+                ThemeColors.QuickFunctions.checkIn
             )
             QuickFunctionItem(
                 Icons.Default.Casino,
                 "幸运转盘",
-                Colors.QuickFunctions.luckyWheel
+                ThemeColors.QuickFunctions.luckyWheel
             )
             QuickFunctionItem(
                 Icons.Default.BugReport,
                 "Bug挑战赛",
-                Colors.QuickFunctions.bugChallenge
+                ThemeColors.QuickFunctions.bugChallenge
             )
             QuickFunctionItem(
                 Icons.Default.Star,
                 "福利兑换",
-                Colors.QuickFunctions.welfare
+                ThemeColors.QuickFunctions.welfare
             )
         }
     }
@@ -59,6 +60,6 @@ private fun QuickFunctionItem(icon: ImageVector, label: String, tint: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable(onClick = { println("点击了 $label") })) {
         Icon(icon, label, Modifier.size(24.dp), tint = tint)
         Spacer(Modifier.height(4.dp))
-        Text(label, fontSize = 12.sp)
+        Text(label, fontSize = 12.sp, color = ThemeColors.Text.primary)
     }
 }

@@ -46,6 +46,7 @@ import com.example.juejin.model.SettingItem
 import com.example.juejin.model.SettingType
 import com.example.juejin.platform.getAppVersionInfo
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.viewmodel.SettingViewModel
 import juejin.composeapp.generated.resources.Res
@@ -98,12 +99,7 @@ private fun SettingsListScreen(
     onItemClick: (SettingItem) -> Unit,
     onLeftClick: () -> Unit
 ) {
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -119,7 +115,7 @@ private fun SettingsListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Colors.Background.primary)
+                    .background(ThemeColors.Background.primary)
             ) {
                 // 添加顶部间距
                 item {
@@ -148,7 +144,7 @@ private fun SettingsListScreen(
                     
                     // 在分组之间添加间距
                     if (isGroupEnd) {
-                        HorizontalDivider(color = Colors.Background.primary, thickness = 8.dp)
+                        HorizontalDivider(color = ThemeColors.Background.primary, thickness = 8.dp)
                     }
                 }
 
@@ -158,7 +154,7 @@ private fun SettingsListScreen(
                     Text(
                         "当前版本: ${versionInfo.getFormattedVersion()}",
                         modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        color = Colors.Text.secondary,
+                        color = ThemeColors.Text.secondary,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
@@ -182,7 +178,7 @@ private fun SettingItemRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Colors.primaryWhite)
+                .background(ThemeColors.primaryWhite)
                 .clickable { onItemClick(item) }
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -191,7 +187,7 @@ private fun SettingItemRow(
             Text(
                 text = item.title,
                 fontSize = 16.sp,
-                color = if (item.isDestructive) Colors.Text.destructive else Colors.Text.primary,
+                color = if (item.isDestructive) ThemeColors.Text.destructive else ThemeColors.Text.primary,
                 modifier = Modifier.weight(1f)
             )
 
@@ -207,21 +203,21 @@ private fun SettingItemRow(
                         ) {
                             Text(
                                 text = darkMode,
-                                color = Colors.Text.secondary,
+                                color = ThemeColors.Text.secondary,
                                 fontSize = 14.sp
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
                                 Icons.Default.ChevronRight,
                                 contentDescription = null,
-                                tint = Colors.Text.secondary,
+                                tint = ThemeColors.Text.secondary,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
 
                         DropdownMenu(
                             expanded = expanded,
-                            containerColor = Colors.primaryWhite,
+                            containerColor = ThemeColors.primaryWhite,
                             onDismissRequest = { expanded = false }
                         ) {
                             options.forEach { option ->
@@ -233,12 +229,12 @@ private fun SettingItemRow(
                                     },
                                     colors =
                                         MenuItemColors(
-                                            Colors.Text.primary,
-                                            leadingIconColor = Colors.primaryBlue,
-                                            trailingIconColor = Colors.primaryBlue,
-                                            disabledTextColor = Colors.Text.secondary,
-                                            disabledLeadingIconColor = Colors.Text.secondary,
-                                            disabledTrailingIconColor = Colors.Text.secondary,
+                                            ThemeColors.Text.primary,
+                                            leadingIconColor = ThemeColors.primaryBlue,
+                                            trailingIconColor = ThemeColors.primaryBlue,
+                                            disabledTextColor = ThemeColors.Text.secondary,
+                                            disabledLeadingIconColor = ThemeColors.Text.secondary,
+                                            disabledTrailingIconColor = ThemeColors.Text.secondary,
                                         )
                                 )
                             }
@@ -251,10 +247,10 @@ private fun SettingItemRow(
                         onCheckedChange = onPushNotificationChanged,
                         colors =
                             SwitchDefaults.colors(
-                                checkedThumbColor = Colors.Switch.checkedThumb,
-                                uncheckedThumbColor = Colors.Switch.uncheckedThumb,
-                                checkedTrackColor = Colors.Switch.checkedTrack,
-                                uncheckedTrackColor = Colors.Switch.uncheckedTrack
+                                checkedThumbColor = ThemeColors.Switch.checkedThumb,
+                                uncheckedThumbColor = ThemeColors.Switch.uncheckedThumb,
+                                checkedTrackColor = ThemeColors.Switch.checkedTrack,
+                                uncheckedTrackColor = ThemeColors.Switch.uncheckedTrack
                             )
                     )
                 }
@@ -262,7 +258,7 @@ private fun SettingItemRow(
                     Icon(
                         Icons.Default.ChevronRight,
                         contentDescription = null,
-                        tint = Colors.Text.secondary,
+                        tint = ThemeColors.Text.secondary,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -273,7 +269,7 @@ private fun SettingItemRow(
         if (showDivider) {
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
         }
     }

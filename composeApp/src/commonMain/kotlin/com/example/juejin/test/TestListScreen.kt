@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 
 /**
@@ -40,12 +41,7 @@ fun TestListScreen(
 ) {
     val testCases = TestRegistry.getAll()
     
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.primaryWhite
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -63,7 +59,7 @@ fun TestListScreen(
                 ) {
                     Text(
                         "暂无测试案例",
-                        color = Colors.Text.secondary,
+                        color = ThemeColors.Text.secondary,
                         fontSize = 16.sp
                     )
                 }
@@ -73,7 +69,7 @@ fun TestListScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(padding)
-                        .background(Colors.Background.primary),
+                        .background(ThemeColors.Background.primary),
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -104,7 +100,7 @@ private fun TestCaseCard(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Colors.primaryWhite
+            containerColor = ThemeColors.primaryWhite
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
@@ -119,7 +115,7 @@ private fun TestCaseCard(
                 text = testCase.title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Colors.Text.primary,
+                color = ThemeColors.Text.primary,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -128,7 +124,7 @@ private fun TestCaseCard(
                 Text(
                     text = testCase.description,
                     fontSize = 12.sp,
-                    color = Colors.Text.secondary,
+                    color = ThemeColors.Text.secondary,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = 8.dp)

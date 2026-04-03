@@ -19,16 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.learn_more
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MemberBanner() {
-    Box(modifier = Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+    Box(modifier = Modifier.fillMaxWidth().background(ThemeColors.primaryWhite).padding(16.dp)) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Colors.UI.memberBanner),
+            colors = CardDefaults.cardColors(containerColor = ThemeColors.UI.memberBanner),
             shape = RoundedCornerShape(8.dp)
         ) {
             Row(
@@ -38,7 +39,7 @@ fun MemberBanner() {
                 Text(
                     "年度会员限时五折 领小册周边福利",
                     fontSize = 14.sp,
-                    color = Colors.Text.white,
+                    color = ThemeColors.Text.white,
                     modifier = Modifier.weight(1f)
                 )
                 Button(
@@ -46,14 +47,14 @@ fun MemberBanner() {
                     modifier = Modifier.height(32.dp),
                     colors =
                         ButtonDefaults.buttonColors(
-                            containerColor = Colors.UI.memberButton
+                            containerColor = ThemeColors.UI.memberButton
                         ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
                         stringResource(Res.string.learn_more),
                         fontSize = 12.sp,
-                        color = Colors.UI.memberButtonText
+                        color = ThemeColors.UI.memberButtonText
                     )
                 }
             }

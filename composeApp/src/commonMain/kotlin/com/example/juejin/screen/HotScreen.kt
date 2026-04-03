@@ -35,6 +35,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.example.juejin.model.Hot
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.viewmodel.HotViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.loading
@@ -47,7 +48,7 @@ fun HotScreen(vm: HotViewModel) {
         val hots by vm.hots.collectAsStateWithLifecycle()
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(Colors.Background.primary),
+            modifier = Modifier.fillMaxSize().background(ThemeColors.Background.primary),
             contentPadding = PaddingValues(0.dp)
         ) {
             // 顶部间距
@@ -58,7 +59,7 @@ fun HotScreen(vm: HotViewModel) {
             items(hots) { hot ->
                 Box(
                     modifier = Modifier.fillMaxWidth()
-                        .background(Colors.primaryWhite)
+                        .background(ThemeColors.primaryWhite)
                 ) {
                     HotItem(hot)
                 }
@@ -66,7 +67,7 @@ fun HotScreen(vm: HotViewModel) {
                 Spacer(
                     modifier = Modifier.fillMaxWidth()
                         .height(1.dp)
-                        .background(Colors.Background.primary)
+                        .background(ThemeColors.Background.primary)
                 )
             }
         }
@@ -81,16 +82,9 @@ fun HotScreen(vm: HotViewModel) {
                 Box(
                     modifier = Modifier
                         .size(48.dp)
-//                .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-//            Text(
-//                text = circle.name.firstOrNull()?.toString() ?: "C",
-//                color = Colors.Text.primary,
-//                style = MaterialTheme.typography.titleMedium
-//            )
-
                     AsyncImage(
                         model = ImageRequest.Builder(LocalPlatformContext.current)
                             .data(hot.avatar)
@@ -105,13 +99,13 @@ fun HotScreen(vm: HotViewModel) {
 
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
-                    Text(hot.author, fontWeight = FontWeight.Bold)
-                    Text(hot.time, color = Colors.Text.secondary, fontSize = 12.sp)
+                    Text(hot.author, fontWeight = FontWeight.Bold, color = ThemeColors.Text.primary)
+                    Text(hot.time, color = ThemeColors.Text.secondary, fontSize = 12.sp)
                 }
             }
 
             // 内容
-            Text(hot.content, modifier = Modifier.padding(vertical = 8.dp))
+            Text(hot.content, modifier = Modifier.padding(vertical = 8.dp), color = ThemeColors.Text.primary)
 
             // 图片（九宫格）
             hot.images?.let { images ->
@@ -122,12 +116,13 @@ fun HotScreen(vm: HotViewModel) {
                                 .size(80.dp)
                                 .padding(4.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(Colors.primaryWhite),
+                                .background(ThemeColors.Background.secondary),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "hot",
-                                fontSize = 24.sp
+                                fontSize = 24.sp,
+                                color = ThemeColors.Text.primary
                             )
                         }
                     }
@@ -148,7 +143,7 @@ fun HotScreen(vm: HotViewModel) {
 
     @Composable
     fun ActionButton(text: String) {
-        Text(text, color = Colors.primaryGray, fontSize = 12.sp)
+        Text(text, color = ThemeColors.primaryGray, fontSize = 12.sp)
     }
 
 

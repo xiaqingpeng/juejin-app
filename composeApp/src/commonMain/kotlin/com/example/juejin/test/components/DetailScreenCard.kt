@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 
 /** 详情卡片组件 */
 @Composable
@@ -19,7 +20,7 @@ fun DetailScreenCard(title: String, content: @Composable () -> Unit) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            color = Colors.primaryBlue
+            color = ThemeColors.primaryBlue
         )
         Spacer(modifier = Modifier.height(12.dp))
         content()

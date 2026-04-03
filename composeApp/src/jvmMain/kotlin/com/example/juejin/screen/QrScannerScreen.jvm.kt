@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 
 @Composable
 actual fun QrScannerPreview(
@@ -15,7 +16,7 @@ actual fun QrScannerPreview(
     onQrCodeScanned: (String) -> Unit
 ) {
     Box(
-        modifier = modifier.fillMaxSize().background(Colors.Background.primary),
+        modifier = modifier.fillMaxSize().background(ThemeColors.Background.primary),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "当前平台不支持二维码扫描")

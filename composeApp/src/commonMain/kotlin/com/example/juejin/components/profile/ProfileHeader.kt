@@ -29,6 +29,7 @@ import coil3.compose.AsyncImage
 import com.example.juejin.model.User
 
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.profile_personal_homepage
 import juejin.composeapp.generated.resources.view_more
@@ -37,12 +38,12 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun ProfileHeader(user: User) {
     Column(
-        modifier = Modifier.fillMaxWidth().background(Colors.Background.surface).padding(16.dp)
+        modifier = Modifier.fillMaxWidth().background(ThemeColors.primaryWhite).padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             // 头像
             Box(
-                modifier = Modifier.size(60.dp).clip(CircleShape).background(Colors.UI.avatar),
+                modifier = Modifier.size(60.dp).clip(CircleShape).background(ThemeColors.UI.avatar),
                 contentAlignment = Alignment.Center
             ) {
                 if (user.avatar.isNotEmpty()) {
@@ -59,25 +60,25 @@ fun ProfileHeader(user: User) {
                     } else {
                         "QP"
                     }
-                    Text(initials, color = Colors.Text.darkGray, fontSize = 20.sp)
+                    Text(initials, color = ThemeColors.Text.darkGray, fontSize = 20.sp)
                 }
             }
 
             Spacer(Modifier.width(12.dp))
 
             Column {
-                Text(user.username, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(user.username, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = ThemeColors.Text.primary)
                 Spacer(Modifier.height(4.dp))
                 Row {
                     Surface(
                         modifier = Modifier.height(20.dp),
-                        color = Colors.UI.levelBadge,
+                        color = ThemeColors.UI.levelBadge,
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
                             user.level,
                             fontSize = 10.sp,
-                            color = Colors.UI.levelText,
+                            color = ThemeColors.UI.levelText,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
@@ -85,7 +86,7 @@ fun ProfileHeader(user: User) {
                     Text(
                         stringResource(Res.string.view_more),
                         fontSize = 12.sp,
-                        color = Colors.Text.secondary
+                        color = ThemeColors.Text.secondary
                     )
                 }
             }
@@ -94,7 +95,7 @@ fun ProfileHeader(user: User) {
             Text(
                 stringResource(Res.string.profile_personal_homepage),
                 fontSize = 12.sp,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
         }
 
@@ -123,7 +124,7 @@ private fun ProfileStatItem(label: String, value: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.clickable(onClick = { println("点击了 $label-$value") })
     ) {
-        Text(value, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Text(label, fontSize = 12.sp, color = Colors.Text.secondary)
+        Text(value, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = ThemeColors.Text.primary)
+        Text(label, fontSize = 12.sp, color = ThemeColors.Text.secondary)
     }
 }

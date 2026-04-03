@@ -41,6 +41,19 @@ actual object PrivacyStorage {
             // 忽略错误
         }
     }
+    
+    actual fun putString(key: String, value: String) {
+        properties.setProperty(key, value)
+        try {
+            prefsFile.outputStream().use { properties.store(it, "App Preferences") }
+        } catch (e: Exception) {
+            // 忽略错误
+        }
+    }
+    
+    actual fun getString(key: String, defaultValue: String): String {
+        return properties.getProperty(key, defaultValue)
+    }
 
     private const val KEY_PRIVACY_ACCEPTED = "privacy_accepted"
 }

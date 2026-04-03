@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.juejin.components.WebView
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 
 /**
  * 通用 WebView 页面组件
@@ -44,7 +45,7 @@ fun WebViewScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Colors.primaryWhite)
+                .background(ThemeColors.primaryWhite)
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -67,7 +68,7 @@ fun WebViewScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Colors.primaryBlue)
+                    CircularProgressIndicator(color = ThemeColors.primaryBlue)
                 }
             }
         }

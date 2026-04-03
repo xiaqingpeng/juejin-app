@@ -22,6 +22,14 @@ actual object PrivacyStorage {
     actual fun setPrivacyPolicyAccepted(accepted: Boolean) {
         prefs.edit().putBoolean(KEY_PRIVACY_ACCEPTED, accepted).apply()
     }
+    
+    actual fun putString(key: String, value: String) {
+        prefs.edit().putString(key, value).apply()
+    }
+    
+    actual fun getString(key: String, defaultValue: String): String {
+        return prefs.getString(key, defaultValue) ?: defaultValue
+    }
 
     /**
      * 初始化，在 Application 或 MainActivity 中调用

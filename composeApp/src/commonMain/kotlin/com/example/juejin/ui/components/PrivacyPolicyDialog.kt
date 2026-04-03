@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.privacy_dialog_agree
 import juejin.composeapp.generated.resources.privacy_dialog_basic_version
@@ -45,7 +46,7 @@ fun PrivacyPolicyDialog(
     onDecline: () -> Unit,
     onNavigateToWebView: (title: String, url: String) -> Unit = { _, _ -> }
 ) {
-    val linkColor = Colors.primaryBlue
+    val linkColor = ThemeColors.primaryBlue
     
     // URL 定义
     val userAgreementUrl = "https://cdn.lifesense.com/sportsAppWebViews/webpack/simple_page/agreement.html"
@@ -55,7 +56,7 @@ fun PrivacyPolicyDialog(
         Column(
             modifier = Modifier
                 .background(
-                    color = Colors.Background.surface,
+                    color = ThemeColors.Background.surface,
                     shape = RoundedCornerShape(4.dp)
                 )
                 .padding(24.dp),
@@ -141,7 +142,7 @@ fun PrivacyPolicyDialog(
                     append(stringResource(Res.string.privacy_dialog_permission_phone))
                 },
                 style = MaterialTheme.typography.bodySmall,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -152,11 +153,11 @@ fun PrivacyPolicyDialog(
                 colors = ButtonDefaults.buttonColors(containerColor = linkColor),
                 shape = RoundedCornerShape(4.dp),
             ) {
-                Text(stringResource(Res.string.privacy_dialog_agree), color = Colors.primaryWhite)
+                Text(stringResource(Res.string.privacy_dialog_agree), color = ThemeColors.primaryWhite)
             }
 
             TextButton(onClick = onDecline) {
-                Text(stringResource(Res.string.privacy_dialog_exit), color = Colors.primaryGray)
+                Text(stringResource(Res.string.privacy_dialog_exit), color = ThemeColors.primaryGray)
             }
         }
     }

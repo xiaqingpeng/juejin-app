@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.viewmodel.LogStatsViewModel
 
@@ -93,12 +94,7 @@ fun ChartTestScreen(
         println("[ChartTestScreen] Unique platforms: $platforms")
     }
     
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -113,7 +109,7 @@ fun ChartTestScreen(
                         modifier = Modifier.fillMaxSize().padding(padding),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = Colors.primaryBlue)
+                        CircularProgressIndicator(color = ThemeColors.primaryBlue)
                     }
                 }
                 errorMessage != null -> {
@@ -123,7 +119,7 @@ fun ChartTestScreen(
                     ) {
                         Text(
                             text = "加载失败: $errorMessage",
-                            color = Colors.Text.secondary
+                            color = ThemeColors.Text.secondary
                         )
                     }
                 }
@@ -169,12 +165,12 @@ private fun TimeRangeSelector(
                     .weight(1f)
                     .height(40.dp)
                     .background(
-                        color = if (isSelected) Colors.primaryBlue else Colors.primaryWhite,
+                        color = if (isSelected) ThemeColors.primaryBlue else ThemeColors.primaryWhite,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .border(
                         width = 1.dp,
-                        color = if (isSelected) Colors.primaryBlue else Color(0xFFE0E0E0),
+                        color = if (isSelected) ThemeColors.primaryBlue else Color(0xFFE0E0E0),
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable { onRangeSelected(range) },
@@ -182,7 +178,7 @@ private fun TimeRangeSelector(
             ) {
                 Text(
                     text = range.label,
-                    color = if (isSelected) Color.White else Colors.Text.primary,
+                    color = if (isSelected) ThemeColors.Text.white else ThemeColors.Text.primary,
                     fontSize = 14.sp,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )
@@ -226,7 +222,7 @@ private fun StatsCard(logStats: List<com.example.juejin.model.LogStatsItem>) {
     
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Colors.primaryWhite),
+        colors = CardDefaults.cardColors(containerColor = ThemeColors.primaryWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -234,7 +230,7 @@ private fun StatsCard(logStats: List<com.example.juejin.model.LogStatsItem>) {
                 text = "数据统计",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Colors.Text.primary
+                color = ThemeColors.Text.primary
             )
             Spacer(modifier = Modifier.height(12.dp))
             Row(
@@ -256,12 +252,12 @@ private fun StatItem(label: String, value: String) {
             text = value,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Colors.primaryBlue
+            color = ThemeColors.primaryBlue
         )
         Text(
             text = label,
             fontSize = 12.sp,
-            color = Colors.Text.secondary
+            color = ThemeColors.Text.secondary
         )
     }
 }
@@ -277,7 +273,7 @@ private fun BarChartCard(logStats: List<com.example.juejin.model.LogStatsItem>) 
     
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Colors.primaryWhite),
+        colors = CardDefaults.cardColors(containerColor = ThemeColors.primaryWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -285,7 +281,7 @@ private fun BarChartCard(logStats: List<com.example.juejin.model.LogStatsItem>) 
                 text = "柱状图 - 全平台请求数",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Colors.Text.primary
+                color = ThemeColors.Text.primary
             )
             Spacer(modifier = Modifier.height(16.dp))
             
@@ -295,7 +291,7 @@ private fun BarChartCard(logStats: List<com.example.juejin.model.LogStatsItem>) 
                     modifier = Modifier.fillMaxWidth().height((platformData.size * 35).dp.coerceAtLeast(200.dp))
                 )
             } else {
-                Text("暂无数据", color = Colors.Text.secondary)
+                Text("暂无数据", color = ThemeColors.Text.secondary)
             }
         }
     }
@@ -318,7 +314,7 @@ private fun BarChart(
                     text = platform,
                     modifier = Modifier.weight(0.3f),
                     fontSize = 11.sp,
-                    color = Colors.Text.primary,
+                    color = ThemeColors.Text.primary,
                     maxLines = 1
                 )
                 Box(
@@ -330,13 +326,13 @@ private fun BarChart(
                         modifier = Modifier
                             .fillMaxWidth(count.toFloat() / maxValue)
                             .height(24.dp),
-                        color = Colors.primaryBlue,
+                        color = ThemeColors.primaryBlue,
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Box(contentAlignment = Alignment.CenterEnd) {
                             Text(
                                 text = count.toString(),
-                                color = Color.White,
+                                color = ThemeColors.Text.white,
                                 fontSize = 10.sp,
                                 modifier = Modifier.padding(horizontal = 8.dp)
                             )
@@ -359,7 +355,7 @@ private fun PieChartCard(logStats: List<com.example.juejin.model.LogStatsItem>) 
     
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Colors.primaryWhite),
+        colors = CardDefaults.cardColors(containerColor = ThemeColors.primaryWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -367,7 +363,7 @@ private fun PieChartCard(logStats: List<com.example.juejin.model.LogStatsItem>) 
                 text = "饼图 - 全平台分布",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Colors.Text.primary
+                color = ThemeColors.Text.primary
             )
             Spacer(modifier = Modifier.height(16.dp))
             
@@ -377,7 +373,7 @@ private fun PieChartCard(logStats: List<com.example.juejin.model.LogStatsItem>) 
                     modifier = Modifier.fillMaxWidth().height(300.dp)
                 )
             } else {
-                Text("暂无数据", color = Colors.Text.secondary)
+                Text("暂无数据", color = ThemeColors.Text.secondary)
             }
         }
     }
@@ -390,7 +386,7 @@ private fun PieChart(
 ) {
     val total = data.sumOf { it.second }
     val colors = listOf(
-        Colors.primaryBlue,
+        ThemeColors.primaryBlue,
         Color(0xFF00C853),
         Color(0xFFFF6D00),
         Color(0xFFAA00FF),
@@ -439,7 +435,7 @@ private fun PieChart(
                         Text(
                             text = "$platform: $count",
                             fontSize = 10.sp,
-                            color = Colors.Text.primary,
+                            color = ThemeColors.Text.primary,
                             modifier = Modifier.padding(start = 6.dp),
                             maxLines = 1
                         )
@@ -458,7 +454,7 @@ private fun LineChartCard(logStats: List<com.example.juejin.model.LogStatsItem>)
     
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Colors.primaryWhite),
+        colors = CardDefaults.cardColors(containerColor = ThemeColors.primaryWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -466,7 +462,7 @@ private fun LineChartCard(logStats: List<com.example.juejin.model.LogStatsItem>)
                 text = "折线图 - 响应时间趋势",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Colors.Text.primary
+                color = ThemeColors.Text.primary
             )
             Spacer(modifier = Modifier.height(16.dp))
             
@@ -476,7 +472,7 @@ private fun LineChartCard(logStats: List<com.example.juejin.model.LogStatsItem>)
                     modifier = Modifier.fillMaxWidth().height(200.dp)
                 )
             } else {
-                Text("暂无数据", color = Colors.Text.secondary)
+                Text("暂无数据", color = ThemeColors.Text.secondary)
             }
         }
     }
@@ -556,17 +552,17 @@ private fun LineChart(
             Text(
                 text = "最小: ${minValue}ms",
                 fontSize = 10.sp,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
             Text(
                 text = "最大: ${maxValue}ms",
                 fontSize = 10.sp,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
             Text(
                 text = "平均: ${if (data.isNotEmpty()) data.average().toInt() else 0}ms",
                 fontSize = 10.sp,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
         }
     }

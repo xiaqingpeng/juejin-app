@@ -39,6 +39,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.Executors
@@ -75,7 +76,7 @@ actual fun QrScannerPreview(
 
     if (!hasCameraPermission || activity == null) {
         Column(
-            modifier = modifier.fillMaxSize().background(Colors.Background.primary).padding(24.dp),
+            modifier = modifier.fillMaxSize().background(ThemeColors.Background.primary).padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

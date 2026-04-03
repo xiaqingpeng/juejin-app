@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 // ColorGridScreen is in the same package, no import needed
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.loading
@@ -78,7 +79,7 @@ fun registerTestCases() {
                         .background(Color.Red),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(stringResource(Res.string.test_color_red), color = Colors.Text.white, fontSize = 20.sp)
+                    Text(stringResource(Res.string.test_color_red), color = ThemeColors.Text.white, fontSize = 20.sp)
                 }
                 Box(
                     modifier = Modifier
@@ -87,7 +88,7 @@ fun registerTestCases() {
                         .background(Color.Green),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(stringResource(Res.string.test_color_green), color = Colors.Text.white, fontSize = 20.sp)
+                    Text(stringResource(Res.string.test_color_green), color = ThemeColors.Text.white, fontSize = 20.sp)
                 }
                 Box(
                     modifier = Modifier
@@ -96,7 +97,7 @@ fun registerTestCases() {
                         .background(Color.Blue),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(stringResource(Res.string.test_color_blue), color = Colors.Text.white, fontSize = 20.sp)
+                    Text(stringResource(Res.string.test_color_blue), color = ThemeColors.Text.white, fontSize = 20.sp)
                 }
             }
         }

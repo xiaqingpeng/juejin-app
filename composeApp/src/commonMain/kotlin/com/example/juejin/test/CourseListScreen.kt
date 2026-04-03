@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.example.juejin.model.LogStatsItem
 import com.example.juejin.test.components.EventCard
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.ui.components.TabItem
 import com.example.juejin.ui.components.TabPager
@@ -95,12 +96,7 @@ fun CourseListScreen(
     val avgDurationMs by LogStatsViewModel.avgDurationMs.collectAsState()
     val errorMessage by LogStatsViewModel.errorMessage.collectAsState()
     
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -167,14 +163,14 @@ private fun PlatformLogStatsPage(
                 if (logStats.isNotEmpty()) {
                     item {
                         Surface(
-                            color = Colors.primaryBlue.copy(alpha = 0.1f),
+                            color = ThemeColors.primaryBlue.copy(alpha = 0.1f),
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = "Total: $total | Avg Duration: ${avgDurationMs}ms",
                                 modifier = Modifier.padding(16.dp),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Colors.Text.primary
+                                color = ThemeColors.Text.primary
                             )
                         }
                     }
@@ -184,7 +180,7 @@ private fun PlatformLogStatsPage(
                         Spacer(
                             modifier = Modifier.fillMaxWidth()
                                 .height(8.dp)
-                                .background(Colors.Background.primary)
+                                .background(ThemeColors.Background.primary)
                         )
                     }
                 }
@@ -201,7 +197,7 @@ private fun PlatformLogStatsPage(
                         Spacer(
                             modifier = Modifier.fillMaxWidth()
                                 .height(1.dp)
-                                .background(Colors.Background.primary)
+                                .background(ThemeColors.Background.primary)
                         )
                     }
                 }
@@ -212,7 +208,7 @@ private fun PlatformLogStatsPage(
                             modifier = Modifier.fillMaxWidth().padding(16.dp),
                             contentAlignment = Alignment.Center
                         ) { 
-                            CircularProgressIndicator(color = Colors.primaryBlue) 
+                            CircularProgressIndicator(color = ThemeColors.primaryBlue) 
                         }
                     }
                 }
@@ -222,7 +218,7 @@ private fun PlatformLogStatsPage(
         // Loading indicator for initial load
         if (isLoading && logStats.isEmpty() && errorMessage == null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Colors.primaryBlue)
+                CircularProgressIndicator(color = ThemeColors.primaryBlue)
             }
         }
         
@@ -265,24 +261,24 @@ private fun ErrorRetryView(
         Text(
             text = stringResource(Res.string.course_list_error_title),
             style = MaterialTheme.typography.titleLarge,
-            color = Colors.Text.primary
+            color = ThemeColors.Text.primary
         )
         Spacer(modifier = Modifier.height(8.dp))
 //        Text(
 //            text = errorMessage,
 //            style = Typography.body,
-//            color = Colors.Text.secondary
+//            color = ThemeColors.Text.secondary
 //        )
         Spacer(modifier = Modifier.height(24.dp))
         // 重试按钮
         Button(colors = ButtonColors(
-            Colors.primaryBlue,
-            contentColor = Colors.primaryBlue,
-            disabledContainerColor = Colors.primaryBlue,
-            disabledContentColor = Colors.primaryBlue,
+            ThemeColors.primaryBlue,
+            contentColor = ThemeColors.primaryBlue,
+            disabledContainerColor = ThemeColors.primaryBlue,
+            disabledContentColor = ThemeColors.primaryBlue,
         ),
             onClick = onRetry) {
-            Text( stringResource(Res.string.course_list_retry_button),color=  Colors.primaryWhite,)
+            Text( stringResource(Res.string.course_list_retry_button),color=  ThemeColors.primaryWhite,)
         }
     }
 }

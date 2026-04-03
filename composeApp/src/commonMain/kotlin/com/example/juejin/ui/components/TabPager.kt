@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import kotlinx.coroutines.launch
 
 /**
@@ -69,22 +70,22 @@ fun <T : TabItem> TabPager(
     Scaffold(
         topBar = {
             Surface(
-                color = Colors.Background.surface,
+                color = ThemeColors.Background.surface,
                 shadowElevation = 0.dp
             ) {
                 Column {
                     ScrollableTabRow(
                         selectedTabIndex = pagerState.currentPage,
                         modifier = Modifier.fillMaxWidth(),
-                        containerColor = Colors.Background.surface,
-                        contentColor = Colors.primaryBlue,
+                        containerColor = ThemeColors.Background.surface,
+                        contentColor = ThemeColors.primaryBlue,
                         edgePadding = 16.dp,
                         indicator = { tabPositions ->
                             val page = currentPage
                             if (tabPositions.isNotEmpty() && page < tabPositions.size) {
                                 SecondaryIndicator(
                                     modifier = Modifier.tabIndicatorOffset(tabPositions[page]),
-                                    color = Colors.primaryBlue
+                                    color = ThemeColors.primaryBlue
                                 )
                             }
                         },
@@ -103,7 +104,7 @@ fun <T : TabItem> TabPager(
                                     text = tab.label,
                                     maxLines = 1,
                                     color = if (pagerState.currentPage == index) {
-                                        Colors.primaryBlue
+                                        ThemeColors.primaryBlue
                                     } else {
                                         Color.Gray
                                     },

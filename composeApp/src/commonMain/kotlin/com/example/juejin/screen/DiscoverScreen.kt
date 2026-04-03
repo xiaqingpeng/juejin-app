@@ -41,6 +41,7 @@ import com.example.juejin.model.Article
 import com.example.juejin.model.Circle
 import com.example.juejin.model.DiscoverModule
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.viewmodel.DiscoverViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.loading
@@ -54,7 +55,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
     val circles by vm.circles.collectAsStateWithLifecycle()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(Colors.Background.primary),
+        modifier = Modifier.fillMaxSize().background(ThemeColors.Background.primary),
         contentPadding = PaddingValues(0.dp)
     ) {
         // 顶部间距
@@ -66,7 +67,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         item {
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
                     .padding(16.dp)
             ) {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -86,7 +87,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         item { 
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
                     .padding(horizontal = 16.dp)
             ) {
                 SectionTitle("每日掘金")
@@ -95,7 +96,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         items(articles) { article ->
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
             ) {
                 ArticleItem(article)
             }
@@ -110,7 +111,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         item { 
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
                     .padding(horizontal = 16.dp)
             ) {
                 SectionTitle("推荐圈子")
@@ -119,7 +120,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         items(circles) { circle ->
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
             ) {
                 CircleItem(circle)
             }
@@ -134,7 +135,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         item { 
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
                     .padding(horizontal = 16.dp)
             ) {
                 SectionTitle("推荐收集榜")
@@ -143,7 +144,7 @@ fun DiscoverScreen(vm: DiscoverViewModel) {
         items(circles) { circle ->
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
             ) {
                 CircleItem(circle)
             }
@@ -161,13 +162,13 @@ fun ModuleItem(mod: DiscoverModule) {
             imageVector = mod.iconRes,
             contentDescription = null,
             modifier = Modifier.size(40.dp),
-            tint = Colors.primaryBlack
+            tint = ThemeColors.primaryBlack
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = mod.title, 
             style = MaterialTheme.typography.labelSmall,
-            color = Colors.Text.primary
+            color = ThemeColors.Text.primary
         )
     }
 }
@@ -182,19 +183,19 @@ fun ArticleItem(article: Article) {
         Text(
             text = article.title, 
             style = MaterialTheme.typography.titleMedium,
-            color = Colors.Text.primary
+            color = ThemeColors.Text.primary
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "作者: ${article.author}", 
             style = MaterialTheme.typography.bodySmall,
-            color = Colors.Text.secondary
+            color = ThemeColors.Text.secondary
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = article.summary,
             style = MaterialTheme.typography.bodyMedium,
-            color = Colors.Text.secondary,
+            color = ThemeColors.Text.secondary,
             maxLines = 2
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -205,32 +206,32 @@ fun ArticleItem(article: Article) {
             Text(
                 text = article.publishTime,
                 style = MaterialTheme.typography.bodySmall,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
             Row {
                 Text(
                     text = article.likeCount.toString(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Colors.Text.secondary
+                    color = ThemeColors.Text.secondary
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "点赞数",
-                    tint = Colors.Text.secondary,
+                    tint = ThemeColors.Text.secondary,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = article.commentCount.toString(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Colors.Text.secondary
+                    color = ThemeColors.Text.secondary
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Comment,
                     contentDescription = "评论数",
-                    tint = Colors.Text.secondary,
+                    tint = ThemeColors.Text.secondary,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -250,13 +251,13 @@ fun CircleItem(circle: Circle) {
         Box(
             modifier = Modifier
                 .size(48.dp)
-//                .background(Colors.UI.avatar, shape = MaterialTheme.shapes.medium)
+//                .background(ThemeColors.UI.avatar, shape = MaterialTheme.shapes.medium)
                 .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
 //            Text(
 //                text = circle.name.firstOrNull()?.toString() ?: "C",
-//                color = Colors.Text.primary,
+//                color = ThemeColors.Text.primary,
 //                style = MaterialTheme.typography.titleMedium
 //            )
 
@@ -280,19 +281,19 @@ fun CircleItem(circle: Circle) {
             Text(
                 text = circle.name, 
                 style = MaterialTheme.typography.titleMedium,
-                color = Colors.Text.primary
+                color = ThemeColors.Text.primary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "${circle.memberCount}人 · ${circle.hotCount}沸点", 
                 style = MaterialTheme.typography.bodySmall,
-                color = Colors.Text.secondary
+                color = ThemeColors.Text.secondary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = circle.description,
                 style = MaterialTheme.typography.bodySmall,
-                color = Colors.Text.secondary,
+                color = ThemeColors.Text.secondary,
                 maxLines = 1
             )
         }
@@ -300,7 +301,7 @@ fun CircleItem(circle: Circle) {
         Icon(
             imageVector = Icons.Default.ChevronRight,
             contentDescription = null,
-            tint = Colors.Text.secondary,
+            tint = ThemeColors.Text.secondary,
             modifier = Modifier.size(20.dp)
         )
     }
@@ -311,7 +312,7 @@ fun SectionTitle(title: String) {
     Text(
         title,
         style = MaterialTheme.typography.titleLarge,
-        color = Colors.Text.primary,
+        color = ThemeColors.Text.primary,
         modifier = Modifier.padding(vertical = 12.dp)
     )
 }

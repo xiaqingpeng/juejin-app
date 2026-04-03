@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.typography.Typography
 import com.example.juejin.util.DateTimeUtil
 
@@ -30,7 +31,7 @@ fun EventCard(logStat: com.example.juejin.model.LogStatsItem, onClick: () -> Uni
         Text(
             text = logStat.path ?: "Unknown Path",
             style = Typography.largeTitle,
-            color = Colors.primaryBlue
+            color = ThemeColors.primaryBlue
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -49,7 +50,7 @@ fun EventCard(logStat: com.example.juejin.model.LogStatsItem, onClick: () -> Uni
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "$label:", style = Typography.caption, color = Colors.Text.secondary)
-        Text(text = value, style = Typography.body, color = Colors.Text.primary)
+        Text(text = "$label:", style = Typography.caption, color = ThemeColors.Text.secondary)
+        Text(text = value, style = Typography.body, color = ThemeColors.Text.primary)
     }
 }

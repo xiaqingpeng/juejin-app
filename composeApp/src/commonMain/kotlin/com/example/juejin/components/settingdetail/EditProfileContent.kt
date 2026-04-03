@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.example.juejin.model.SettingDetailItem
 import com.example.juejin.model.SettingDetailSection
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 
 /**
  * 编辑资料详情内容
@@ -46,13 +47,13 @@ fun EditProfileContent() {
             text = "💡 提示",
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = Colors.Text.primary,
+            color = ThemeColors.Text.primary,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
             text = "点击上方任意字段即可进入编辑页面进行修改",
             fontSize = 12.sp,
-            color = Colors.Text.secondary
+            color = ThemeColors.Text.secondary
         )
     }
 }

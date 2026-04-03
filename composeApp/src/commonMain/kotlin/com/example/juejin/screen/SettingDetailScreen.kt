@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import com.example.juejin.model.SettingItem
 import com.example.juejin.components.settingdetail.SettingDetailContentProvider
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 
 /**
@@ -27,12 +28,7 @@ fun SettingDetailScreen(
     onNavigateToDeviceInfo: () -> Unit = {},
     onNavigateToWebView: (String, String) -> Unit = { _, _ -> }
 ) {
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.Background.surface
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -45,7 +41,7 @@ fun SettingDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Colors.Background.primary)
+                    .background(ThemeColors.Background.primary)
             ) {
                 item {
                     // 从内容提供者获取详情内容

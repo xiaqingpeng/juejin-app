@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 
 /**
@@ -22,12 +23,7 @@ fun TestDetailScreen(
     testCase: TestCase,
     onLeftClick: () -> Unit
 ) {
-    MaterialTheme(
-        colorScheme = lightColorScheme(
-            background = Colors.Background.primary,
-            surface = Colors.primaryWhite
-        )
-    ) {
+    com.example.juejin.theme.AppTheme {
         Scaffold(
             topBar = {
                 TopNavigationBarWithBack(
@@ -40,7 +36,7 @@ fun TestDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Colors.Background.primary),
+                    .background(ThemeColors.Background.primary),
                 contentAlignment = Alignment.Center
             ) {
                 // 渲染测试案例的内容

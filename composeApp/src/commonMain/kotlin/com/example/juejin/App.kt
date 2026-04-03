@@ -47,6 +47,7 @@ import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
 import com.example.juejin.storage.PrivacyStorage
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.NotificationPermissionDialog
 import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.StatusBarEffect
@@ -69,16 +70,14 @@ fun App() {
     // 注册测试案例
     LaunchedEffect(Unit) { com.example.juejin.test.registerTestCases() }
 
-    // 设置状态栏为浅色模式（深色文字/图标）
-    StatusBarEffect(isDark = false, color = Colors.primaryWhite)
+    // 观察主题状态
+    val isDarkMode = com.example.juejin.theme.ThemeManager.isDarkMode
+    val backgroundColor = if (isDarkMode) com.example.juejin.theme.DarkColors.Background.primary else ThemeColors.Background.primary
+    
+    // 设置状态栏（深色模式时使用浅色图标，浅色模式时使用深色图标）
+    StatusBarEffect(isDark = isDarkMode, color = backgroundColor)
 
-    MaterialTheme(
-            colorScheme =
-                    lightColorScheme(
-                            background = Colors.primaryWhite,
-                            surface = Colors.primaryWhite
-                    )
-    ) {
+    com.example.juejin.theme.AppTheme {
         val tabs =
                 listOf(
                         TabItem.Home,
@@ -126,16 +125,16 @@ fun App() {
         // Scaffold provides proper layout structure
         Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                containerColor = Colors.primaryWhite,
+                containerColor = ThemeColors.primaryWhite,
                 bottomBar = {
                     // Bottom Navigation Bar - 只在主页面显示
                     if (isMainScreen) {
                         Surface(
                                 shadowElevation = 8.dp, // 传统的物理阴影
-                                color = Colors.primaryWhite
+                                color = ThemeColors.primaryWhite
                         ) {
                             NavigationBar(
-                                    containerColor = Colors.primaryWhite,
+                                    containerColor = ThemeColors.primaryWhite,
                                     tonalElevation = 0.dp
                             ) {
                                 tabs.forEachIndexed { index, tab ->
@@ -144,8 +143,8 @@ fun App() {
                                             icon = {
                                                 // Use Material Icons with dynamic coloring
                                                 val iconColor =
-                                                        if (isSelected) Colors.primaryBlue
-                                                        else Colors.primaryGray
+                                                        if (isSelected) ThemeColors.primaryBlue
+                                                        else ThemeColors.primaryGray
                                                 Icon(
                                                         imageVector = tab.icon,
                                                         contentDescription =
@@ -163,12 +162,12 @@ fun App() {
                                             colors =
                                                     NavigationBarItemDefaults.colors(
                                                             selectedIconColor =
-                                                                    Colors.primaryBlue,
-                                                            selectedTextColor = Colors.primaryBlue,
+                                                                    ThemeColors.primaryBlue,
+                                                            selectedTextColor = ThemeColors.primaryBlue,
                                                             unselectedIconColor =
-                                                                    Colors.primaryGray,
+                                                                    ThemeColors.primaryGray,
                                                             unselectedTextColor =
-                                                                    Colors.primaryGray,
+                                                                    ThemeColors.primaryGray,
                                                             indicatorColor = Color.Transparent
                                                             )
                                     )
@@ -187,8 +186,8 @@ fun App() {
                                 com.example.juejin.util.Logger.d("App", "点击测试入口按钮")
                                 navigationState.navigate(com.example.juejin.navigation.Screen.TestList) 
                             },
-                            containerColor = Colors.primaryBlue,
-                            contentColor = Color.White
+                            containerColor = ThemeColors.primaryBlue,
+                            contentColor = ThemeColors.Text.white
                         ) {
                             Icon(
                                 imageVector = Icons.Default.BugReport,
@@ -211,13 +210,13 @@ fun App() {
                         Text(
                                 text = "无法继续使用",
                                 style = MaterialTheme.typography.headlineMedium,
-                                color = Colors.primaryBlue
+                                color = ThemeColors.primaryBlue
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                                 text = stringResource(Res.string.privacy_policy_required),
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Colors.Text.secondary
+                                color = ThemeColors.Text.secondary
                         )
                     }
                 }

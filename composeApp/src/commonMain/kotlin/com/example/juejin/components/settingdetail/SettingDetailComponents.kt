@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.example.juejin.model.SettingDetailItem
 import com.example.juejin.model.SettingDetailSection
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 
 /**
  * 详情区域组件
@@ -50,7 +51,7 @@ fun DetailSection(section: SettingDetailSection) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Colors.primaryWhite)
+                    .background(ThemeColors.primaryWhite)
             ) {
                 // 如果有标题或描述，显示在卡片内部
                 if (section.title.length > 0 || section.description != null) {
@@ -64,7 +65,7 @@ fun DetailSection(section: SettingDetailSection) {
                                 text = section.title,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Colors.Text.primary
+                                color = ThemeColors.Text.primary
                             )
                         }
 
@@ -73,7 +74,7 @@ fun DetailSection(section: SettingDetailSection) {
                             Text(
                                 text = desc,
                                 fontSize = 14.sp,
-                                color = Colors.Text.secondary,
+                                color = ThemeColors.Text.secondary,
                                 lineHeight = 20.sp
                             )
                         }
@@ -82,7 +83,7 @@ fun DetailSection(section: SettingDetailSection) {
                     if (section.items.size > 0) {
                         HorizontalDivider(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            color = Colors.UI.divider
+                            color = ThemeColors.UI.divider
                         )
                     }
                 }
@@ -103,7 +104,7 @@ fun DetailSection(section: SettingDetailSection) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp)
-                .background(Colors.Background.primary)
+                .background(ThemeColors.Background.primary)
         )
     }
 }
@@ -121,7 +122,7 @@ fun DetailItemRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Colors.primaryWhite)
+                .background(ThemeColors.primaryWhite)
                 .clickable(enabled = item.onClick != null) { 
                     item.onClick?.invoke() 
                 }
@@ -133,15 +134,15 @@ fun DetailItemRow(
             Text(
                 text = item.label,
                 fontSize = 16.sp,
-                color = Colors.Text.primary,
+                color = ThemeColors.Text.primary,
                 modifier = Modifier.weight(1f)
             )
             
             // 值
 //            val displayValue = if (item.value.length == 0) "未设置" else item.value
-            val textColor = if (item.isHighlight) Colors.primaryBlue 
-                           else if (item.value.isEmpty()) Colors.Text.secondary
-                           else Colors.Text.primary
+            val textColor = if (item.isHighlight) ThemeColors.primaryBlue 
+                           else if (item.value.isEmpty()) ThemeColors.Text.secondary
+                           else ThemeColors.Text.primary
             
             Text(
                 text = item.value,
@@ -156,7 +157,7 @@ fun DetailItemRow(
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForwardIos,
                     contentDescription = null,
-                    tint = Colors.Text.secondary,
+                    tint = ThemeColors.Text.secondary,
                     modifier = Modifier.size(16.dp)
                 )
             }
@@ -166,7 +167,7 @@ fun DetailItemRow(
         if (!isLast) {
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
         }
     }

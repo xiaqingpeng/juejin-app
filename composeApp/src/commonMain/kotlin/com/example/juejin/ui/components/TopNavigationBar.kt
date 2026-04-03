@@ -38,8 +38,8 @@ fun TopNavigationBar(
     onRightClick: (() -> Unit)? = null,
     rightIcon: ImageVector? = null,
     rightContent: @Composable (() -> Unit)? = null,
-    backgroundColor: Color = TopAppBarDefaults.topAppBarColors().containerColor,
-    contentColor: Color = Color.Unspecified
+    backgroundColor: Color = com.example.juejin.theme.ThemeColors.primaryWhite,
+    contentColor: Color = com.example.juejin.theme.ThemeColors.Text.primary
 ) {
     Surface(
         color = backgroundColor,
@@ -114,8 +114,8 @@ fun TopNavigationBar(
 @Composable
 fun TopNavigationBarSimple(
     title: String,
-    backgroundColor: Color = TopAppBarDefaults.topAppBarColors().containerColor,
-    contentColor: Color = Color.Unspecified
+    backgroundColor: Color = com.example.juejin.theme.ThemeColors.primaryWhite,
+    contentColor: Color = com.example.juejin.theme.ThemeColors.Text.primary
 ) {
     TopNavigationBar(
         title = title,
@@ -131,8 +131,8 @@ fun TopNavigationBarSimple(
 fun TopNavigationBarWithBack(
     title: String,
     onLeftClick: () -> Unit,
-    backgroundColor: Color = TopAppBarDefaults.topAppBarColors().containerColor,
-    contentColor: Color = Color.Unspecified
+    backgroundColor: Color = com.example.juejin.theme.ThemeColors.primaryWhite,
+    contentColor: Color = com.example.juejin.theme.ThemeColors.Text.primary
 ) {
     TopNavigationBar(
         title = title,
@@ -150,8 +150,8 @@ fun TopNavigationBarWithRightAction(
     title: String,
     onRightClick: () -> Unit,
     rightIcon: ImageVector,
-    backgroundColor: Color = TopAppBarDefaults.topAppBarColors().containerColor,
-    contentColor: Color = Color.Unspecified
+    backgroundColor: Color = com.example.juejin.theme.ThemeColors.primaryWhite,
+    contentColor: Color = com.example.juejin.theme.ThemeColors.Text.primary
 ) {
     TopNavigationBar(
         title = title,

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.juejin.model.SettingDetailItem
 import com.example.juejin.platform.getDeviceInfo
 import com.example.juejin.ui.Colors
+import com.example.juejin.theme.ThemeColors
 import com.example.juejin.components.settingdetail.DetailItemRow
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 
@@ -52,7 +53,7 @@ fun DeviceInfoScreen(
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
             
             // 系统版本
@@ -65,7 +66,7 @@ fun DeviceInfoScreen(
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
             
             // SDK 版本
@@ -78,7 +79,7 @@ fun DeviceInfoScreen(
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
             
             // 屏幕分辨率
@@ -91,7 +92,7 @@ fun DeviceInfoScreen(
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
             
             // 设备语言
@@ -104,7 +105,7 @@ fun DeviceInfoScreen(
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
             
             // 地区
@@ -117,7 +118,7 @@ fun DeviceInfoScreen(
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                color = Colors.UI.divider
+                color = ThemeColors.UI.divider
             )
             
             // 时区
