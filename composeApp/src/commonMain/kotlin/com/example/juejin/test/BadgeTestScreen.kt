@@ -190,6 +190,23 @@ fun BadgeTestScreen(
                     }
                 }
                 
+                // 测试按钮 - 强制设置
+                item {
+                    Button(
+                        onClick = {
+                            com.example.juejin.util.Logger.d("BadgeTest", "=== 开始角标测试 ===")
+                            badgeManager.setBadge(88)
+                            currentCount = 88
+                            statusMessage = "已设置测试角标 88"
+                            com.example.juejin.util.Logger.d("BadgeTest", "=== 角标测试完成 ===")
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue)
+                    ) {
+                        Text("测试角标 (88)", color = Colors.primaryWhite, fontSize = 16.sp)
+                    }
+                }
+                
                 item { Spacer(modifier = Modifier.height(16.dp)) }
                 
                 // 使用说明

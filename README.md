@@ -263,7 +263,59 @@ adb logcat | grep ImagePicker
 # 查看日志（过滤 EditProfile）
 adb logcat | grep EditProfile
 
+# 打开应用设置页面（用于配置权限）
+adb shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:com.example.juejin
+```
 
+#### ADB 命令详解
+
+**打开应用设置页面**：
+```bash
+adb -s 2XYYD24505209655 shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:com.example.juejin
+```
+
+各部分说明：
+- `adb` - Android Debug Bridge，Android 调试桥，用于与 Android 设备通信
+- `-s 2XYYD24505209655` - 指定设备序列号（多设备时使用）
+  - 查看设备列表：`adb devices`
+  - 单设备时可省略此参数
+- `shell` - 在 Android 设备上执行 shell 命令
+- `am start` - Activity Manager，启动一个 Activity
+- `-a android.settings.APPLICATION_DETAILS_SETTINGS` - Intent Action，打开应用详情设置页面
+- `-d package:com.example.juejin` - 指定应用包名
+
+**使用场景**：
+- 快速打开应用权限设置（相机、通知、存储等）
+- 配置桌面角标权限
+- 管理应用数据和缓存
+- 查看应用详细信息
+
+**常用 ADB 命令**：
+```bash
+# 查看连接的设备
+adb devices
+
+# 安装 APK
+adb install app.apk
+
+# 卸载应用
+adb uninstall com.example.juejin
+
+# 清除应用数据
+adb shell pm clear com.example.juejin
+
+# 启动应用
+adb shell am start -n com.example.juejin/.MainActivity
+
+# 查看应用进程
+adb shell ps | grep juejin
+
+# 截图
+adb shell screencap -p /sdcard/screen.png
+adb pull /sdcard/screen.png
+
+# 录屏
+adb shell screenrecord /sdcard/demo.mp4
 ```
 
 #### Desktop 构建失败
