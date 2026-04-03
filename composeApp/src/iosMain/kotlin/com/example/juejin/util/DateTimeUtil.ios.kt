@@ -2,6 +2,7 @@ package com.example.juejin.util
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 actual object DateTimeUtil {
     
@@ -11,6 +12,7 @@ actual object DateTimeUtil {
         return padding.concatToString() + this
     }
     
+    @OptIn(ExperimentalTime::class)
     actual fun formatRequestTime(isoString: String?): String {
         if (isoString == null || isoString.length == 0) return "N/A"
         

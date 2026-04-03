@@ -2,38 +2,42 @@ package com.example.juejin.platform
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
+import platform.UIKit.UIDevice
+import platform.UIKit.UIScreen
 import platform.Foundation.NSLocale
 import platform.Foundation.NSTimeZone
 import platform.Foundation.countryCode
 import platform.Foundation.currentLocale
 import platform.Foundation.languageCode
 import platform.Foundation.localTimeZone
-import platform.UIKit.UIDevice
-import platform.UIKit.UIScreen
 
-/**
- * iOS 平台设备信息实现
- */
+actual fun getDeviceManufacturer(): String {
+    return "Apple"
+}
+
+actual fun getDeviceModel(): String {
+    return UIDevice.currentDevice.model
+}
+
 @OptIn(ExperimentalForeignApi::class)
 actual fun getDeviceInfo(): DeviceInfo {
-    val device = UIDevice.currentDevice
     val screen = UIScreen.mainScreen
-    val bounds = screen.bounds
     val scale = screen.scale
-    
-    val screenWidth = (bounds.useContents { size.width } * scale).toInt()
-    val screenHeight = (bounds.useContents { size.height } * scale).toInt()
+    val bounds = screen.bounds
+    val width = (bounds.useContents { size.width } * scale).toInt()
+    val height = (bounds.useContents { size.height } * scale).toInt()
     
     val locale = NSLocale.currentLocale
-    val timeZone = NSTimeZone.localTimeZone
+    val languageCode = locale.languageCode ?: "en"
+    val countryCode = locale.countryCode ?: "US"
     
     return DeviceInfo(
-        osName = device.systemName,
-        osVersion = device.systemVersion,
-        sdkVersion = device.systemVersion,
-        screenResolution = "$screenWidth x $screenHeight",
-        language = locale.languageCode,
-        region = locale.countryCode ?: "Unknown",
-        timeZone = timeZone.name
+        osName = UIDevice.currentDevice.systemName,
+        osVersion = UIDevice.currentDevice.systemVersion,
+        sdkVersion = UIDevice.currentDevice.systemVersion,
+        screenResolution = "${width}x${height}",
+        language = languageCode,
+        region = countryCode,
+        timeZone = NSTimeZone.localTimeZone.name
     )
 }

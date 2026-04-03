@@ -9,6 +9,23 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- 角标权限 - 不同厂商可能需要不同权限 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    
+    <!-- 华为角标权限 -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    
+    <!-- 小米角标权限 -->
+    <uses-permission android:name="android.permission.READ_APP_BADGE" />
+    
+    <!-- OPPO角标权限 -->
+    <uses-permission android:name="com.oppo.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" />
+    
+    <!-- vivo角标权限 -->
+    <uses-permission android:name="com.vivo.notification.permission.BADGE_ICON" />
 
     <application
         android:allowBackup="true"

@@ -1,25 +1,28 @@
 package com.example.juejin.platform
 
-import java.awt.Toolkit
 import java.util.Locale
 import java.util.TimeZone
+import java.awt.Toolkit
 
-/**
- * JVM/Desktop 平台设备信息实现
- */
+actual fun getDeviceManufacturer(): String {
+    return System.getProperty("os.name") ?: "Unknown"
+}
+
+actual fun getDeviceModel(): String {
+    return System.getProperty("os.arch") ?: "Unknown"
+}
+
 actual fun getDeviceInfo(): DeviceInfo {
     val toolkit = Toolkit.getDefaultToolkit()
     val screenSize = toolkit.screenSize
-    val locale = Locale.getDefault()
-    val timeZone = TimeZone.getDefault()
     
     return DeviceInfo(
         osName = System.getProperty("os.name") ?: "Unknown",
         osVersion = System.getProperty("os.version") ?: "Unknown",
-        sdkVersion = "Java ${System.getProperty("java.version")}",
-        screenResolution = "${screenSize.width} x ${screenSize.height}",
-        language = locale.language,
-        region = locale.country,
-        timeZone = timeZone.id
+        sdkVersion = System.getProperty("java.version") ?: "Unknown",
+        screenResolution = "${screenSize.width}x${screenSize.height}",
+        language = Locale.getDefault().language,
+        region = Locale.getDefault().country,
+        timeZone = TimeZone.getDefault().id
     )
 }

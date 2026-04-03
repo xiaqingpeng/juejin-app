@@ -1,28 +1,30 @@
 package com.example.juejin.platform
 
-import android.content.res.Resources
 import android.os.Build
+import android.content.res.Resources
 import java.util.Locale
 import java.util.TimeZone
 
-/**
- * Android 平台设备信息实现
- */
+actual fun getDeviceManufacturer(): String {
+    return Build.MANUFACTURER
+}
+
+actual fun getDeviceModel(): String {
+    return Build.MODEL
+}
+
 actual fun getDeviceInfo(): DeviceInfo {
     val displayMetrics = Resources.getSystem().displayMetrics
     val screenWidth = displayMetrics.widthPixels
     val screenHeight = displayMetrics.heightPixels
     
-    val locale = Locale.getDefault()
-    val timeZone = TimeZone.getDefault()
-    
     return DeviceInfo(
         osName = "Android",
         osVersion = Build.VERSION.RELEASE,
         sdkVersion = "API ${Build.VERSION.SDK_INT}",
-        screenResolution = "${screenWidth} x ${screenHeight}",
-        language = locale.language,
-        region = locale.country,
-        timeZone = timeZone.id
+        screenResolution = "${screenWidth}x${screenHeight}",
+        language = Locale.getDefault().language,
+        region = Locale.getDefault().country,
+        timeZone = TimeZone.getDefault().id
     )
 }

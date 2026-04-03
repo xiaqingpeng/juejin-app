@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.juejin.platform.BadgeManager
+import com.example.juejin.platform.getDeviceManufacturer
+import com.example.juejin.platform.getDeviceModel
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 
@@ -38,6 +40,11 @@ fun BadgeTestScreen(
 ) {
     val badgeManager = remember { BadgeManager() }
     var currentCount by remember { mutableStateOf(0) }
+    var statusMessage by remember { mutableStateOf("") }
+    
+    val deviceInfo = remember {
+        "${getDeviceManufacturer()} ${getDeviceModel()}"
+    }
     
     MaterialTheme(
         colorScheme = lightColorScheme(
@@ -53,129 +60,152 @@ fun BadgeTestScreen(
                 )
             }
         ) { padding ->
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Spacer(modifier = Modifier.height(32.dp))
+                item { Spacer(modifier = Modifier.height(16.dp)) }
                 
-                // 当前角标数量显示
-                Text(
-                    text = "当前角标数量",
-                    fontSize = 16.sp,
-                    color = Colors.Text.secondary
-                )
+                // 设备信息
+                item {
+                    Text(
+                        text = "设备: $deviceInfo",
+                        fontSize = 12.sp,
+                        color = Colors.Text.secondary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 
-                Text(
-                    text = "$currentCount",
-                    fontSize = 64.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Colors.primaryBlue
-                )
+                // 状态消息
+                if (statusMessage.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = statusMessage,
+                            fontSize = 12.sp,
+                            color = Colors.primaryBlue,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
                 
-                Spacer(modifier = Modifier.height(32.dp))
+                // 当前角标数量
+                item {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("当前角标数量", fontSize = 16.sp, color = Colors.Text.secondary)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "$currentCount",
+                            fontSize = 64.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Colors.primaryBlue
+                        )
+                    }
+                }
                 
-                // 快捷设置按钮
-                Text(
-                    text = "快捷设置",
-                    fontSize = 14.sp,
-                    color = Colors.Text.secondary,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                item { Spacer(modifier = Modifier.height(16.dp)) }
                 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    listOf(1, 5, 10, 99).forEach { count ->
-                        Button(
-                            onClick = {
-                                badgeManager.setBadge(count)
-                                currentCount = count
-                            },
-                            modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Colors.primaryBlue
-                            )
-                        ) {
-                            Text("$count", color = Colors.primaryWhite)
+                // 快捷设置
+                item {
+                    Text("快捷设置", fontSize = 14.sp, color = Colors.Text.secondary, modifier = Modifier.fillMaxWidth())
+                }
+                
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        listOf(1, 5, 10, 99).forEach { count ->
+                            Button(
+                                onClick = {
+                                    badgeManager.setBadge(count)
+                                    currentCount = count
+                                    statusMessage = "已设置为 $count"
+                                },
+                                modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue)
+                            ) {
+                                Text("$count", color = Colors.primaryWhite)
+                            }
                         }
                     }
                 }
                 
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                // 增减按钮
-                Text(
-                    text = "手动调整",
-                    fontSize = 14.sp,
-                    color = Colors.Text.secondary,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = {
-                            if (currentCount > 0) {
-                                currentCount--
-                                badgeManager.setBadge(currentCount)
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Colors.Text.secondary
-                        )
-                    ) {
-                        Text("-1", color = Colors.primaryWhite, fontSize = 20.sp)
-                    }
-                    
-                    Button(
-                        onClick = {
-                            currentCount++
-                            badgeManager.setBadge(currentCount)
-                        },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Colors.primaryBlue
-                        )
-                    ) {
-                        Text("+1", color = Colors.primaryWhite, fontSize = 20.sp)
-                    }
+                // 手动调整
+                item {
+                    Text("手动调整", fontSize = 14.sp, color = Colors.Text.secondary, modifier = Modifier.fillMaxWidth())
                 }
                 
-                Spacer(modifier = Modifier.height(16.dp))
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                if (currentCount > 0) {
+                                    currentCount--
+                                    badgeManager.setBadge(currentCount)
+                                    statusMessage = "已更新为 $currentCount"
+                                }
+                            },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.buttonColors(containerColor = Colors.Text.secondary)
+                        ) {
+                            Text("-1", color = Colors.primaryWhite, fontSize = 20.sp)
+                        }
+                        
+                        Button(
+                            onClick = {
+                                currentCount++
+                                badgeManager.setBadge(currentCount)
+                                statusMessage = "已更新为 $currentCount"
+                            },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.buttonColors(containerColor = Colors.primaryBlue)
+                        ) {
+                            Text("+1", color = Colors.primaryWhite, fontSize = 20.sp)
+                        }
+                    }
+                }
                 
                 // 清除按钮
-                Button(
-                    onClick = {
-                        badgeManager.clearBadge()
-                        currentCount = 0
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Colors.Button.danger
-                    )
-                ) {
-                    Text("清除角标", color = Colors.primaryWhite, fontSize = 16.sp)
+                item {
+                    Button(
+                        onClick = {
+                            badgeManager.clearBadge()
+                            currentCount = 0
+                            statusMessage = "已清除"
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Colors.Button.danger)
+                    ) {
+                        Text("清除角标", color = Colors.primaryWhite, fontSize = 16.sp)
+                    }
                 }
                 
-                Spacer(modifier = Modifier.weight(1f))
+                item { Spacer(modifier = Modifier.height(16.dp)) }
                 
-                // 说明文字
-                Text(
-                    text = "提示：请按 Home 键退出应用查看角标效果",
-                    fontSize = 12.sp,
-                    color = Colors.Text.secondary,
-                    modifier = Modifier.padding(16.dp)
-                )
+                // 使用说明
+                item {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text("使用说明：", fontSize = 14.sp, color = Colors.Text.primary)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "1. 点击按钮设置角标\n2. 按 Home 键查看桌面图标\n3. 部分设备需在系统设置中开启角标权限",
+                            fontSize = 12.sp,
+                            color = Colors.Text.secondary
+                        )
+                    }
+                }
+                
+                item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }
