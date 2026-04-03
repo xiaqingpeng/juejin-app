@@ -50,6 +50,9 @@ kotlin {
             implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0")
             // ProcessCameraProvider uses Guava's ListenableFuture
             implementation("com.google.guava:guava:29.0-android")
+            
+            // 角标管理
+            implementation(libs.shortcut.badger)
         }
         commonMain.dependencies {
         implementation(libs.compose.runtime)

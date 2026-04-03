@@ -24,7 +24,10 @@ fun AppNavGraph(
     ) -> Unit
 ) {
     Box(modifier = modifier) {
-        when (val screen = navigationState.currentScreen) {
+        val screen = navigationState.currentScreen
+        com.example.juejin.util.Logger.d("NavGraph", "当前渲染页面: $screen")
+        
+        when (screen) {
             is Screen.Main -> {
                 mainContent(
                     { navigationState.navigate(Screen.Settings) },
@@ -34,8 +37,13 @@ fun AppNavGraph(
             }
             
             is Screen.Settings -> {
+                com.example.juejin.util.Logger.d("NavGraph", "渲染设置页面")
                 SettingsScreen(
-                    onLeftClick = { navigationState.popBackStack() },
+                    onLeftClick = { 
+                        com.example.juejin.util.Logger.d("NavGraph", "设置页面返回回调触发")
+                        val result = navigationState.popBackStack()
+                        com.example.juejin.util.Logger.d("NavGraph", "返回结果: $result")
+                    },
                     userViewModel = userViewModel,
                     onNavigateToDetail = { settingTitle ->
                         navigationState.navigate(Screen.SettingDetail(settingTitle))
@@ -91,6 +99,7 @@ fun AppNavGraph(
                             "test_course_list" -> navigationState.navigate(Screen.CourseList)
                             "test_charts" -> navigationState.navigate(Screen.ChartTest)
                             "test_webview" -> navigationState.navigate(Screen.WebViewTest)
+                            "test_badge" -> navigationState.navigate(Screen.BadgeTest)
                             else -> navigationState.navigate(Screen.TestDetail(testCase.id))
                         }
                     }
@@ -135,6 +144,12 @@ fun AppNavGraph(
             
             is Screen.WebViewTest -> {
                 com.example.juejin.test.WebViewTestScreen(
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.BadgeTest -> {
+                com.example.juejin.test.BadgeTestScreen(
                     onLeftClick = { navigationState.popBackStack() }
                 )
             }

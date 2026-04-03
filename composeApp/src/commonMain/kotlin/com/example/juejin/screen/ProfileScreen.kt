@@ -84,8 +84,23 @@ fun JuejinProfilePage(
 
                                     actionButtons.forEach { (icon, description) ->
                                         val clickAction = when (icon) {
-                                            Icons.Filled.Settings -> onSettingsClick
-                                            else -> { { println("点击了 $description") } }
+                                            Icons.Filled.Settings -> {
+                                                {
+                                                    com.example.juejin.util.Logger.d("ProfileScreen", "点击设置按钮")
+                                                    onSettingsClick()
+                                                }
+                                            }
+                                            Icons.Filled.QrCodeScanner -> {
+                                                {
+                                                    com.example.juejin.util.Logger.d("ProfileScreen", "点击扫码按钮")
+                                                    onQrScanClick()
+                                                }
+                                            }
+                                            else -> {
+                                                {
+                                                    com.example.juejin.util.Logger.d("ProfileScreen", "点击了 $description")
+                                                }
+                                            }
                                         }
                                         IconButton(
                                             onClick = clickAction,

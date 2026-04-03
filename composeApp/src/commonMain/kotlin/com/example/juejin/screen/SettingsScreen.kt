@@ -60,6 +60,7 @@ fun SettingsScreen(
     onNavigateToDetail: (String) -> Unit = {},
     onNavigateToEditProfile: () -> Unit = {}
 ) {
+    com.example.juejin.util.Logger.d("SettingsScreen", "设置页面已加载")
     val darkMode by settingViewModel.darkMode.collectAsStateWithLifecycle()
     val pushNotification by settingViewModel.pushNotification.collectAsStateWithLifecycle()
     val settings by remember { derivedStateOf { settingViewModel.getUpdatedSettings() } }
@@ -107,7 +108,10 @@ private fun SettingsListScreen(
             topBar = {
                 TopNavigationBarWithBack(
                     title = stringResource(Res.string.tab_profile_setting),
-                    onLeftClick = onLeftClick
+                    onLeftClick = {
+                        com.example.juejin.util.Logger.d("SettingsScreen", "点击返回按钮")
+                        onLeftClick()
+                    }
                 )
             }
         ) { padding ->

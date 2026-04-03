@@ -116,6 +116,12 @@ fun App() {
 
         // 判断是否在主页面
         val isMainScreen = navigationState.currentScreen is com.example.juejin.navigation.Screen.Main
+        
+        // 添加日志
+        LaunchedEffect(navigationState.currentScreen) {
+            com.example.juejin.util.Logger.d("App", "当前页面: ${navigationState.currentScreen}, 是否主页面: $isMainScreen")
+            navigationState.printBackStack()
+        }
 
         // Scaffold provides proper layout structure
         Scaffold(
@@ -177,7 +183,10 @@ fun App() {
 
                     if (isDevelopment && isMainScreen) {
                         androidx.compose.material3.FloatingActionButton(
-                            onClick = { navigationState.navigate(com.example.juejin.navigation.Screen.TestList) },
+                            onClick = { 
+                                com.example.juejin.util.Logger.d("App", "点击测试入口按钮")
+                                navigationState.navigate(com.example.juejin.navigation.Screen.TestList) 
+                            },
                             containerColor = Colors.primaryBlue,
                             contentColor = Color.White
                         ) {
@@ -316,6 +325,7 @@ fun App() {
                     userViewModel = userViewModel,
                     navigationState = navigationState,
                     mainContent = { onNavigateToSettings, onNavigateToQrScanner, onNavigateToTestList ->
+                    com.example.juejin.util.Logger.d("App", "渲染主内容区域")
                     // Horizontal Pager with gesture support
                     HorizontalPager(
                             state = pagerState,

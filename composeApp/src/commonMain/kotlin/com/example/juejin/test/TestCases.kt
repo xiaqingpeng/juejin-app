@@ -228,5 +228,19 @@ fun registerTestCases() {
         }
     )
     
+    // 测试案例 9：角标测试
+    TestRegistry.register(
+        TestCase(
+            id = "test_badge",
+            title = "角标测试",
+            description = "测试跨平台应用角标功能，支持设置、清除和获取角标数量"
+        ) {
+            // 这个测试案例只作为导航入口，实际内容在 BadgeTestScreen 中
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(stringResource(Res.string.loading), fontSize = 16.sp)
+            }
+        }
+    )
+    
     // 可以继续添加更多测试案例...
 }
