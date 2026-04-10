@@ -125,16 +125,16 @@ fun App() {
         // Scaffold provides proper layout structure
         Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                containerColor = ThemeColors.primaryWhite,
+                containerColor = ThemeColors.Background.primary,
                 bottomBar = {
                     // Bottom Navigation Bar - 只在主页面显示
                     if (isMainScreen) {
                         Surface(
                                 shadowElevation = 8.dp, // 传统的物理阴影
-                                color = ThemeColors.primaryWhite
+                                color = ThemeColors.Background.primary
                         ) {
                             NavigationBar(
-                                    containerColor = ThemeColors.primaryWhite,
+                                    containerColor = ThemeColors.Background.primary,
                                     tonalElevation = 0.dp
                             ) {
                                 tabs.forEachIndexed { index, tab ->
@@ -144,7 +144,7 @@ fun App() {
                                                 // Use Material Icons with dynamic coloring
                                                 val iconColor =
                                                         if (isSelected) ThemeColors.primaryBlue
-                                                        else ThemeColors.primaryGray
+                                                        else ThemeColors.Text.secondary
                                                 Icon(
                                                         imageVector = tab.icon,
                                                         contentDescription =
@@ -152,7 +152,13 @@ fun App() {
                                                         tint = iconColor
                                                 )
                                             },
-                                            label = { Text(stringResource(tab.title)) },
+                                            label = { 
+                                                Text(
+                                                    stringResource(tab.title),
+                                                    color = if (isSelected) ThemeColors.primaryBlue 
+                                                           else ThemeColors.Text.secondary
+                                                )
+                                            },
                                             selected = isSelected,
                                             onClick = {
                                                 coroutineScope.launch {
@@ -165,9 +171,9 @@ fun App() {
                                                                     ThemeColors.primaryBlue,
                                                             selectedTextColor = ThemeColors.primaryBlue,
                                                             unselectedIconColor =
-                                                                    ThemeColors.primaryGray,
+                                                                    ThemeColors.Text.secondary,
                                                             unselectedTextColor =
-                                                                    ThemeColors.primaryGray,
+                                                                    ThemeColors.Text.secondary,
                                                             indicatorColor = Color.Transparent
                                                             )
                                     )

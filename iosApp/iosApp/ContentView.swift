@@ -3,25 +3,47 @@ import SwiftUI
 import ComposeApp
 
 struct ComposeView: UIViewControllerRepresentable {
+    var isDarkMode: Bool
+    
     func makeUIViewController(context: Context) -> UIViewController {
         let controller = MainViewControllerKt.MainViewController()
-        // 设置状态栏样式为深色内容（适配白色背景）
-        controller.overrideUserInterfaceStyle = .light
+        // 根据主题设置状态栏样式
+        updateStatusBarStyle(controller: controller, isDarkMode: isDarkMode)
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // 当主题改变时更新状态栏样式
+        updateStatusBarStyle(controller: uiViewController, isDarkMode: isDarkMode)
+    }
+    
+    private func updateStatusBarStyle(controller: UIViewController, isDarkMode: Bool) {
+        if isDarkMode {
+            // 深色模式：使用浅色状态栏（白色文字/图标）
+            controller.overrideUserInterfaceStyle = .dark
+        } else {
+            // 浅色模式：使用深色状态栏（黑色文字/图标）
+            controller.overrideUserInterfaceStyle = .light
+        }
+    }
 }
 
 struct ContentView: View {
     @State var scaleAmount = 1.0
     @State var isHomeRootScreen = false
+    // 监听主题变化
+    @State var isDarkMode = false
 
     var body: some View {
         ZStack {
             if isHomeRootScreen {
-                ComposeView()
-                    .preferredColorScheme(.light) // 强制使用浅色模式
+                ComposeView(isDarkMode: isDarkMode)
+                    .preferredColorScheme(isDarkMode ? .dark : .light)
+                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ThemeChanged"))) { notification in
+                        if let darkMode = notification.object as? Bool {
+                            isDarkMode = darkMode
+                        }
+                    }
             } else {
                 // 设置背景颜色为白色
                 Color.white.ignoresSafeArea()

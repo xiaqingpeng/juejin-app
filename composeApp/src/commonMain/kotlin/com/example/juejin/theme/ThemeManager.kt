@@ -33,10 +33,27 @@ object ThemeManager {
     fun toggleTheme() {
         isDarkMode = !isDarkMode
         saveTheme()
+        notifyThemeChanged()
     }
     
     private fun saveTheme() {
         val theme = if (isDarkMode) THEME_DARK else THEME_LIGHT
         PrivacyStorage.putString(THEME_KEY, theme)
     }
+    
+    /**
+     * 通知主题变化（用于 iOS 状态栏更新）
+     */
+    private fun notifyThemeChanged() {
+        try {
+            notifyThemeChangedPlatform(isDarkMode)
+        } catch (e: Exception) {
+            // 忽略平台特定的错误
+        }
+    }
 }
+
+/**
+ * 平台特定的主题变化通知
+ */
+expect fun notifyThemeChangedPlatform(isDarkMode: Boolean)
