@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.juejin.model.SettingItem
 import com.example.juejin.model.SettingType
+import com.example.juejin.theme.ThemeManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 // 为了在 SwiftUI 中使用，需要添加 @ObservableObject 注解
 // 但是这个注解在 Kotlin/Native 中不可用，所以我们需要创建一个 iOS 专用的包装器
 class SettingViewModel : ViewModel() {
-    private val _darkMode = MutableStateFlow("跟随系统")
+    private val _darkMode = MutableStateFlow(ThemeManager.getThemeModeString())
     val darkMode: StateFlow<String> = _darkMode.asStateFlow()
 
     private val _pushNotification = MutableStateFlow(true)
@@ -34,6 +35,8 @@ class SettingViewModel : ViewModel() {
 
     fun updateDarkMode(mode: String) {
         _darkMode.value = mode
+        // 更新 ThemeManager
+        ThemeManager.setThemeModeByString(mode)
     }
 
     fun updatePushNotification(enabled: Boolean) {

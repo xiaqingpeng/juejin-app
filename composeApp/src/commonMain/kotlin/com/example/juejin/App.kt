@@ -70,14 +70,25 @@ fun App() {
     // 注册测试案例
     LaunchedEffect(Unit) { com.example.juejin.test.registerTestCases() }
 
-    // 观察主题状态
-    val isDarkMode = com.example.juejin.theme.ThemeManager.isDarkMode
-    val backgroundColor = if (isDarkMode) com.example.juejin.theme.DarkColors.Background.primary else ThemeColors.Background.primary
-    
-    // 设置状态栏（深色模式时使用浅色图标，浅色模式时使用深色图标）
-    StatusBarEffect(isDark = isDarkMode, color = backgroundColor)
-
     com.example.juejin.theme.AppTheme {
+        // 观察主题状态
+        val systemDarkMode = com.example.juejin.theme.isSystemInDarkTheme()
+        
+        // 更新 ThemeManager 的系统主题状态
+        LaunchedEffect(systemDarkMode) {
+            com.example.juejin.theme.ThemeManager.isSystemDarkMode = systemDarkMode
+        }
+        
+        val isDarkMode = com.example.juejin.theme.ThemeManager.isDarkMode
+        val backgroundColor = if (isDarkMode) {
+            com.example.juejin.theme.DarkColors.Background.primary 
+        } else {
+            ThemeColors.Background.primary
+        }
+        
+        // 设置状态栏（深色模式时使用浅色图标，浅色模式时使用深色图标）
+        StatusBarEffect(isDark = isDarkMode, color = backgroundColor)
+
         val tabs =
                 listOf(
                         TabItem.Home,
@@ -388,4 +399,5 @@ fun App() {
             )
         }
     }
-}}
+}
+}
