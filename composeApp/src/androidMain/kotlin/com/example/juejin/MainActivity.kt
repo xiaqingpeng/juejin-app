@@ -13,7 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.example.juejin.storage.PrivacyStorage
+import com.example.juejin.core.storage.PrivacyStorage
+import com.example.juejin.ui.theme.ThemeManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.Continuation
@@ -80,6 +81,9 @@ class MainActivity : ComponentActivity() {
 
         // 初始化隐私政策存储
         PrivacyStorage.init(application)
+        
+        // 初始化主题管理器
+        ThemeManager.initialize()
 
         setContent {
             App()

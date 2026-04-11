@@ -3,7 +3,7 @@ package com.example.juejin.theme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.juejin.storage.PrivacyStorage
+import com.example.juejin.core.storage.PrivacyStorage
 
 /**
  * 主题模式
@@ -24,9 +24,11 @@ object ThemeManager {
     private const val THEME_LIGHT = "light"
     private const val THEME_DARK = "dark"
     
-    // 当前主题模式
-    var themeMode by mutableStateOf(ThemeMode.SYSTEM)
-        private set
+    // 当前主题模式（私有可变，公开只读）
+    private var _themeMode by mutableStateOf(ThemeMode.SYSTEM)
+    
+    val themeMode: ThemeMode
+        get() = _themeMode
     
     // 系统是否为深色模式（由平台提供）
     var isSystemDarkMode by mutableStateOf(false)
@@ -34,7 +36,7 @@ object ThemeManager {
     
     // 实际显示的是否为深色模式
     val isDarkMode: Boolean
-        get() = when (themeMode) {
+        get() = when (_themeMode) {
             ThemeMode.SYSTEM -> isSystemDarkMode
             ThemeMode.LIGHT -> false
             ThemeMode.DARK -> true
@@ -47,7 +49,7 @@ object ThemeManager {
     
     private fun loadTheme() {
         val savedTheme = PrivacyStorage.getString(THEME_KEY, THEME_SYSTEM)
-        themeMode = when (savedTheme) {
+        _themeMode = when (savedTheme) {
             THEME_LIGHT -> ThemeMode.LIGHT
             THEME_DARK -> ThemeMode.DARK
             else -> ThemeMode.SYSTEM
@@ -58,7 +60,7 @@ object ThemeManager {
      * 设置主题模式
      */
     fun setThemeMode(mode: ThemeMode) {
-        themeMode = mode
+        _themeMode = mode
         saveTheme()
         notifyThemeChanged()
     }
@@ -80,7 +82,7 @@ object ThemeManager {
      * 获取当前主题模式的字符串表示
      */
     fun getThemeModeString(): String {
-        return when (themeMode) {
+        return when (_themeMode) {
             ThemeMode.SYSTEM -> "跟随系统"
             ThemeMode.LIGHT -> "浅色模式"
             ThemeMode.DARK -> "深色模式"
@@ -91,7 +93,7 @@ object ThemeManager {
      * 切换主题模式（用于防护模式按钮）
      */
     fun toggleTheme() {
-        val newMode = when (themeMode) {
+        val newMode = when (_themeMode) {
             ThemeMode.SYSTEM -> if (isSystemDarkMode) ThemeMode.LIGHT else ThemeMode.DARK
             ThemeMode.LIGHT -> ThemeMode.DARK
             ThemeMode.DARK -> ThemeMode.LIGHT
@@ -100,7 +102,7 @@ object ThemeManager {
     }
     
     private fun saveTheme() {
-        val theme = when (themeMode) {
+        val theme = when (_themeMode) {
             ThemeMode.SYSTEM -> THEME_SYSTEM
             ThemeMode.LIGHT -> THEME_LIGHT
             ThemeMode.DARK -> THEME_DARK

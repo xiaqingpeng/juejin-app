@@ -49,7 +49,7 @@ object ApiRepository {
 
             val response = HttpClientManager.get(url)
             val result: LogStatsResponse = try {
-                HttpClientManager.parseResponse(response)
+                HttpClientManager.parseResponse(response, LogStatsResponse.serializer())
             } catch (e: IllegalArgumentException) {
                 // 处理空响应，返回模拟数据
                 println("[ApiRepository] Empty response, using mock data")

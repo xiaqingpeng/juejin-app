@@ -33,7 +33,8 @@ import com.example.juejin.components.profile.MemberBanner
 import com.example.juejin.components.profile.MoreFunctionSection
 import com.example.juejin.components.profile.ProfileHeader
 import com.example.juejin.components.profile.QuickFunctionSection
-import com.example.juejin.theme.ThemeColors
+import com.example.juejin.ui.theme.ThemeColors
+import com.example.juejin.ui.theme.ThemeManager
 import com.example.juejin.ui.components.TopNavigationBar
 import com.example.juejin.util.Logger
 import com.example.juejin.viewmodel.UserViewModel
@@ -97,7 +98,7 @@ fun JuejinProfilePage(
                                             Icons.Filled.ShieldMoon -> {
                                                 {
                                                     Logger.d("ProfileScreen", "切换主题模式")
-                                                    com.example.juejin.theme.ThemeManager.toggleTheme()
+                                                    ThemeManager.toggleTheme()
                                                 }
                                             }
                                             else -> {

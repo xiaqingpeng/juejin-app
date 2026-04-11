@@ -45,3 +45,15 @@ plugins {
 }
 
 include(":composeApp")
+
+// 共享模块 - 核心
+include(":shared:core:common")
+include(":shared:core:storage")
+include(":shared:core:network")
+
+// 共享模块 - 领域
+include(":shared:domain")
+
+// 共享模块 - UI
+include(":shared:ui:theme")
+include(":shared:ui:components")

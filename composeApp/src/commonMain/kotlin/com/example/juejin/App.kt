@@ -21,7 +21,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.juejin.core.storage.PrivacyStorage
 import com.example.juejin.enums.TabItem
 import com.example.juejin.navigation.AppNavGraph
 import com.example.juejin.platform.exitApp
@@ -45,12 +45,14 @@ import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
-import com.example.juejin.storage.PrivacyStorage
-import com.example.juejin.ui.Colors
-import com.example.juejin.theme.ThemeColors
 import com.example.juejin.ui.components.NotificationPermissionDialog
 import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.StatusBarEffect
+import com.example.juejin.ui.theme.AppTheme
+import com.example.juejin.ui.theme.DarkColors
+import com.example.juejin.ui.theme.ThemeColors
+import com.example.juejin.ui.theme.ThemeManager
+import com.example.juejin.ui.theme.isSystemInDarkTheme
 import com.example.juejin.viewmodel.DiscoverViewModel
 import com.example.juejin.viewmodel.HotViewModel
 import juejin.composeapp.generated.resources.Res
@@ -70,18 +72,18 @@ fun App() {
     // 注册测试案例
     LaunchedEffect(Unit) { com.example.juejin.test.registerTestCases() }
 
-    com.example.juejin.theme.AppTheme {
+    AppTheme {
         // 观察主题状态
-        val systemDarkMode = com.example.juejin.theme.isSystemInDarkTheme()
+        val systemDarkMode = isSystemInDarkTheme()
         
         // 更新 ThemeManager 的系统主题状态
         LaunchedEffect(systemDarkMode) {
-            com.example.juejin.theme.ThemeManager.isSystemDarkMode = systemDarkMode
+            ThemeManager.isSystemDarkMode = systemDarkMode
         }
         
-        val isDarkMode = com.example.juejin.theme.ThemeManager.isDarkMode
+        val isDarkMode = ThemeManager.isDarkMode
         val backgroundColor = if (isDarkMode) {
-            com.example.juejin.theme.DarkColors.Background.primary 
+            DarkColors.Background.primary 
         } else {
             ThemeColors.Background.primary
         }

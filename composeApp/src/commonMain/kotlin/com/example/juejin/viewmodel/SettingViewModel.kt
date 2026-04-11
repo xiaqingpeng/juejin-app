@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.juejin.model.SettingItem
 import com.example.juejin.model.SettingType
-import com.example.juejin.theme.ThemeManager
+import com.example.juejin.ui.theme.ThemeManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -55,6 +55,14 @@ kotlin {
             implementation(libs.shortcut.badger)
         }
         commonMain.dependencies {
+        // 共享模块依赖
+        implementation(project(":shared:core:common"))
+        implementation(project(":shared:core:storage"))
+        implementation(project(":shared:core:network"))
+        implementation(project(":shared:domain"))
+        implementation(project(":shared:ui:theme"))
+        implementation(project(":shared:ui:components"))
+        
         implementation(libs.compose.runtime)
         implementation(libs.compose.foundation)
         implementation(compose.material3)
