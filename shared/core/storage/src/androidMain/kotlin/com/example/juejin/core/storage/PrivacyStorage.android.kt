@@ -34,7 +34,7 @@ actual object PrivacyStorage {
     /**
      * 初始化，在 Application 或 MainActivity 中调用
      */
-    fun init(context: Application) {
+    fun init(context: Context) {
         appContext = context.applicationContext
     }
 
