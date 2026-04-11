@@ -30,9 +30,23 @@
 - [iOS_COMPILE_FIX.md](../iOS_COMPILE_FIX.md) - iOS 编译问题
 - [iOS_XCODE_BUILD_SCRIPT_FIX.md](../iOS_XCODE_BUILD_SCRIPT_FIX.md) - Xcode 脚本问题
 
-## 📋 会话记录
+## 📋 归档文档
 
-历史会话记录已归档到 `docs/archive/sessions/` 目录。
+### 会话记录
+历史开发会话记录，记录了项目演进过程：
+- `docs/archive/sessions/` - 所有会话记录（SESSION_*.md）
+
+### Android Studio
+历史 Android Studio 配置文档：
+- `docs/archive/android-studio/` - 详细配置指南和问题修复
+
+### iOS 开发
+历史 iOS 开发文档：
+- `docs/archive/ios/` - iOS 配置、编译、运行相关文档
+
+### 已废弃
+不再使用的文档：
+- `docs/archive/deprecated/` - 过时的迁移记录、状态文档等
 
 ## 🗂️ 文档结构
 

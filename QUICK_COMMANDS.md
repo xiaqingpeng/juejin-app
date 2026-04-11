@@ -1,141 +1,159 @@
 # ⚡ 快速命令参考
 
-## 🚀 一键脚本
+## 🚀 快速运行
 
+### Android
 ```bash
-./test-all-platforms.sh    # 测试所有平台编译
-./run-desktop.sh           # 运行 Desktop 应用
-./install-all.sh           # 安装 Android 应用
-```
+# juejin-lite（推荐，最快 7秒）
+./gradlew :apps:juejin-lite:assembleDebug
+./gradlew :apps:juejin-lite:installDebug
 
-## 📱 Android
-
-### juejin-main
-```bash
-# 编译
+# juejin-main
 ./gradlew :apps:juejin-main:assembleDebug
-./gradlew :apps:juejin-main:assembleRelease
-
-# 安装运行
 ./gradlew :apps:juejin-main:installDebug
-adb shell am start -n com.example.juejin/.MainActivity
 ```
 
-### juejin-lite
+### iOS
 ```bash
-# 编译
+# 使用脚本（推荐）
+./run-ios.sh
+
+# 手动编译
+./gradlew :apps:juejin-lite:linkDebugFrameworkIosSimulatorArm64
+cd iosApp-lite && open iosApp.xcodeproj
+```
+
+### Desktop
+```bash
+# 使用脚本（推荐）
+./run-desktop.sh
+
+# 手动运行
+./gradlew :apps:juejin-lite:run
+./gradlew :apps:juejin-main:run
+```
+
+## 🔧 配置命令
+
+### Android Studio
+```bash
+# 配置运行配置
+./setup-android-studio.sh
+```
+
+### iOS Lite
+```bash
+# 首次配置 juejin-lite iOS 项目
+./setup-ios-lite.sh
+```
+
+## 🧪 测试命令
+
+```bash
+# 测试所有平台编译
+./test-all-platforms.sh
+
+# 安装所有 Android 应用
+./install-all.sh
+```
+
+## 🧹 清理命令
+
+```bash
+# 清理 Gradle 构建
+./gradlew clean
+
+# 清理 iOS
+rm -rf ~/Library/Developer/Xcode/DerivedData
+rm -rf ~/.konan
+
+# 清理模拟器
+xcrun simctl delete unavailable
+```
+
+## 📊 常用 Gradle 任务
+
+### 查看项目结构
+```bash
+./gradlew projects
+```
+
+### 查看任务列表
+```bash
+./gradlew tasks
+./gradlew :apps:juejin-lite:tasks
+```
+
+### 编译特定平台
+```bash
+# Android
 ./gradlew :apps:juejin-lite:assembleDebug
 ./gradlew :apps:juejin-lite:assembleRelease
 
-# 安装运行
-./gradlew :apps:juejin-lite:installDebug
-adb shell am start -n com.example.juejin.lite/.MainActivity
-```
-
-## 🍎 iOS
-
-### juejin-main
-```bash
-# 模拟器
-./gradlew :apps:juejin-main:linkDebugFrameworkIosSimulatorArm64
-
-# 真机
-./gradlew :apps:juejin-main:linkDebugFrameworkIosArm64
-```
-
-### juejin-lite
-```bash
-# 模拟器
+# iOS
 ./gradlew :apps:juejin-lite:linkDebugFrameworkIosSimulatorArm64
-
-# 真机
-./gradlew :apps:juejin-lite:linkDebugFrameworkIosArm64
-```
-
-## 🖥️ Desktop
-
-### juejin-main
-```bash
-# 运行
-./gradlew :apps:juejin-main:run
-
-# 编译 JAR
-./gradlew :apps:juejin-main:jvmJar
-
-# 打包发布
-./gradlew :apps:juejin-main:packageDistributionForCurrentOS
-```
-
-### juejin-lite
-```bash
-# 运行
-./gradlew :apps:juejin-lite:run
-
-# 编译 JAR
-./gradlew :apps:juejin-lite:jvmJar
-
-# 打包发布
-./gradlew :apps:juejin-lite:packageDistributionForCurrentOS
-```
-
-## 🔧 开发常用
-
-```bash
-# 最快编译（开发时使用）
-./gradlew :apps:juejin-lite:assembleDebug --no-daemon
-
-# 清理构建
-./gradlew clean
-
-# 查看所有任务
-./gradlew :apps:juejin-lite:tasks
-
-# 查看依赖
-./gradlew :apps:juejin-lite:dependencies
-```
-
-## 📊 编译时间
-
-| 命令 | 时间 |
-|------|------|
-| `juejin-lite:assembleDebug` | ~7秒 |
-| `juejin-main:assembleDebug` | ~38秒 |
-| `juejin-lite:jvmJar` | ~20秒 |
-| `juejin-main:jvmJar` | ~15秒 |
-| `juejin-lite:linkDebugFrameworkIosSimulatorArm64` | ~15秒 |
-
-## 🎯 推荐工作流
-
-### 日常开发
-```bash
-# 1. 使用 Android Debug（最快）
-./gradlew :apps:juejin-lite:assembleDebug --no-daemon
-
-# 2. 安装到设备
-./gradlew :apps:juejin-lite:installDebug
-
-# 3. 启动应用
-adb shell am start -n com.example.juejin.lite/.MainActivity
-```
-
-### 跨平台测试
-```bash
-# 测试所有平台
-./test-all-platforms.sh
-```
-
-### 发布准备
-```bash
-# Android
-./gradlew :apps:juejin-lite:assembleRelease
+./gradlew :apps:juejin-lite:linkReleaseFrameworkIosArm64
 
 # Desktop
 ./gradlew :apps:juejin-lite:packageDistributionForCurrentOS
-
-# iOS
-./gradlew :apps:juejin-lite:linkDebugFrameworkIosArm64
 ```
+
+## 📱 模拟器管理
+
+### iOS 模拟器
+```bash
+# 查看可用模拟器
+xcrun simctl list devices available
+
+# 启动模拟器
+xcrun simctl boot <UUID>
+open -a Simulator
+
+# 清理模拟器
+xcrun simctl erase all
+```
+
+### Android 模拟器
+```bash
+# 查看设备
+adb devices
+
+# 安装应用
+adb install -r apps/juejin-lite/build/outputs/apk/debug/juejin-lite-debug.apk
+
+# 卸载应用
+adb uninstall com.example.juejin.lite
+```
+
+## 🔍 调试命令
+
+### 查看日志
+```bash
+# Android
+adb logcat | grep "Juejin"
+
+# iOS (在 Xcode 中查看)
+```
+
+### 检查编译问题
+```bash
+# 详细输出
+./gradlew :apps:juejin-lite:assembleDebug --info
+
+# 调试输出
+./gradlew :apps:juejin-lite:assembleDebug --debug
+
+# 堆栈跟踪
+./gradlew :apps:juejin-lite:assembleDebug --stacktrace
+```
+
+## 📚 更多信息
+
+- [README.md](README.md) - 项目主文档
+- [KMP_MONOREPO_GUIDE.md](KMP_MONOREPO_GUIDE.md) - Monorepo 架构指南
+- [iOS_APPS_QUICK_START.md](iOS_APPS_QUICK_START.md) - iOS 快速启动
+- [ANDROID_STUDIO_MULTIPLATFORM.md](ANDROID_STUDIO_MULTIPLATFORM.md) - Android Studio 配置
 
 ---
 
-**提示**: 添加 `--no-daemon` 可以节省内存，但会稍微增加启动时间
+**更新时间**: 2026-04-11

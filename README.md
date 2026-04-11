@@ -138,32 +138,22 @@ juejin-app/
 
 ## 📚 文档
 
-### 快速参考
+### 快速开始
 - [QUICK_COMMANDS.md](QUICK_COMMANDS.md) - 常用命令速查
-- [PLATFORM_STATUS.md](PLATFORM_STATUS.md) - 平台支持状态
-
-### 完整指南
-- [ALL_PLATFORMS_COMPLETE.md](ALL_PLATFORMS_COMPLETE.md) - 多平台完整指南
 - [KMP_MONOREPO_GUIDE.md](KMP_MONOREPO_GUIDE.md) - Monorepo 架构指南
-- [DEVICE_INSTALLATION_SUMMARY.md](DEVICE_INSTALLATION_SUMMARY.md) - Android 安装指南
 
-### Android Studio 配置
-- [ANDROID_STUDIO_MULTIPLATFORM.md](ANDROID_STUDIO_MULTIPLATFORM.md) - 多平台开发指南
-- [ANDROID_STUDIO_SETUP_VISUAL.md](ANDROID_STUDIO_SETUP_VISUAL.md) - 可视化配置指南
-- [ANDROID_STUDIO_RUN_CONFIG.md](ANDROID_STUDIO_RUN_CONFIG.md) - 运行配置详解
+### Android Studio
+- [ANDROID_STUDIO_MULTIPLATFORM.md](ANDROID_STUDIO_MULTIPLATFORM.md) - 多平台开发配置
 - [MODULE_NOT_FOUND_FIX.md](MODULE_NOT_FOUND_FIX.md) - 常见问题修复
 
 ### iOS 开发
-- [iOS_APPS_QUICK_START.md](iOS_APPS_QUICK_START.md) - iOS 应用快速启动（推荐）
-- [iOS_RUN_GUIDE.md](iOS_RUN_GUIDE.md) - iOS 应用运行指南
-- [iOS_LITE_SETUP_GUIDE.md](iOS_LITE_SETUP_GUIDE.md) - juejin-lite iOS 配置指南
+- [iOS_APPS_QUICK_START.md](iOS_APPS_QUICK_START.md) - iOS 快速启动（推荐）
 - [iOS_DEVELOPMENT_GUIDE.md](iOS_DEVELOPMENT_GUIDE.md) - iOS 开发完整指南
-- [iOS_COMPILE_FIX.md](iOS_COMPILE_FIX.md) - 编译问题修复
-- [iOS_QUICK_REFERENCE.md](iOS_QUICK_REFERENCE.md) - 快速命令参考
+- [iOS_LITE_SETUP_GUIDE.md](iOS_LITE_SETUP_GUIDE.md) - juejin-lite iOS 配置
+- [iOS_XCODE_BUILD_SCRIPT_FIX.md](iOS_XCODE_BUILD_SCRIPT_FIX.md) - Xcode 构建脚本修复
 
-### 总结文档
-- [MULTIPLATFORM_FINAL_SUMMARY.md](MULTIPLATFORM_FINAL_SUMMARY.md) - 多平台扩展总结
-- [SESSION_6_COMPLETE.md](SESSION_6_COMPLETE.md) - 最新会话总结
+### 更多文档
+- [docs/](docs/) - 归档文档和详细指南
 
 ## 🎯 开发建议
 
