@@ -4,10 +4,7 @@
 
 - [README.md](../README.md) - 项目主文档
 - [QUICK_COMMANDS.md](../QUICK_COMMANDS.md) - 常用命令速查
-
-## 🏗️ 架构指南
-
-- [KMP_MONOREPO_GUIDE.md](../KMP_MONOREPO_GUIDE.md) - Monorepo 架构完整指南
+- [KMP_MONOREPO_GUIDE.md](../KMP_MONOREPO_GUIDE.md) - Monorepo 架构指南
 
 ## 📱 平台开发
 
@@ -17,18 +14,10 @@
 
 ### iOS 开发
 - [iOS_APPS_QUICK_START.md](../iOS_APPS_QUICK_START.md) - iOS 快速启动（推荐）
-- [iOS_DEVELOPMENT_GUIDE.md](../iOS_DEVELOPMENT_GUIDE.md) - iOS 开发完整指南
-- [iOS_LITE_SETUP_GUIDE.md](../iOS_LITE_SETUP_GUIDE.md) - juejin-lite iOS 配置
-- [iOS_XCODE_BUILD_SCRIPT_FIX.md](../iOS_XCODE_BUILD_SCRIPT_FIX.md) - Xcode 构建脚本修复
+- 详细文档请查看 `docs/archive/ios/`
 
 ### Desktop
 - 使用 `./run-desktop.sh` 脚本运行
-
-## 🔧 问题修复
-
-- [MODULE_NOT_FOUND_FIX.md](../MODULE_NOT_FOUND_FIX.md) - 模块找不到问题
-- [iOS_COMPILE_FIX.md](../iOS_COMPILE_FIX.md) - iOS 编译问题
-- [iOS_XCODE_BUILD_SCRIPT_FIX.md](../iOS_XCODE_BUILD_SCRIPT_FIX.md) - Xcode 脚本问题
 
 ## 📋 归档文档
 

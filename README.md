@@ -148,9 +148,7 @@ juejin-app/
 
 ### iOS 开发
 - [iOS_APPS_QUICK_START.md](iOS_APPS_QUICK_START.md) - iOS 快速启动（推荐）
-- [iOS_DEVELOPMENT_GUIDE.md](iOS_DEVELOPMENT_GUIDE.md) - iOS 开发完整指南
-- [iOS_LITE_SETUP_GUIDE.md](iOS_LITE_SETUP_GUIDE.md) - juejin-lite iOS 配置
-- [iOS_XCODE_BUILD_SCRIPT_FIX.md](iOS_XCODE_BUILD_SCRIPT_FIX.md) - Xcode 构建脚本修复
+- 详细文档请查看 [docs/archive/ios/](docs/archive/ios/)
 
 ### 更多文档
 - [docs/](docs/) - 归档文档和详细指南
