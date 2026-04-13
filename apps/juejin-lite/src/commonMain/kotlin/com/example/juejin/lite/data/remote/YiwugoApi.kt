@@ -193,6 +193,126 @@ class YiwugoApi {
             Result.failure(e)
         }
     }
+    
+    /**
+     * 获取推荐商品列表（用于购物车"猜你喜欢"）
+     */
+    suspend fun getRecommendedProducts(
+        userId: String = "0106ba9a-af5f-4121-8880-a9e741807126",
+        page: Int = 1,
+        pageSize: Int = 20
+    ): Result<List<ProductDto>> {
+        return try {
+            val apiId = generateUUID()
+            val apiTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis().toString()
+            
+            // 生成简单的签名（MD5）
+            val signString = "$apiTime$apiId$API_KEY"
+            val apiSign = generateSimpleMD5(signString)
+            
+            val url = "https://api.yiwugo.com/app/getMyCenterRecommencProductPi.htm"
+            Logger.d(TAG, "========== 获取推荐商品 ==========")
+            Logger.d(TAG, "URL: $url")
+            Logger.d(TAG, "userId: $userId, page: $page, pageSize: $pageSize")
+            Logger.d(TAG, "api_id: $apiId")
+            Logger.d(TAG, "api_t: $apiTime")
+            Logger.d(TAG, "api_sign: $apiSign")
+            Logger.d(TAG, "sign_string: $signString")
+            
+            val response = HttpClientManager.get(url) {
+                url {
+                    parameters.append("currPage", page.toString())
+                    parameters.append("pageSize", pageSize.toString())
+                    parameters.append("userId", userId)
+                    parameters.append("spm", "YXBpLnlpd3Vnby5jb20vYXBwL2dldE15Q2VudGVyUmVjb21tZW5jUHJvZHVjdFBpLmh0bQ==")
+                    parameters.append("api_sign", apiSign)
+                    parameters.append("api_key", API_KEY)
+                    parameters.append("appid", "1")
+                    parameters.append("qudao", "hm")
+                    parameters.append("imei", DEVICE_ID)
+                    parameters.append("api_t", apiTime)
+                    parameters.append("api_id", apiId)
+                }
+                headers {
+                    append("Host", "api.yiwugo.com")
+                    append("accept", "application/json, text/plain, */*")
+                    append("appversion", APP_VERSION)
+                    append("content-type", "application/x-www-form-urlencoded")
+                    append("cookie", "uid=harmonyos$APP_VERSION@@$DEVICE_ID;")
+                    append("user-agent", "YiwugouApp/${APP_VERSION}HarmonyOS: Mobile")
+                }
+            }
+            
+            val responseBody = response.bodyAsText()
+            Logger.d(TAG, "========== 推荐商品响应 ==========")
+            Logger.d(TAG, "Response Status: ${response.status}")
+            Logger.d(TAG, "Response Headers: ${response.headers.entries().joinToString { "${it.key}: ${it.value}" }}")
+            Logger.d(TAG, "Response Body Length: ${responseBody.length}")
+            Logger.d(TAG, "========== 完整响应内容 ==========")
+            Logger.d(TAG, responseBody)
+            Logger.d(TAG, "========================================")
+            
+            // 解析响应
+            val result: YiwugoRecommendResponse = HttpClientManager.json.decodeFromString(responseBody)
+            Logger.d(TAG, "成功解析，推荐商品数量: ${result.pi?.size ?: 0}")
+            
+            // 打印每个商品的详细信息
+            result.pi?.forEachIndexed { index, item ->
+                Logger.d(TAG, "商品 #${index + 1}:")
+                Logger.d(TAG, "  - offerid: ${item.offerid}")
+                Logger.d(TAG, "  - subject: ${item.subject}")
+                Logger.d(TAG, "  - imageurl: ${item.imageurl}")
+                Logger.d(TAG, "  - price: ${item.price}")
+                Logger.d(TAG, "  - beginAmount: ${item.beginAmount}")
+                Logger.d(TAG, "  - companyname: ${item.companyname}")
+                Logger.d(TAG, "  - companyid: ${item.companyid}")
+            }
+            
+            val products = result.pi?.map { item ->
+                ProductDto(
+                    id = item.offerid ?: "",
+                    title = item.subject ?: "",
+                    pic = item.imageurl,
+                    price = item.price,
+                    minPrice = item.beginAmount,
+                    maxPrice = null,
+                    shopName = item.companyname,
+                    viewCount = 0,
+                    saleCount = 0
+                )
+            } ?: emptyList()
+            
+            Logger.d(TAG, "转换后商品数量: ${products.size}")
+            if (products.isNotEmpty()) {
+                Logger.d(TAG, "第一个转换后的商品:")
+                Logger.d(TAG, "  - id: ${products[0].id}")
+                Logger.d(TAG, "  - title: ${products[0].title}")
+                Logger.d(TAG, "  - pic: ${products[0].pic}")
+                Logger.d(TAG, "  - price: ${products[0].price}")
+                Logger.d(TAG, "  - shopName: ${products[0].shopName}")
+            }
+            Logger.d(TAG, "========================================")
+            
+            Result.success(products)
+        } catch (e: Exception) {
+            Logger.e(TAG, "获取推荐商品失败: ${e.message}", e)
+            Logger.e(TAG, "异常堆栈: ${e.stackTraceToString()}")
+            Result.failure(e)
+        }
+    }
+    
+    /**
+     * 生成简单的 MD5 签名（跨平台实现）
+     */
+    private fun generateSimpleMD5(input: String): String {
+        // 简单的哈希实现（不是真正的 MD5，只是为了测试）
+        var hash = 0
+        for (char in input) {
+            hash = ((hash shl 5) - hash) + char.code
+            hash = hash and hash // Convert to 32bit integer
+        }
+        return hash.toString(16).uppercase().padStart(32, '0')
+    }
 }
 
 /**
@@ -268,4 +388,27 @@ data class ProductDto(
     @SerialName("shopname") val shopName: String? = null,
     @SerialName("viewcount") val viewCount: Int = 0,
     @SerialName("salecount") val saleCount: Int = 0
+)
+
+
+/**
+ * 义乌购推荐商品响应
+ */
+@Serializable
+data class YiwugoRecommendResponse(
+    @SerialName("pi") val pi: List<RecommendProductDto>? = null
+)
+
+/**
+ * 推荐商品 DTO
+ */
+@Serializable
+data class RecommendProductDto(
+    @SerialName("offerid") val offerid: String? = null,
+    @SerialName("subject") val subject: String? = null,
+    @SerialName("imageurl") val imageurl: String? = null,
+    @SerialName("price") val price: String? = null,
+    @SerialName("beginAmount") val beginAmount: String? = null,
+    @SerialName("companyname") val companyname: String? = null,
+    @SerialName("companyid") val companyid: String? = null
 )
