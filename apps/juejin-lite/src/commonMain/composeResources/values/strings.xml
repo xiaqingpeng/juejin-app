@@ -16,17 +16,26 @@
     <string name="home_title">首页</string>
     <string name="home_subtitle">掘金轻量版 - 核心功能</string>
     
-    <!-- ==================== 热门 ==================== -->
-    <string name="category_title">热门</string>
-    <string name="category_subtitle">热门内容列表</string>
-
+    <!-- ==================== 分类 ==================== -->
+    <string name="category_title">分类</string>
+    <string name="category_all">全部</string>
+    
     <!-- ==================== 消息 ==================== -->
     <string name="message_title">消息</string>
-    <string name="message_subtitle">消息内容列表</string>
-
+    <string name="message_system">系统消息</string>
+    <string name="message_like">点赞</string>
+    <string name="message_comment">评论</string>
+    <string name="message_follow">关注</string>
+    <string name="message_mark_read">标记已读</string>
+    <string name="message_delete">删除</string>
+    
     <!-- ==================== 购物车 ==================== -->
     <string name="shopping_cart_title">购物车</string>
-    <string name="shopping_cart_subtitle">购物车内容列表</string>
+    <string name="shopping_cart_empty">购物车是空的</string>
+    <string name="shopping_cart_total">合计</string>
+    <string name="shopping_cart_checkout">结算</string>
+    <string name="shopping_cart_select_all">全选</string>
+    <string name="shopping_cart_delete">删除</string>
     
     <!-- ==================== 个人中心 ==================== -->
     <string name="profile_title">我的</string>

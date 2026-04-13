@@ -16,11 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.juejin.lite.screen.CategoryScreen
-import com.example.juejin.lite.screen.HomeScreen
-import com.example.juejin.lite.screen.MessageScreen
-import com.example.juejin.lite.screen.ProfileScreen
-import com.example.juejin.lite.screen.ShoppingCartScreen
+import com.example.juejin.lite.di.AppContainer
 import com.example.juejin.ui.components.AppTabBar
 import com.example.juejin.ui.components.TabItem
 import com.example.juejin.ui.theme.AppTheme
@@ -35,7 +31,7 @@ import juejin.lite.generated.resources.tab_shopping_cart
 
 /**
  * 掘金轻量版主应用
- * 只包含核心功能：首页、热门、我的
+ * 采用 MVVM 架构：首页、分类、消息、购物车、个人中心
  */
 @Composable
 fun App() {
@@ -58,6 +54,16 @@ fun App() {
 @Composable
 fun LiteMainScreen() {
     var selectedTab by remember { mutableStateOf(0) }
+    
+    // 获取依赖容器
+    val appContainer = remember { AppContainer.getInstance() }
+    
+    // 创建 ViewModels
+    val homeViewModel = remember { appContainer.provideHomeViewModel() }
+    val categoryViewModel = remember { appContainer.provideCategoryViewModel() }
+    val messageViewModel = remember { appContainer.provideMessageViewModel() }
+    val cartViewModel = remember { appContainer.provideCartViewModel() }
+    val profileViewModel = remember { appContainer.provideProfileViewModel() }
     
     // 定义轻量版的标签页
     val tabs = listOf(
@@ -98,11 +104,11 @@ fun LiteMainScreen() {
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             when (selectedTab) {
-                0 -> HomeScreen()
-                1 -> CategoryScreen()
-                2 -> MessageScreen()
-                3 -> ShoppingCartScreen()
-                4 -> ProfileScreen()
+                0 -> com.example.juejin.lite.presentation.home.HomeScreen(viewModel = homeViewModel)
+                1 -> com.example.juejin.lite.presentation.category.CategoryScreen(viewModel = categoryViewModel)
+                2 -> com.example.juejin.lite.presentation.message.MessageScreen(viewModel = messageViewModel)
+                3 -> com.example.juejin.lite.presentation.cart.CartScreen(viewModel = cartViewModel)
+                4 -> com.example.juejin.lite.presentation.profile.ProfileScreen(viewModel = profileViewModel)
             }
         }
     }
