@@ -38,7 +38,7 @@ import com.example.juejin.test.components.EventCard
 import com.example.juejin.ui.Colors
 import com.example.juejin.ui.theme.ThemeColors
 import com.example.juejin.ui.typography.Typography
-import com.example.juejin.ui.components.TabItem
+import com.example.juejin.ui.components.TabPagerItem
 import com.example.juejin.ui.components.TabPager
 import com.example.juejin.ui.components.TopNavigationBarWithBack
 import com.example.juejin.viewmodel.LogStatsViewModel
@@ -76,16 +76,16 @@ fun CourseListScreen(
 ) {
     // 平台列表（All 为全平台，null 表示不传 platform 参数）
     val platforms = listOf(
-        TabItem(null, stringResource(Res.string.course_list_platform_all)),
-        TabItem("Android", stringResource(Res.string.course_list_platform_android)),
-        TabItem("Harmony", stringResource(Res.string.course_list_platform_harmony)),
-        TabItem("iOS", stringResource(Res.string.course_list_platform_ios)),
-        TabItem("Linux", stringResource(Res.string.course_list_platform_linux)),
-        TabItem("MacOS", stringResource(Res.string.course_list_platform_macos)),
-        TabItem("MiniProgram", stringResource(Res.string.course_list_platform_miniprogram)),
-        TabItem("TV", stringResource(Res.string.course_list_platform_tv)),
-        TabItem("Web", stringResource(Res.string.course_list_platform_web)),
-        TabItem("Windows", stringResource(Res.string.course_list_platform_windows))
+        TabPagerItem(null, stringResource(Res.string.course_list_platform_all)),
+        TabPagerItem("Android", stringResource(Res.string.course_list_platform_android)),
+        TabPagerItem("Harmony", stringResource(Res.string.course_list_platform_harmony)),
+        TabPagerItem("iOS", stringResource(Res.string.course_list_platform_ios)),
+        TabPagerItem("Linux", stringResource(Res.string.course_list_platform_linux)),
+        TabPagerItem("MacOS", stringResource(Res.string.course_list_platform_macos)),
+        TabPagerItem("MiniProgram", stringResource(Res.string.course_list_platform_miniprogram)),
+        TabPagerItem("TV", stringResource(Res.string.course_list_platform_tv)),
+        TabPagerItem("Web", stringResource(Res.string.course_list_platform_web)),
+        TabPagerItem("Windows", stringResource(Res.string.course_list_platform_windows))
     )
 
     // 从全局 ViewModel 订阅状态
@@ -106,7 +106,7 @@ fun CourseListScreen(
             }
         ) { padding ->
             Box(modifier = Modifier.padding(padding)) {
-                TabPager<TabItem>(
+                TabPager<TabPagerItem>(
                     tabs = platforms,
                     onTabSelected = { _, platform -> LogStatsViewModel.refresh(platform = platform) }
                 ) { _, platform ->

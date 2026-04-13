@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Fireplace
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.juejin.core.storage.PrivacyStorage
-import com.example.juejin.enums.TabItem
 import com.example.juejin.navigation.AppNavGraph
 import com.example.juejin.platform.exitApp
 import com.example.juejin.platform.requestNotificationPermission
@@ -45,9 +46,11 @@ import com.example.juejin.screen.DiscoverScreen
 import com.example.juejin.screen.HomeScreen
 import com.example.juejin.screen.HotScreen
 import com.example.juejin.screen.ProfileScreen
+import com.example.juejin.ui.components.AppTabBar
 import com.example.juejin.ui.components.NotificationPermissionDialog
 import com.example.juejin.ui.components.PrivacyPolicyDialog
 import com.example.juejin.ui.components.StatusBarEffect
+import com.example.juejin.ui.components.TabItem
 import com.example.juejin.ui.theme.AppTheme
 import com.example.juejin.ui.theme.DarkColors
 import com.example.juejin.ui.theme.ThemeColors
@@ -57,6 +60,11 @@ import com.example.juejin.viewmodel.DiscoverViewModel
 import com.example.juejin.viewmodel.HotViewModel
 import juejin.composeapp.generated.resources.Res
 import juejin.composeapp.generated.resources.privacy_policy_required
+import juejin.composeapp.generated.resources.tab_courses
+import juejin.composeapp.generated.resources.tab_discover
+import juejin.composeapp.generated.resources.tab_home
+import juejin.composeapp.generated.resources.tab_hot
+import juejin.composeapp.generated.resources.tab_profile
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -93,11 +101,11 @@ fun App() {
 
         val tabs =
                 listOf(
-                        TabItem.Home,
-                        TabItem.Hot,
-                        TabItem.Discover,
-                        TabItem.Courses,
-                        TabItem.Profile
+                        TabItem(Res.string.tab_home, Icons.Filled.Home),
+                        TabItem(Res.string.tab_hot, Icons.Filled.Fireplace),
+                        TabItem(Res.string.tab_discover, Icons.Filled.Explore),
+                        TabItem(Res.string.tab_courses, Icons.Filled.Book),
+                        TabItem(Res.string.tab_profile, Icons.Filled.Person)
                 )
 
         // Pager state with proper initialization
@@ -142,57 +150,15 @@ fun App() {
                 bottomBar = {
                     // Bottom Navigation Bar - 只在主页面显示
                     if (isMainScreen) {
-                        Surface(
-                                shadowElevation = 8.dp, // 传统的物理阴影
-                                color = ThemeColors.Background.primary
-                        ) {
-                            NavigationBar(
-                                    containerColor = ThemeColors.Background.primary,
-                                    tonalElevation = 0.dp
-                            ) {
-                                tabs.forEachIndexed { index, tab ->
-                                    val isSelected = pagerState.currentPage == index
-                                    NavigationBarItem(
-                                            icon = {
-                                                // Use Material Icons with dynamic coloring
-                                                val iconColor =
-                                                        if (isSelected) ThemeColors.primaryBlue
-                                                        else ThemeColors.Text.secondary
-                                                Icon(
-                                                        imageVector = tab.icon,
-                                                        contentDescription =
-                                                                stringResource(tab.title),
-                                                        tint = iconColor
-                                                )
-                                            },
-                                            label = { 
-                                                Text(
-                                                    stringResource(tab.title),
-                                                    color = if (isSelected) ThemeColors.primaryBlue 
-                                                           else ThemeColors.Text.secondary
-                                                )
-                                            },
-                                            selected = isSelected,
-                                            onClick = {
-                                                coroutineScope.launch {
-                                                    pagerState.animateScrollToPage(index)
-                                                }
-                                            },
-                                            colors =
-                                                    NavigationBarItemDefaults.colors(
-                                                            selectedIconColor =
-                                                                    ThemeColors.primaryBlue,
-                                                            selectedTextColor = ThemeColors.primaryBlue,
-                                                            unselectedIconColor =
-                                                                    ThemeColors.Text.secondary,
-                                                            unselectedTextColor =
-                                                                    ThemeColors.Text.secondary,
-                                                            indicatorColor = Color.Transparent
-                                                            )
-                                    )
+                        AppTabBar(
+                            tabs = tabs,
+                            selectedIndex = pagerState.currentPage,
+                            onTabSelected = { index ->
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
                                 }
                             }
-                        }
+                        )
                     }
                 },
                 floatingActionButton = {
@@ -383,17 +349,16 @@ fun App() {
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                         ) {
-                            when (tabs[page]) {
-                                TabItem.Home -> HomeScreen()
-                                TabItem.Hot -> HotScreen(vm = hotViewModel)
-                                TabItem.Discover -> DiscoverScreen(vm = discoverViewModel)
-                                TabItem.Courses -> CourseScreen()
-                                TabItem.Profile ->
-                                        ProfileScreen(
-                                                userViewModel = userViewModel,
-                                                onQrScanClick = onNavigateToQrScanner,
-                                                onSettingsClick = onNavigateToSettings
-                                        )
+                            when (page) {
+                                0 -> HomeScreen()
+                                1 -> HotScreen(vm = hotViewModel)
+                                2 -> DiscoverScreen(vm = discoverViewModel)
+                                3 -> CourseScreen()
+                                4 -> ProfileScreen(
+                                        userViewModel = userViewModel,
+                                        onQrScanClick = onNavigateToQrScanner,
+                                        onSettingsClick = onNavigateToSettings
+                                )
                             }
                         }
                     }

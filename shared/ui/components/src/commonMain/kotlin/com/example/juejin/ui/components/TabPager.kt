@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
  * @param key Tab 标识（可用于业务逻辑，如 platform 参数）
  * @param label 显示文本
  */
-data class TabItem(
+data class TabPagerItem(
     val key: String?,
     val label: String
 )
@@ -49,8 +49,8 @@ data class TabItem(
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T : TabItem> TabPager(
-    tabs: List<TabItem>,
+fun <T : TabPagerItem> TabPager(
+    tabs: List<TabPagerItem>,
     initialPage: Int = 0,
     onTabSelected: (index: Int, key: String?) -> Unit = { _, _ -> },
     pageContent: @Composable (page: Int, key: String?) -> Unit
