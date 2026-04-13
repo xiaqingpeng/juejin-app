@@ -1,5 +1,6 @@
 package com.example.juejin.lite.data.repository
 
+import com.example.juejin.core.common.DateTimeUtil
 import com.example.juejin.core.common.Logger
 import com.example.juejin.lite.data.mapper.YiwugoMapper.toDomain
 import com.example.juejin.lite.data.remote.YiwugoApi
@@ -79,7 +80,7 @@ class CategoryRepositoryImpl(
                         viewCount = (1000..10000).random(),
                         likeCount = (100..1000).random(),
                         commentCount = (10..100).random(),
-                        publishTime = System.currentTimeMillis() - (index * 3600000L),
+                        publishTime = DateTimeUtil.currentTimeMillis() - (index * 3600000L),
                         tags = listOf(category?.name ?: "商品")
                     )
                 }

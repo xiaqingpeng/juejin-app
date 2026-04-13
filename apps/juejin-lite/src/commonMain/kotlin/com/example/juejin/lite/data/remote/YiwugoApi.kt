@@ -49,7 +49,7 @@ class YiwugoApi {
     suspend fun getCategories(upperType: String = "0"): Result<List<CategoryDto>> {
         return try {
             val apiId = generateUUID()
-            val apiTime = System.currentTimeMillis().toString()
+            val apiTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis().toString()
             
             val url = "$BASE_URL/producttype/listforapp.html"
             Logger.d(TAG, "========== 获取分类列表 ==========")
@@ -111,7 +111,7 @@ class YiwugoApi {
     ): Result<YiwugoResponse<ProductListDto>> {
         return try {
             val apiId = generateUUID()
-            val apiTime = System.currentTimeMillis().toString()
+            val apiTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis().toString()
             
             // 实际上这个接口返回的是子分类，不是商品
             // 我们先返回空列表，因为真实的商品接口需要更多参数

@@ -5,4 +5,8 @@ actual object DateTimeUtil {
         // Desktop 端直接返回原始字符串，不做格式化处理
         return isoString ?: "N/A"
     }
+    
+    actual fun currentTimeMillis(): Long {
+        return System.currentTimeMillis()
+    }
 }

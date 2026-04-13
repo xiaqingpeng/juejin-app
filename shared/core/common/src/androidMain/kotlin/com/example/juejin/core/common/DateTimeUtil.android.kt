@@ -26,4 +26,8 @@ actual object DateTimeUtil {
             isoString
         }
     }
+
+    actual fun currentTimeMillis(): Long {
+        return System.currentTimeMillis()
+    }
 }

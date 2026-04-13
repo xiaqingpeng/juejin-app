@@ -116,9 +116,7 @@ class AppContainer(
         private var instance: AppContainer? = null
         
         fun getInstance(useRealApi: Boolean = true): AppContainer {
-            return instance ?: synchronized(this) {
-                instance ?: AppContainer(useRealApi).also { instance = it }
-            }
+            return instance ?: AppContainer(useRealApi).also { instance = it }
         }
     }
 }

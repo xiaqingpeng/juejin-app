@@ -1,5 +1,6 @@
 package com.example.juejin.lite.data.repository
 
+import com.example.juejin.core.common.DateTimeUtil
 import com.example.juejin.lite.domain.model.Author
 import com.example.juejin.lite.domain.model.Message
 import com.example.juejin.lite.domain.model.MessageType
@@ -28,7 +29,7 @@ class MessageRepositoryImpl : MessageRepository {
                     content = "这是消息内容 $index",
                     sender = Author("sender_$index", "用户${index}", null),
                     isRead = index % 3 == 0,
-                    createTime = System.currentTimeMillis() - (index * 1800000L)
+                    createTime = DateTimeUtil.currentTimeMillis() - (index * 1800000L)
                 )
             }
         )

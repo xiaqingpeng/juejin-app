@@ -10,4 +10,10 @@ expect object DateTimeUtil {
      * @return 格式化后的时间字符串，如 "2026-03-23 16:00:00"
      */
     fun formatRequestTime(isoString: String?): String
+    
+    /**
+     * 获取当前时间戳（毫秒）
+     * @return 当前时间的毫秒数
+     */
+    fun currentTimeMillis(): Long
 }

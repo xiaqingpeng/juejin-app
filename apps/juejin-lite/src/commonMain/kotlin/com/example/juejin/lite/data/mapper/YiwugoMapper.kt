@@ -1,5 +1,6 @@
 package com.example.juejin.lite.data.mapper
 
+import com.example.juejin.core.common.DateTimeUtil
 import com.example.juejin.core.common.Logger
 import com.example.juejin.lite.data.remote.CategoryDto
 import com.example.juejin.lite.data.remote.ProductDto
@@ -46,7 +47,7 @@ object YiwugoMapper {
             viewCount = viewCount,
             likeCount = saleCount, // 使用销量作为点赞数
             commentCount = 0,
-            publishTime = System.currentTimeMillis(),
+            publishTime = DateTimeUtil.currentTimeMillis(),
             tags = listOf()
         )
     }

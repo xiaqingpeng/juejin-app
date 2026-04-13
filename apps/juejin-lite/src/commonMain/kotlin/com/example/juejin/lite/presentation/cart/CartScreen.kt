@@ -123,7 +123,7 @@ private fun CartContent(
                         color = ThemeColors.Text.secondary
                     )
                     Text(
-                        text = "¥${String.format("%.2f", summary.totalPrice)}",
+                        text = "¥${(summary.totalPrice * 100).toInt() / 100.0}",
                         style = MaterialTheme.typography.titleLarge,
                         color = ThemeColors.primaryBlue
                     )

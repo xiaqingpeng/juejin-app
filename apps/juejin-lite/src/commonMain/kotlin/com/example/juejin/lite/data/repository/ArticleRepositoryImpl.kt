@@ -1,5 +1,6 @@
 package com.example.juejin.lite.data.repository
 
+import com.example.juejin.core.common.DateTimeUtil
 import com.example.juejin.lite.domain.model.Article
 import com.example.juejin.lite.domain.model.Author
 import com.example.juejin.lite.domain.repository.ArticleRepository
@@ -29,7 +30,7 @@ class ArticleRepositoryImpl : ArticleRepository {
                     viewCount = (1000..10000).random(),
                     likeCount = (100..1000).random(),
                     commentCount = (10..100).random(),
-                    publishTime = System.currentTimeMillis() - (index * 3600000L),
+                    publishTime = DateTimeUtil.currentTimeMillis() - (index * 3600000L),
                     tags = listOf("Kotlin", "Android", "iOS")
                 )
             }
@@ -52,7 +53,7 @@ class ArticleRepositoryImpl : ArticleRepository {
                     viewCount = 1000,
                     likeCount = 100,
                     commentCount = 50,
-                    publishTime = System.currentTimeMillis(),
+                    publishTime = DateTimeUtil.currentTimeMillis(),
                     tags = listOf("Kotlin")
                 )
             )
