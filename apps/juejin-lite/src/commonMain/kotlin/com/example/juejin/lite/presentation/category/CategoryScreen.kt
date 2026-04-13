@@ -1,67 +1,77 @@
 package com.example.juejin.lite.presentation.category
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.juejin.lite.domain.model.Article
 import com.example.juejin.lite.domain.model.Category
 import com.example.juejin.ui.theme.ThemeColors
-import juejin.lite.generated.resources.*
+import juejin.lite.generated.resources.Res
+import juejin.lite.generated.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * 分类页面 - 1688风格
+ * 左侧：垂直分类列表（始终显示）
+ * 右侧：3列网格文章列表（根据选中的分类显示）
+ */
 @Composable
 fun CategoryScreen(viewModel: CategoryViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     
-    Column(modifier = Modifier.fillMaxSize()) {
-        when (val state = uiState) {
-            is CategoryUiState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = ThemeColors.primaryBlue)
+    when (val state = uiState) {
+        is CategoryUiState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = ThemeColors.primaryBlue)
+            }
+        }
+        
+        is CategoryUiState.Success -> {
+            CategoryMainLayout(
+                categories = state.categories,
+                selectedCategoryId = state.selectedCategoryId,
+                articles = state.articles,
+                isLoadingArticles = state.isLoadingArticles,
+                onCategoryClick = { viewModel.selectCategory(it.id) },
+                onArticleClick = { article ->
+                    // TODO: 跳转到文章详情页
+                    println("点击文章: ${article.title}")
                 }
-            }
-            
-            is CategoryUiState.CategoriesLoaded -> {
-                CategoryList(
-                    categories = state.categories,
-                    onCategoryClick = { viewModel.selectCategory(it.id) }
-                )
-            }
-            
-            is CategoryUiState.ArticlesLoaded -> {
-                ArticleList(
-                    articles = state.articles,
-                    isLoadingMore = state.isLoadingMore,
-                    onLoadMore = { viewModel.loadArticles() },
-                    onRefresh = { viewModel.refresh() }
-                )
-            }
-            
-            is CategoryUiState.Error -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = state.message,
-                            color = ThemeColors.Text.secondary
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = { viewModel.refresh() }) {
-                            Text(stringResource(Res.string.retry))
-                        }
+            )
+        }
+        
+        is CategoryUiState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = state.message,
+                        color = ThemeColors.Text.secondary
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { viewModel.refresh() }) {
+                        Text(stringResource(Res.string.retry))
                     }
                 }
             }
@@ -69,93 +79,64 @@ fun CategoryScreen(viewModel: CategoryViewModel) {
     }
 }
 
+/**
+ * 主布局：左侧分类栏 + 右侧文章网格
+ */
 @Composable
-private fun CategoryList(
+private fun CategoryMainLayout(
     categories: List<Category>,
-    onCategoryClick: (Category) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(categories) { category ->
-            CategoryItem(
-                category = category,
-                onClick = { onCategoryClick(category) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun CategoryItem(
-    category: Category,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = ThemeColors.Background.surface
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = category.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = ThemeColors.Text.primary
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "${category.articleCount} 篇文章",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = ThemeColors.Text.tertiary
-                )
-            }
-            
-            Text(
-                text = ">",
-                style = MaterialTheme.typography.titleLarge,
-                color = ThemeColors.Text.tertiary
-            )
-        }
-    }
-}
-
-@Composable
-private fun ArticleList(
+    selectedCategoryId: String?,
     articles: List<Article>,
-    isLoadingMore: Boolean,
-    onLoadMore: () -> Unit,
-    onRefresh: () -> Unit
+    isLoadingArticles: Boolean,
+    onCategoryClick: (Category) -> Unit,
+    onArticleClick: (Article) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F5F5))
     ) {
-        items(articles) { article ->
-            ArticleItem(article = article)
-        }
+        // 左侧分类侧边栏
+        CategorySideBar(
+            categories = categories,
+            selectedCategoryId = selectedCategoryId,
+            onCategoryClick = onCategoryClick
+        )
         
-        if (isLoadingMore) {
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = ThemeColors.primaryBlue
+        // 右侧文章网格
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(Color.White)
+        ) {
+            when {
+                isLoadingArticles -> {
+                    // 加载中
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = ThemeColors.primaryBlue)
+                    }
+                }
+                articles.isEmpty() -> {
+                    // 空状态
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = if (selectedCategoryId == null) "请选择左侧分类" else "暂无文章",
+                            color = ThemeColors.Text.secondary
+                        )
+                    }
+                }
+                else -> {
+                    // 显示文章网格
+                    ArticleGridList(
+                        articles = articles,
+                        onArticleClick = onArticleClick
                     )
                 }
             }
@@ -163,53 +144,179 @@ private fun ArticleList(
     }
 }
 
+/**
+ * 左侧分类侧边栏
+ */
 @Composable
-private fun ArticleItem(article: Article) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = ThemeColors.Background.surface
-        )
+private fun CategorySideBar(
+    categories: List<Category>,
+    selectedCategoryId: String?,
+    onCategoryClick: (Category) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .width(100.dp)
+            .fillMaxHeight()
+            .background(Color.White)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        items(categories) { category ->
+            val isSelected = category.id == selectedCategoryId
+            CategorySideItem(
+                name = category.name,
+                isSelected = isSelected,
+                onClick = { onCategoryClick(category) }
+            )
+        }
+    }
+}
+
+/**
+ * 左侧分类单项
+ */
+@Composable
+private fun CategorySideItem(
+    name: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(if (isSelected) Color(0xFFF5F5F5) else Color.White)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = name,
+            fontSize = 15.sp,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+            color = if (isSelected) ThemeColors.primaryBlue else Color.Black
+        )
+        
+        // 选中项左侧高亮条
+        if (isSelected) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .fillMaxHeight()
+                    .background(ThemeColors.primaryBlue)
+                    .align(Alignment.CenterStart)
+            )
+        }
+    }
+}
+
+
+
+/**
+ * 右侧文章网格列表（3列布局）
+ */
+@Composable
+private fun ArticleGridList(
+    articles: List<Article>,
+    onArticleClick: (Article) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3), // 3列布局
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F5F5))
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(articles) { article ->
+            ArticleGridItem(
+                article = article,
+                onClick = { onArticleClick(article) }
+            )
+        }
+    }
+}
+
+/**
+ * 右侧网格单项
+ */
+@Composable
+private fun ArticleGridItem(
+    article: Article,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color.White)
+            .clickable { onClick() }
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // 文章封面占位（可替换为真实图片）
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(4.dp))
+                .background(Color(0xFFF0F0F0)),
+            contentAlignment = Alignment.Center
         ) {
             Text(
-                text = article.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = ThemeColors.Text.primary,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                text = "📄",
+                fontSize = 32.sp
             )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = article.summary,
-                style = MaterialTheme.typography.bodyMedium,
-                color = ThemeColors.Text.secondary,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            
-            Spacer(modifier = Modifier.height(12.dp))
-            
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = article.author.name,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = ThemeColors.Text.tertiary
-                )
-                
-                Text(
-                    text = "👁 ${article.viewCount}  ❤️ ${article.likeCount}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = ThemeColors.Text.tertiary
-                )
-            }
         }
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        // 文章标题
+        Text(
+            text = article.title,
+            fontSize = 13.sp,
+            color = ThemeColors.Text.primary,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            lineHeight = 18.sp
+        )
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        // 作者信息
+        Text(
+            text = article.author.name,
+            fontSize = 11.sp,
+            color = ThemeColors.Text.tertiary,
+            maxLines = 1
+        )
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        // 统计信息
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Text(
+                text = "👁 ${formatCount(article.viewCount)}",
+                fontSize = 10.sp,
+                color = ThemeColors.Text.tertiary
+            )
+            Text(
+                text = "❤️ ${formatCount(article.likeCount)}",
+                fontSize = 10.sp,
+                color = ThemeColors.Text.tertiary
+            )
+        }
+    }
+}
+
+/**
+ * 格式化数字（1000+ 显示为 1k）
+ */
+private fun formatCount(count: Int): String {
+    return when {
+        count >= 10000 -> "${count / 1000}k"
+        count >= 1000 -> "${count / 1000}k"
+        else -> count.toString()
     }
 }

@@ -22,9 +22,8 @@ class CategoryViewModel(
     private val _uiState = MutableStateFlow<CategoryUiState>(CategoryUiState.Loading)
     val uiState: StateFlow<CategoryUiState> = _uiState.asStateFlow()
     
-    private var currentCategoryId: String? = null
-    private var currentPage = 0
-    private val articles = mutableListOf<Article>()
+    private var categories: List<Category> = emptyList()
+    private var selectedCategoryId: String? = null
     
     init {
         loadCategories()
@@ -35,8 +34,19 @@ class CategoryViewModel(
             _uiState.value = CategoryUiState.Loading
             
             getCategoriesUseCase()
-                .onSuccess { categories ->
-                    _uiState.value = CategoryUiState.CategoriesLoaded(categories)
+                .onSuccess { loadedCategories ->
+                    categories = loadedCategories
+                    // 默认选中第一个分类
+                    if (loadedCategories.isNotEmpty()) {
+                        selectCategory(loadedCategories.first().id)
+                    } else {
+                        _uiState.value = CategoryUiState.Success(
+                            categories = emptyList(),
+                            selectedCategoryId = null,
+                            articles = emptyList(),
+                            isLoadingArticles = false
+                        )
+                    }
                 }
                 .onFailure { error ->
                     _uiState.value = CategoryUiState.Error(error.message ?: "加载失败")
@@ -45,46 +55,37 @@ class CategoryViewModel(
     }
     
     fun selectCategory(categoryId: String?) {
-        currentCategoryId = categoryId
-        currentPage = 0
-        articles.clear()
-        loadArticles()
-    }
-    
-    fun loadArticles() {
-        if (currentCategoryId == null) return
+        if (categoryId == null) return
         
+        selectedCategoryId = categoryId
+        
+        // 更新状态为加载中
+        _uiState.value = CategoryUiState.Success(
+            categories = categories,
+            selectedCategoryId = categoryId,
+            articles = emptyList(),
+            isLoadingArticles = true
+        )
+        
+        // 加载该分类下的文章
         viewModelScope.launch {
-            _uiState.value = if (articles.isEmpty()) {
-                CategoryUiState.Loading
-            } else {
-                CategoryUiState.ArticlesLoaded(articles, isLoadingMore = true)
-            }
-            
-            categoryRepository.getArticlesByCategory(currentCategoryId!!, currentPage, 20)
-                .onSuccess { newArticles ->
-                    articles.addAll(newArticles)
-                    currentPage++
-                    _uiState.value = CategoryUiState.ArticlesLoaded(articles, isLoadingMore = false)
+            categoryRepository.getArticlesByCategory(categoryId, 0, 20)
+                .onSuccess { articles ->
+                    _uiState.value = CategoryUiState.Success(
+                        categories = categories,
+                        selectedCategoryId = categoryId,
+                        articles = articles,
+                        isLoadingArticles = false
+                    )
                 }
                 .onFailure { error ->
-                    _uiState.value = if (articles.isEmpty()) {
-                        CategoryUiState.Error(error.message ?: "加载失败")
-                    } else {
-                        CategoryUiState.ArticlesLoaded(articles, isLoadingMore = false)
-                    }
+                    _uiState.value = CategoryUiState.Error(error.message ?: "加载文章失败")
                 }
         }
     }
     
     fun refresh() {
-        currentPage = 0
-        articles.clear()
-        if (currentCategoryId != null) {
-            loadArticles()
-        } else {
-            loadCategories()
-        }
+        loadCategories()
     }
 }
 
@@ -93,10 +94,11 @@ class CategoryViewModel(
  */
 sealed class CategoryUiState {
     object Loading : CategoryUiState()
-    data class CategoriesLoaded(val categories: List<Category>) : CategoryUiState()
-    data class ArticlesLoaded(
+    data class Success(
+        val categories: List<Category>,
+        val selectedCategoryId: String?,
         val articles: List<Article>,
-        val isLoadingMore: Boolean = false
+        val isLoadingArticles: Boolean
     ) : CategoryUiState()
     data class Error(val message: String) : CategoryUiState()
 }
