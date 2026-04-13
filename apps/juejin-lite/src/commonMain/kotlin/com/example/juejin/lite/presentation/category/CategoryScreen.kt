@@ -15,10 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.juejin.lite.domain.model.Article
 import com.example.juejin.lite.domain.model.Category
 import com.example.juejin.ui.theme.ThemeColors
@@ -236,7 +242,7 @@ private fun ArticleGridList(
 }
 
 /**
- * 右侧网格单项
+ * 右侧网格单项 - 简化版（仅显示图片和商品名）
  */
 @Composable
 private fun ArticleGridItem(
@@ -252,7 +258,7 @@ private fun ArticleGridItem(
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 文章封面占位（可替换为真实图片）
+        // 商品图片
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -261,52 +267,44 @@ private fun ArticleGridItem(
                 .background(Color(0xFFF0F0F0)),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "📄",
-                fontSize = 32.sp
-            )
+            val imageUrl = article.coverImage
+            if (!imageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = article.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    onError = {
+                        // 图片加载失败时的处理
+                        println("图片加载失败: $imageUrl")
+                    }
+                )
+            } else {
+                // 无图片时显示占位符
+                Text(
+                    text = "📦",
+                    fontSize = 32.sp,
+                    color = Color(0xFFCCCCCC)
+                )
+            }
         }
         
         Spacer(modifier = Modifier.height(8.dp))
         
-        // 文章标题
+        // 商品名称
         Text(
             text = article.title,
             fontSize = 13.sp,
             color = ThemeColors.Text.primary,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            lineHeight = 18.sp
+            lineHeight = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
-        
-        Spacer(modifier = Modifier.height(4.dp))
-        
-        // 作者信息
-        Text(
-            text = article.author.name,
-            fontSize = 11.sp,
-            color = ThemeColors.Text.tertiary,
-            maxLines = 1
-        )
-        
-        Spacer(modifier = Modifier.height(4.dp))
-        
-        // 统计信息
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Text(
-                text = "👁 ${formatCount(article.viewCount)}",
-                fontSize = 10.sp,
-                color = ThemeColors.Text.tertiary
-            )
-            Text(
-                text = "❤️ ${formatCount(article.likeCount)}",
-                fontSize = 10.sp,
-                color = ThemeColors.Text.tertiary
-            )
-        }
     }
 }
 

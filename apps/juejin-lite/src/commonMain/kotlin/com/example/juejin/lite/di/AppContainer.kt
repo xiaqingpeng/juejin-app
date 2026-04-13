@@ -1,5 +1,6 @@
 package com.example.juejin.lite.di
 
+import com.example.juejin.lite.data.remote.YiwugoApi
 import com.example.juejin.lite.data.repository.ArticleRepositoryImpl
 import com.example.juejin.lite.data.repository.CartRepositoryImpl
 import com.example.juejin.lite.data.repository.CategoryRepositoryImpl
@@ -27,12 +28,20 @@ import com.example.juejin.lite.presentation.profile.ProfileViewModel
  * 
  * 支持 5 个核心模块：
  * 1. 首页 - 推荐文章
- * 2. 分类 - 文章分类浏览
+ * 2. 分类 - 商品分类浏览（集成义乌购 API，使用共享 HttpClient）
  * 3. 消息 - 系统消息管理
  * 4. 购物车 - 商品管理
  * 5. 个人中心 - 用户资料
  */
-class AppContainer {
+class AppContainer(
+    private val useRealApi: Boolean = true // 默认使用真实 API
+) {
+    
+    // ==================== API Services ====================
+    
+    private val yiwugoApi: YiwugoApi by lazy {
+        YiwugoApi() // 使用共享的 HttpClientManager
+    }
     
     // ==================== Repositories ====================
     
@@ -45,7 +54,10 @@ class AppContainer {
     }
     
     private val categoryRepository: CategoryRepository by lazy {
-        CategoryRepositoryImpl()
+        CategoryRepositoryImpl(
+            yiwugoApi = if (useRealApi) yiwugoApi else null,
+            useMockData = !useRealApi
+        )
     }
     
     private val messageRepository: MessageRepository by lazy {
@@ -103,9 +115,9 @@ class AppContainer {
     companion object {
         private var instance: AppContainer? = null
         
-        fun getInstance(): AppContainer {
+        fun getInstance(useRealApi: Boolean = true): AppContainer {
             return instance ?: synchronized(this) {
-                instance ?: AppContainer().also { instance = it }
+                instance ?: AppContainer(useRealApi).also { instance = it }
             }
         }
     }

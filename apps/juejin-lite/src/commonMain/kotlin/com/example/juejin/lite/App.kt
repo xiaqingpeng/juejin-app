@@ -75,18 +75,14 @@ fun LiteMainScreen() {
             title = Res.string.tab_category,
             icon = Icons.Default.Category
         ),
-
         TabItem(
             title = Res.string.tab_message,
             icon = Icons.AutoMirrored.Filled.Message
         ),
-
         TabItem(
             title = Res.string.tab_shopping_cart,
             icon = Icons.Default.ShoppingCart
         ),
-
-
         TabItem(
             title = Res.string.tab_profile,
             icon = Icons.Default.Person
