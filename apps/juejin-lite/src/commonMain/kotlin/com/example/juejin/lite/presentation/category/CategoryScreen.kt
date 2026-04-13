@@ -47,7 +47,7 @@ fun CategoryScreen(viewModel: CategoryViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = ThemeColors.primaryBlue)
+                CircularProgressIndicator(color = Color(0xFFFF6900))
             }
         }
         
@@ -123,7 +123,7 @@ private fun CategoryMainLayout(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = ThemeColors.primaryBlue)
+                        CircularProgressIndicator(color = Color(0xFFFF6900))
                     }
                 }
                 articles.isEmpty() -> {
@@ -197,7 +197,7 @@ private fun CategorySideItem(
             text = name,
             fontSize = 15.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-            color = if (isSelected) ThemeColors.primaryBlue else Color.Black
+            color = if (isSelected) Color(0xFFFF6900) else Color.Black
         )
         
         // 选中项左侧高亮条
@@ -206,7 +206,7 @@ private fun CategorySideItem(
                 modifier = Modifier
                     .width(3.dp)
                     .fillMaxHeight()
-                    .background(ThemeColors.primaryBlue)
+                    .background(Color(0xFFFF6900))
                     .align(Alignment.CenterStart)
             )
         }

@@ -19,7 +19,8 @@ fun AppTabBar(
     tabs: List<TabItem>,
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selectedColor: Color = ThemeColors.primaryBlue
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -35,7 +36,7 @@ fun AppTabBar(
                 NavigationBarItem(
                     icon = {
                         val iconColor = if (isSelected) {
-                            ThemeColors.primaryBlue
+                            selectedColor
                         } else {
                             ThemeColors.Text.secondary
                         }
@@ -49,7 +50,7 @@ fun AppTabBar(
                         Text(
                             text = stringResource(tab.title),
                             color = if (isSelected) {
-                                ThemeColors.primaryBlue
+                                selectedColor
                             } else {
                                 ThemeColors.Text.secondary
                             }
@@ -58,8 +59,8 @@ fun AppTabBar(
                     selected = isSelected,
                     onClick = { onTabSelected(index) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = ThemeColors.primaryBlue,
-                        selectedTextColor = ThemeColors.primaryBlue,
+                        selectedIconColor = selectedColor,
+                        selectedTextColor = selectedColor,
                         unselectedIconColor = ThemeColors.Text.secondary,
                         unselectedTextColor = ThemeColors.Text.secondary,
                         indicatorColor = Color.Transparent

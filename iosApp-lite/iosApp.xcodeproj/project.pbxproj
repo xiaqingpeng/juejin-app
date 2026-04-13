@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		FB660A3D3E187E2244117656 /* 掘金APP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "掘金APP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB660A3D3E187E2244117656 /* 掘金轻量版.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "掘金轻量版.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -59,7 +59,7 @@
 		F2626CA24E31031B76E9A404 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FB660A3D3E187E2244117656 /* 掘金APP.app */,
+				FB660A3D3E187E2244117656 /* 掘金轻量版.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = FB660A3D3E187E2244117656 /* 掘金APP.app */;
+			productReference = FB660A3D3E187E2244117656 /* 掘金轻量版.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

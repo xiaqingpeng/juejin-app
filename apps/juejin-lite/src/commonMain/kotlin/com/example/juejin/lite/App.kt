@@ -1,6 +1,7 @@
 package com.example.juejin.lite
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Message
@@ -16,7 +17,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.juejin.lite.di.AppContainer
+import com.example.juejin.lite.navigation.NavigationState
+import com.example.juejin.lite.navigation.Screen
+import com.example.juejin.lite.navigation.rememberNavigationState
 import com.example.juejin.ui.components.AppTabBar
 import com.example.juejin.ui.components.TabItem
 import com.example.juejin.ui.theme.AppTheme
@@ -46,14 +51,49 @@ fun App() {
         ThemeManager.isSystemDarkMode = systemDarkMode
     }
     
+    // 导航状态
+    val navigationState = rememberNavigationState()
+    
+    // 登录状态
+    var isLoggedIn by remember { mutableStateOf(false) }
+    
+    // 记住从哪个标签页跳转到登录的
+    var returnToTab by remember { mutableStateOf(4) } // 默认返回"我的"
+    
     AppTheme {
-        LiteMainScreen()
+        when (navigationState.currentScreen) {
+            is Screen.Main -> {
+                LiteMainScreen(
+                    isLoggedIn = isLoggedIn,
+                    onNavigateToLogin = {
+                        returnToTab = 4 // 从"我的"页面跳转到登录
+                        navigationState.navigate(Screen.Login)
+                    },
+                    initialTab = returnToTab
+                )
+            }
+            is Screen.Login -> {
+                com.example.juejin.lite.presentation.login.LoginScreen(
+                    onLoginSuccess = {
+                        isLoggedIn = true
+                        navigationState.popBackStack()
+                    },
+                    onClose = {
+                        navigationState.popBackStack()
+                    }
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun LiteMainScreen() {
-    var selectedTab by remember { mutableStateOf(0) }
+fun LiteMainScreen(
+    isLoggedIn: Boolean,
+    onNavigateToLogin: () -> Unit,
+    initialTab: Int = 0
+) {
+    var selectedTab by remember { mutableStateOf(initialTab) }
     
     // 获取依赖容器
     val appContainer = remember { AppContainer.getInstance() }
@@ -94,17 +134,22 @@ fun LiteMainScreen() {
             AppTabBar(
                 tabs = tabs,
                 selectedIndex = selectedTab,
-                onTabSelected = { index -> selectedTab = index }
+                onTabSelected = { index -> selectedTab = index },
+                selectedColor = Color(0xFFFF6900)
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
+        Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
             when (selectedTab) {
                 0 -> com.example.juejin.lite.presentation.home.HomeScreen(viewModel = homeViewModel)
                 1 -> com.example.juejin.lite.presentation.category.CategoryScreen(viewModel = categoryViewModel)
                 2 -> com.example.juejin.lite.presentation.message.MessageScreen(viewModel = messageViewModel)
                 3 -> com.example.juejin.lite.presentation.cart.CartScreen(viewModel = cartViewModel)
-                4 -> com.example.juejin.lite.presentation.profile.ProfileScreen(viewModel = profileViewModel)
+                4 -> com.example.juejin.lite.presentation.profile.ProfileScreen(
+                    viewModel = profileViewModel,
+                    isLoggedIn = isLoggedIn,
+                    onLoginClick = onNavigateToLogin
+                )
             }
         }
     }
