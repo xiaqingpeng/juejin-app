@@ -60,6 +60,14 @@ fun App() {
     // 记住从哪个标签页跳转到登录的
     var returnToTab by remember { mutableStateOf(4) } // 默认返回"我的"
     
+    // 在 App 层级创建 ViewModels，避免导航时重新创建
+    val appContainer = remember { AppContainer.getInstance() }
+    val homeViewModel = remember { appContainer.provideHomeViewModel() }
+    val categoryViewModel = remember { appContainer.provideCategoryViewModel() }
+    val messageViewModel = remember { appContainer.provideMessageViewModel() }
+    val cartViewModel = remember { appContainer.provideCartViewModel() }
+    val profileViewModel = remember { appContainer.provideProfileViewModel() }
+    
     AppTheme {
         when (navigationState.currentScreen) {
             is Screen.Main -> {
@@ -69,13 +77,20 @@ fun App() {
                         returnToTab = 4 // 从"我的"页面跳转到登录
                         navigationState.navigate(Screen.Login)
                     },
-                    initialTab = returnToTab
+                    initialTab = returnToTab,
+                    homeViewModel = homeViewModel,
+                    categoryViewModel = categoryViewModel,
+                    messageViewModel = messageViewModel,
+                    cartViewModel = cartViewModel,
+                    profileViewModel = profileViewModel
                 )
             }
             is Screen.Login -> {
                 com.example.juejin.lite.presentation.login.LoginScreen(
                     onLoginSuccess = {
                         isLoggedIn = true
+                        // 登录成功后静默刷新个人信息（不显示 Loading）
+                        profileViewModel.loadProfile(forceRefresh = false)
                         navigationState.popBackStack()
                     },
                     onClose = {
@@ -91,19 +106,14 @@ fun App() {
 fun LiteMainScreen(
     isLoggedIn: Boolean,
     onNavigateToLogin: () -> Unit,
-    initialTab: Int = 0
+    initialTab: Int = 0,
+    homeViewModel: com.example.juejin.lite.presentation.home.HomeViewModel,
+    categoryViewModel: com.example.juejin.lite.presentation.category.CategoryViewModel,
+    messageViewModel: com.example.juejin.lite.presentation.message.MessageViewModel,
+    cartViewModel: com.example.juejin.lite.presentation.cart.CartViewModel,
+    profileViewModel: com.example.juejin.lite.presentation.profile.ProfileViewModel
 ) {
     var selectedTab by remember { mutableStateOf(initialTab) }
-    
-    // 获取依赖容器
-    val appContainer = remember { AppContainer.getInstance() }
-    
-    // 创建 ViewModels
-    val homeViewModel = remember { appContainer.provideHomeViewModel() }
-    val categoryViewModel = remember { appContainer.provideCategoryViewModel() }
-    val messageViewModel = remember { appContainer.provideMessageViewModel() }
-    val cartViewModel = remember { appContainer.provideCartViewModel() }
-    val profileViewModel = remember { appContainer.provideProfileViewModel() }
     
     // 定义轻量版的标签页
     val tabs = listOf(

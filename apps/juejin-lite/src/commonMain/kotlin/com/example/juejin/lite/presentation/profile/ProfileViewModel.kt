@@ -20,13 +20,18 @@ class ProfileViewModel(
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
     
+    private var isInitialized = false
+    
     init {
         loadProfile()
     }
     
-    fun loadProfile() {
+    fun loadProfile(forceRefresh: Boolean = false) {
         viewModelScope.launch {
-            _uiState.value = ProfileUiState.Loading
+            // 只在首次加载或强制刷新时显示 Loading
+            if (!isInitialized || forceRefresh) {
+                _uiState.value = ProfileUiState.Loading
+            }
             
             // 检查是否已登录
             val loginUser = UserPreferences.getUser()
@@ -51,6 +56,7 @@ class ProfileViewModel(
                     recommendedProducts = recommendedProducts,
                     isLoggedIn = true
                 )
+                isInitialized = true
             } else {
                 // 未登录，使用默认资料
                 val profileResult = getUserProfileUseCase("current_user")
@@ -63,9 +69,11 @@ class ProfileViewModel(
                             recommendedProducts = recommendedProducts,
                             isLoggedIn = false
                         )
+                        isInitialized = true
                     }
                     .onFailure { error ->
                         _uiState.value = ProfileUiState.Error(error.message ?: "加载失败")
+                        isInitialized = true
                     }
             }
         }
@@ -174,7 +182,7 @@ class ProfileViewModel(
     }
     
     fun refresh() {
-        loadProfile()
+        loadProfile(forceRefresh = true)
     }
 }
 
