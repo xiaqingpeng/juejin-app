@@ -17,3 +17,26 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+
+# Java heap dumps (JVM crash files)
+*.hprof
+java_pid*.hprof
+
+# iOS DerivedData
+DerivedData/
+*.xcworkspace/xcuserdata/
+
+# Kotlin Native cache
+.konan/
+
+# Android
+*.apk
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+
+# Gradle daemon
+.gradle/daemon/

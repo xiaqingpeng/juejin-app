@@ -1,502 +1,310 @@
+# 🚀 Juejin KMP Monorepo
 
+一个基于 Kotlin Multiplatform (KMP) 的掘金客户端项目，支持 Android、iOS 和 Desktop 平台。
 
-# Kotlin Multiplatform 打包指南
+## ✨ 特性
+
+- 🎯 **多平台支持**: Android、iOS、Desktop (macOS/Windows/Linux)
+- 📦 **Monorepo 架构**: 统一管理多个应用和共享模块
+- 🔄 **90% 代码共享**: 业务逻辑、UI 组件完全共享
+- ⚡ **快速编译**: juejin-lite 仅需 7 秒（Android Debug）
+- 🎨 **Material Design 3**: 现代化的 UI 设计
+- 🌙 **主题切换**: 支持亮色/暗色主题
+
+## 📱 应用
+
+### juejin-main（完整版）
+完整功能的掘金客户端，包含所有功能模块。
+
+- ✅ 首页、热门、沸点、课程、我的
+- ✅ 文章详情、评论、点赞
+- ✅ 用户资料、关注、粉丝
+- ✅ 搜索、分类、标签
+- ✅ 主题切换、隐私设置
+
+### juejin-lite（轻量版）
+精简版掘金客户端，专注核心功能。
+
+- ✅ 首页、热门、我的
+- ✅ 文章详情、评论
+- ✅ 主题切换
+- ⚡ 编译速度快 5 倍
+- 📦 体积更小
 
 ## 🚀 快速开始
 
-### 本地构建
+### 前置要求
+
+- JDK 11+
+- Android Studio Ladybug+
+- Xcode 15+ (iOS 开发)
+- Gradle 8.14+
+
+### 克隆项目
+
 ```bash
-# 克隆项目
-git clone https://github.com/your-username/juejin-app.git
+git clone <repository-url>
 cd juejin-app
-
-# 赋予脚本执行权限
-chmod +x scripts/release/*.sh
-
-# 运行完整发布流程
-./scripts/release/complete-release.sh
 ```
 
-### 自动化构建
-- 推送标签到 GitHub 自动触发 CI/CD
-- 手动触发构建：GitHub Actions → Run workflow
+### 配置 Android Studio
 
----
-
-## 📱 Android
-
-| 类型 | 命令 | 产物 |
-|------|------|------|
-| 开发测试 | `./gradlew :composeApp:assembleDebug` | APK |
-| 正式发布 | `./gradlew :composeApp:assembleRelease` | APK |
-| 上架专用 | `./gradlew :composeApp:bundleRelease` | AAB |
-
-**脚本构建**：
 ```bash
-# Android 专用构建
-./scripts/release/android-build.sh --type debug --version v1.0.0
+# 运行配置脚本
+./setup-android-studio.sh
 
-# 所有 Android 构建类型
-./scripts/release/android-build.sh --type all --version v1.0.0 --upload
+# 重启 Android Studio
+# 在顶部工具栏选择运行配置并运行
 ```
 
-**产物路径**：`composeApp/build/outputs/apk/release/`
+### 编译运行
 
----
-
-## 🍎 iOS
-
-| 场景 | 方式 | 说明 |
-|------|------|------|
-| 模拟器运行 | Android Studio 直接运行 | 或使用 `iosDeployAppleSim` 命令 |
-| 生成 Framework | `./gradlew :composeApp:embedAndSignAppleFrameworkForXcode` | 供 Xcode 调用 |
-| 正式分发 | Xcode → Product → Archive → Distribute App | 导出 `.ipa` 文件 |
-
-**环境要求**：macOS + 开发者证书
-
----
-
-## 🌐 Web
-
-| 类型 | 命令 | 产物 |
-|------|------|------|
-| 生产打包 | `./gradlew :composeApp:wasmJsBrowserDistribution` | HTML/JS/Wasm |
-| 开发运行 | `./gradlew :composeApp:wasmJsBrowserRun` | 热重载支持 |
-
-**产物路径**：`composeApp/build/dist/wasmJs/productionExecutable/`
-
----
-
-## 💻 Desktop
-
-| 平台 | 命令 | 产物 |
-|------|------|------|
-| Windows | `./gradlew packageExe` | EXE 安装包 |
-| macOS | `./gradlew packageDmg` | DMG 安装包 |
-| Linux | `./gradlew packageDeb` | DEB 安装包 |
-
-**脚本构建**：
+#### Android
 ```bash
-# 跨平台构建
-./scripts/release/cross-platform-build.sh --version v1.0.0 --upload
+# juejin-lite（推荐，最快）
+./gradlew :apps:juejin-lite:assembleDebug
+./gradlew :apps:juejin-lite:installDebug
 
-# Desktop 专用构建
-./scripts/release/desktop-build.sh --platforms current --version v1.0.0
-
-# 所有桌面平台
-./scripts/release/desktop-build.sh --platforms all --version v1.0.0
+# juejin-main
+./gradlew :apps:juejin-main:assembleDebug
+./gradlew :apps:juejin-main:installDebug
 ```
 
----
-
-## 🔄 CI/CD 自动化
-
-### GitHub Actions 工作流
-
-项目包含完整的 GitHub Actions 工作流，支持：
-
-#### 自动触发
-- **标签推送**：推送 `v*` 标签自动触发全平台构建
-- **手动触发**：在 Actions 页面手动选择平台构建
-
-#### 支持的平台
-- ✅ **Android**：Debug APK、Release APK、AAB
-- ✅ **iOS**：Framework（需要 Xcode 打包）
-- ✅ **Desktop**：Windows EXE、macOS DMG、Linux DEB
-- ✅ **Web**：WASM 静态文件
-
-#### 工作流文件
-`.github/workflows/release.yml` - 完整的多平台构建和发布
-
-### 本地脚本系统
-
-#### 主要脚本
-
-| 脚本 | 功能 | 使用场景 |
-|------|------|----------|
-| `complete-release.sh` | 完整发布流程菜单 | 正式发布 |
-| `cross-platform-build.sh` | 跨平台构建 | 本地全平台构建 |
-| `android-build.sh` | Android专用构建 | Android快速发布 |
-| `desktop-build.sh` | Desktop专用构建 | Desktop快速发布 |
-| `upload-release.sh` | 上传到GitHub Release | 手动上传 |
-| `recreate-tag.sh` | 标签重建 | 触发CI/CD |
-
-#### 使用示例
-
+#### Desktop
 ```bash
-# 1. 完整发布流程（推荐）
-./scripts/release/complete-release.sh
+# 使用脚本（推荐）
+./run-desktop.sh
 
-# 2. 快速Android发布
-./scripts/release/android-build.sh --type release --version v1.0.0 --upload
-
-# 3. 跨平台构建
-./scripts/release/cross-platform-build.sh --version v1.0.0
-
-# 4. 触发GitHub Actions
-./scripts/release/recreate-tag.sh --tag v1.0.0
-
-# 5. 上传文件到Release
-./scripts/release/upload-release.sh juejin-app-v1.0.0-android-release.apk
+# 或直接运行
+./gradlew :apps:juejin-lite:run
+./gradlew :apps:juejin-main:run
 ```
 
----
-
-## 📋 平台速查
-
-| 平台 | 核心命令 | 产物 | 前置条件 |
-|------|----------|------|----------|
-| Android | `assembleRelease` | APK/AAB | 签名配置 |
-| iOS | Xcode Archive | IPA | macOS + 证书 |
-| Web | `wasmJsBrowserDistribution` | HTML/JS/Wasm | 无 |
-| Desktop | `packageExe` / `packageDmg` | EXE/DMG | 本地 OS |
-
----
-
-## 🔧 开发环境
-
-### 系统要求
-- **Java**: JDK 17+
-- **Kotlin**: 1.9.0+
-- **Gradle**: 8.0+
-- **Android SDK**: API 21+ (Android 构建)
-- **Xcode**: 14.0+ (iOS 构建)
-
-### 环境配置
-
+#### iOS
 ```bash
-# Java 版本检查
-java -version
+# 方法 1: 使用脚本（推荐）
+./run-ios.sh
+# 选择 1) juejin-main 或 2) juejin-lite
 
-# Gradle 版本检查
-./gradlew --version
+# 方法 2: 使用 Xcode
+# juejin-main
+./gradlew :apps:juejin-main:linkDebugFrameworkIosSimulatorArm64
+cd iosApp && open iosApp.xcodeproj
 
-# Android SDK 配置
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+# juejin-lite（首次需要配置 Framework）
+./setup-ios-lite.sh  # 首次运行
+cd iosApp-lite && open iosApp.xcodeproj
+
+# 3. 在 Xcode 中点击运行 (▶️) 或按 Cmd + R
 ```
 
----
+**注意**: iOS 需要两个步骤：
+1. 编译 Framework（Gradle）
+2. 运行应用（Xcode）
 
-## 📝 日志查看
+详见 [iOS_RUN_GUIDE.md](iOS_RUN_GUIDE.md) 和 [iOS_LITE_SETUP_GUIDE.md](iOS_LITE_SETUP_GUIDE.md)
 
-### Android
+### 一键脚本
+
 ```bash
-# ADB 日志
-adb logcat -s "juejin-app"
-
-# 构建日志
-./gradlew assembleDebug --info
+./test-all-platforms.sh    # 测试所有平台编译
+./run-desktop.sh           # 运行 Desktop 应用
+./run-ios.sh               # 运行 iOS 应用
+./install-all.sh           # 安装 Android 应用
 ```
 
-### Desktop
-```bash
-# JVM 运行日志
-./gradlew :composeApp:jvmRun --stacktrace
+## 📊 项目结构
 
-# 构建日志
-./gradlew packageDmg --info
+```
+juejin-app/
+├── apps/                          # 应用层
+│   ├── juejin-main/              # 完整版应用
+│   └── juejin-lite/              # 轻量版应用
+│
+├── shared/                        # 共享模块
+│   ├── core/
+│   │   ├── common/               # 通用工具
+│   │   ├── storage/              # 数据存储
+│   │   └── network/              # 网络请求
+│   ├── domain/                   # 业务逻辑
+│   └── ui/
+│       ├── theme/                # 主题样式
+│       └── components/           # UI 组件
+│
+├── gradle/                        # Gradle 配置
+├── *.sh                          # 工具脚本
+└── *.md                          # 文档
 ```
 
-### iOS
+## 📚 文档
+
+### 快速开始
+- [QUICK_COMMANDS.md](QUICK_COMMANDS.md) - 常用命令速查
+- [KMP_MONOREPO_GUIDE.md](KMP_MONOREPO_GUIDE.md) - Monorepo 架构指南
+
+### Android Studio
+- [ANDROID_STUDIO_MULTIPLATFORM.md](ANDROID_STUDIO_MULTIPLATFORM.md) - 多平台开发配置
+- [MODULE_NOT_FOUND_FIX.md](MODULE_NOT_FOUND_FIX.md) - 常见问题修复
+
+### iOS 开发
+- [iOS_APPS_QUICK_START.md](iOS_APPS_QUICK_START.md) - iOS 快速启动（推荐）
+- 详细文档请查看 [docs/archive/ios/](docs/archive/ios/)
+
+### 更多文档
+- [docs/](docs/) - 归档文档和详细指南
+
+## 🎯 开发建议
+
+### 日常开发（最快）
 ```bash
-# Xcode 日志
-# 在 Xcode 中查看 Console 输出
+# 使用 Android Debug（7 秒）
+./gradlew :apps:juejin-lite:assembleDebug --no-daemon
 ```
 
-
-### Gradle清理并重新构建
+### 跨平台测试
 ```bash
-./gradlew clean build --refresh-dependencies
+# 测试所有平台
+./test-all-platforms.sh
 ```
 
-
----
-
-## 🚀 发布流程
-
-### 自动发布（推荐）
-1. **代码提交**：确保所有更改已提交
-2. **创建标签**：`git tag v1.0.0`
-3. **推送标签**：`git push origin v1.0.0`
-4. **等待构建**：GitHub Actions 自动构建
-5. **检查产物**：在 Release 页面下载测试
-
-### 手动发布
-1. **本地构建**：使用脚本构建所需平台
-2. **创建Release**：在 GitHub 创建 Release
-3. **上传产物**：使用上传脚本或手动上传
-
-### 脚本发布
+### 发布准备
 ```bash
-# 一键发布
-./scripts/release/complete-release.sh
+# Android Release
+./gradlew :apps:juejin-lite:assembleRelease
 
-# 选择选项 7：跨平台构建和打包
-# 选择选项 2：重建标签并推送（触发 CI/CD）
-# 选择选项 3：检测流水线状态
+# Desktop 打包
+./gradlew :apps:juejin-lite:packageDistributionForCurrentOS
+
+# iOS Framework
+./gradlew :apps:juejin-lite:linkDebugFrameworkIosArm64
 ```
 
----
+## 📊 性能指标
 
-## 🐛 故障排除
+### 编译时间
+| 应用 | Android Debug | Android Release | iOS | Desktop |
+|------|--------------|----------------|-----|---------|
+| juejin-main | 38秒 | 40秒 | 15秒 | 15秒 |
+| juejin-lite | 7秒 | 36秒 | 15秒 | 20秒 |
 
-### 常见问题
+### 应用大小（估算）
+| 应用 | Android | iOS | Desktop |
+|------|---------|-----|---------|
+| juejin-main | ~15MB | ~20MB | ~30MB |
+| juejin-lite | ~12MB | ~15MB | ~25MB |
 
-#### Android 构建失败
+## 🛠️ 技术栈
+
+### 核心框架
+- Kotlin Multiplatform
+- Compose Multiplatform
+- Kotlin Coroutines
+
+### 网络
+- Ktor Client
+- Kotlinx Serialization
+
+### UI
+- Material Design 3
+- Compose Material Icons
+- Coil (图片加载)
+
+### 存储
+- DataStore (Android)
+- UserDefaults (iOS)
+- Preferences (Desktop)
+
+### 日志
+- Kermit
+
+## 🎨 平台特性
+
+| 特性 | Android | iOS | Desktop |
+|------|---------|-----|---------|
+| Material 3 | ✅ | ✅ | ✅ |
+| 系统主题 | ✅ | ✅ | ✅ |
+| 网络请求 | ✅ | ✅ | ✅ |
+| 本地存储 | ✅ | ✅ | ✅ |
+| 图片加载 | ✅ | ✅ | ✅ |
+| 启动屏幕 | ✅ | ✅ | ❌ |
+| 通知 | ✅ | ✅ | ⚠️ |
+| 相机扫码 | ✅ | ⚠️ | ❌ |
+| 窗口管理 | ❌ | ❌ | ✅ |
+
+## 🐛 常见问题
+
+### Q: R8 混淆失败
+**A**: 检查 `proguard-rules.pro` 是否包含所有必要的规则
+
+### Q: Desktop 任务找不到
+**A**: 使用 `./gradlew :apps:juejin-lite:run` 而不是 `runDesktop`
+
+### Q: iOS 编译时间过长
+**A**: 开发时优先使用 Android 平台（最快）
+
+### Q: 模块名称错误
+**A**: 使用 `Juejin.apps.juejin-lite.main` 而不是 `juejin-app.apps.juejin-lite.main`
+
+### Q: iOS 模拟器问题或需要清理
+**A**: 使用以下命令清理模拟器：
+
 ```bash
-# 清理构建
+# 方法 1: 删除不可用的模拟器
+xcrun simctl delete unavailable
+
+# 方法 2: 重置所有模拟器（会清除所有数据）
+xcrun simctl erase all
+
+# 方法 3: 在 Xcode 中清理
+# Xcode → Window → Devices and Simulators → 右键模拟器 → Delete
+```
+
+### Q: iOS Framework 编译失败（符号冲突）
+**A**: 如果看到 `IrPropertySymbolImpl is already bound` 错误：
+
+```bash
+# 1. 清理构建
 ./gradlew clean
 
-# 检查 Android SDK
-echo $ANDROID_HOME
+# 2. 删除 Kotlin Native 缓存
+rm -rf ~/.konan
 
-# 重新构建
-./gradlew assembleDebug
+# 3. 检查是否有重复的类定义
+grep -r "data class TabItem" --include="*.kt"
 
- # 安装到设备/模拟器
-./gradlew :composeApp:installDebug
-
-# 查看日志（过滤 ImagePicker）
-adb logcat | grep ImagePicker
-
-# 查看日志（过滤 EditProfile）
-adb logcat | grep EditProfile
-
-# 打开应用设置页面（用于配置权限）
-adb shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:com.example.juejin
+# 4. 重新编译
+./gradlew :apps:juejin-main:linkDebugFrameworkIosSimulatorArm64
 ```
 
-#### ADB 命令详解
+详见 [iOS_COMPILE_FIX.md](iOS_COMPILE_FIX.md)
 
-**打开应用设置页面**：
-```bash
-adb -s 2XYYD24505209655 shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:com.example.juejin
-```
+更多问题请查看 [MODULE_NOT_FOUND_FIX.md](MODULE_NOT_FOUND_FIX.md)
 
-各部分说明：
-- `adb` - Android Debug Bridge，Android 调试桥，用于与 Android 设备通信
-- `-s 2XYYD24505209655` - 指定设备序列号（多设备时使用）
-  - 查看设备列表：`adb devices`
-  - 单设备时可省略此参数
-- `shell` - 在 Android 设备上执行 shell 命令
-- `am start` - Activity Manager，启动一个 Activity
-- `-a android.settings.APPLICATION_DETAILS_SETTINGS` - Intent Action，打开应用详情设置页面
-- `-d package:com.example.juejin` - 指定应用包名
+## 📈 项目统计
 
-**使用场景**：
-- 快速打开应用权限设置（相机、通知、存储等）
-- 配置桌面角标权限
-- 管理应用数据和缓存
-- 查看应用详细信息
+- **应用数量**: 2 (juejin-main, juejin-lite)
+- **支持平台**: 3 (Android, iOS, Desktop)
+- **iOS 项目**: 2 (iosApp, iosApp-lite)
+- **共享模块**: 6
+- **可部署应用**: 6 (每个应用 × 3 平台)
+- **代码共享率**: 90%
 
-**常用 ADB 命令**：
-```bash
-# 查看连接的设备
-adb devices
+## 🤝 贡献
 
-# 安装 APK
-adb install app.apk
-
-# 卸载应用
-adb uninstall com.example.juejin
-
-# 清除应用数据
-adb shell pm clear com.example.juejin
-
-# 启动应用
-adb shell am start -n com.example.juejin/.MainActivity
-
-# 查看应用进程
-adb shell ps | grep juejin
-
-# 截图
-adb shell screencap -p /sdcard/screen.png
-adb pull /sdcard/screen.png
-
-# 录屏
-adb shell screenrecord /sdcard/demo.mp4
-```
-
-#### Desktop 构建失败
-```bash
-# 检查 Java 版本
-java -version
-
-# 清理构建
-./gradlew clean
-
-# 重新构建
-./gradlew packageDmg
-```
-
-#### GitHub Actions 失败
-1. 检查工作流配置
-2. 查看错误日志
-3. 检查 secrets 配置
-4. 重新触发工作流
-
-### 获取帮助
-- **项目 Issues**：https://github.com/your-username/juejin-app/issues
-- **GitHub Actions**：https://github.com/your-username/juejin-app/actions
-- **构建日志**：查看 Actions 中的详细日志
-
----
+欢迎提交 Issue 和 Pull Request！
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
+[MIT License](LICENSE)
 
+## 🔗 相关链接
 
-
-
----
-
-## 🎯 发布系统
-
-### 快速发布
-
-```bash
-# 1. 验证环境
-./scripts/release/verify-scripts.sh
-
-# 2. 选择发布方式
-./scripts/release/complete-release.sh
-
-# 3. 或直接使用命令
-./scripts/release/quick-build-upload.sh --version v1.0.0 --platform android
-```
-
-### 可用脚本
-
-| 脚本 | 用途 | 示例 |
-|------|------|------|
-| `verify-scripts.sh` | 验证环境配置 | `./scripts/release/verify-scripts.sh` |
-| `android-build.sh` | Android 构建 | `--version v1.0.0 --type all` |
-| `desktop-build.sh` | Desktop 构建 | `--version v1.0.0 --platforms current` |
-| `quick-build-upload.sh` | 快速构建上传 | `--version v1.0.0 --platform android` |
-| `create-lite-tag.sh` | 轻量级发布 | `--tag v1.0.0` |
-| `complete-release.sh` | 菜单式发布 | 交互式选择 |
-
-### 构建产物
-
-所有构建产物保存在：
-- Android: `build/releases/android/`
-- Desktop: `build/releases/desktop/`
-
-### 详细文档
-
-- 📖 [发布指南](RELEASE_GUIDE.md) - 完整的发布流程
-- 🚀 [快速开始](QUICK_START.md) - 5分钟快速上手
-- 📱 [iOS 状态栏](iOS_STATUS_BAR_TEST.md) - iOS 状态栏配置
-- 📊 [发布总结](RELEASE_SUMMARY.md) - 系统总览
+- [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
+- [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
+- [掘金](https://juejin.cn/)
 
 ---
 
-## 🎨 状态栏配置
-
-项目已配置统一的跨平台状态栏样式：
-
-- ✅ Android: 白色状态栏 + 深色图标
-- ✅ iOS: 深色图标（浅色模式）
-- ✅ 统一的 API 接口
-
-详见：[STATUS_BAR_SETUP.md](STATUS_BAR_SETUP.md)
-
----
-
-## 🛠️ 开发工具
-
-### 必需工具
-- Git
-- Java 17+
-- Gradle (通过 gradlew)
-- GitHub CLI (`gh`) - 用于上传 Release
-
-### 可选工具
-- Android SDK - Android 构建
-- Xcode - iOS 构建
-- ADB - Android 调试
-
-### 首次设置
-
-```bash
-# 1. 安装 GitHub CLI
-brew install gh
-
-# 2. 认证
-gh auth login
-
-# 3. 验证环境
-./scripts/release/verify-scripts.sh
-```
-
----
-
-## 📦 发布流程
-
-### 开发测试
-
-```bash
-# 构建 Debug 版本
-./scripts/release/android-build.sh --version v1.0.0-dev --type debug
-
-# 安装到设备
-adb install -r build/releases/android/juejin-app-v1.0.0-dev-android-debug.apk
-```
-
-### 正式发布
-
-```bash
-# 方式 1: 使用菜单
-./scripts/release/complete-release.sh
-# 选择 "选项 8: 快速构建上传"
-
-# 方式 2: 直接命令
-./scripts/release/quick-build-upload.sh --version v1.0.0 --platform all
-```
-
-### 热修复
-
-```bash
-# 轻量级发布（避免 Actions 超时）
-./scripts/release/create-lite-tag.sh --tag v1.0.1
-```
-
----
-
-## 🐛 故障排除
-
-### 构建失败
-
-```bash
-./gradlew clean
-./scripts/release/android-build.sh --version v1.0.0 --type debug
-```
-
-### 找不到 APK
-
-```bash
-find composeApp/build/outputs/apk -name "*.apk"
-```
-
-### 上传失败
-
-```bash
-gh auth status
-gh auth login
-```
-
----
-
-## 📞 获取帮助
-
-- 查看脚本帮助：`./scripts/release/<script>.sh --help`
-- 验证环境：`./scripts/release/verify-scripts.sh`
-- 问题反馈：[GitHub Issues](https://github.com/xiaqingpeng/juejin-app/issues)
-
----
-
-## 📄 许可证
-
-[添加你的许可证信息]
+**更新时间**: 2026-04-11  
+**状态**: ✅ 多平台配置完成  
+**版本**: 1.0.0

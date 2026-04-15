@@ -1,0 +1,86 @@
+import UIKit
+import SwiftUI
+import JuejinLite
+
+struct ComposeView: UIViewControllerRepresentable {
+    var isDarkMode: Bool
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = MainViewControllerKt.MainViewController()
+        // 根据主题设置状态栏样式
+        updateStatusBarStyle(controller: controller, isDarkMode: isDarkMode)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // 当主题改变时更新状态栏样式
+        updateStatusBarStyle(controller: uiViewController, isDarkMode: isDarkMode)
+    }
+    
+    private func updateStatusBarStyle(controller: UIViewController, isDarkMode: Bool) {
+        if isDarkMode {
+            // 深色模式：使用浅色状态栏（白色文字/图标）
+            controller.overrideUserInterfaceStyle = .dark
+        } else {
+            // 浅色模式：使用深色状态栏（黑色文字/图标）
+            controller.overrideUserInterfaceStyle = .light
+        }
+    }
+}
+
+struct ContentView: View {
+    @State var scaleAmount = 1.0
+    @State var isHomeRootScreen = false
+    // 监听主题变化
+    @State var isDarkMode = false
+
+    var body: some View {
+        ZStack {
+            if isHomeRootScreen {
+                ComposeView(isDarkMode: isDarkMode)
+                    .preferredColorScheme(isDarkMode ? .dark : .light)
+                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ThemeChanged"))) { notification in
+                        if let darkMode = notification.object as? Bool {
+                            isDarkMode = darkMode
+                        }
+                    }
+            } else {
+                // 设置背景颜色为白色
+                Color.white.ignoresSafeArea()
+                
+                VStack {
+                    // 使用与掘金品牌相关的系统图标
+                    Image(systemName: "book.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .scaleEffect(scaleAmount)
+                        .frame(width: 120)
+                        .foregroundColor(.blue)
+                    
+                    // 添加应用名称
+                    Text("掘金轻量版")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.blue)
+                        .padding(.top, 20)
+                }
+                .onAppear() {
+                    // 缩放动画：2秒内将图标缩小到消失
+                    withAnimation(.easeIn(duration: 2)) {
+                        scaleAmount = 0.0
+                    }
+
+                    // 2秒后切换到主应用
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        isHomeRootScreen = true
+                    }
+                }
+            }
+        }
+        .ignoresSafeArea((isHomeRootScreen ? .keyboard : .all))
+    }
+}
+
+
+
+

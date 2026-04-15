@@ -1,0 +1,171 @@
+package com.example.juejin.navigation
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.example.juejin.screen.QrScannerScreen
+import com.example.juejin.screen.SettingsScreen
+import com.example.juejin.viewmodel.UserViewModel
+
+/**
+ * 应用导航图
+ * 使用简单的状态管理来避免 Navigation Compose 在 iOS 上的兼容性问题
+ */
+@Composable
+fun AppNavGraph(
+    modifier: Modifier = Modifier,
+    userViewModel: UserViewModel,
+    navigationState: NavigationState,
+    mainContent: @Composable (
+        onNavigateToSettings: () -> Unit,
+        onNavigateToQrScanner: () -> Unit,
+        onNavigateToTestList: () -> Unit
+    ) -> Unit
+) {
+    Box(modifier = modifier) {
+        val screen = navigationState.currentScreen
+        com.example.juejin.util.Logger.d("NavGraph", "当前渲染页面: $screen")
+        
+        when (screen) {
+            is Screen.Main -> {
+                mainContent(
+                    { navigationState.navigate(Screen.Settings) },
+                    { navigationState.navigate(Screen.QrScanner) },
+                    { navigationState.navigate(Screen.TestList) }
+                )
+            }
+            
+            is Screen.Settings -> {
+                com.example.juejin.util.Logger.d("NavGraph", "渲染设置页面")
+                SettingsScreen(
+                    onLeftClick = { 
+                        com.example.juejin.util.Logger.d("NavGraph", "设置页面返回回调触发")
+                        val result = navigationState.popBackStack()
+                        com.example.juejin.util.Logger.d("NavGraph", "返回结果: $result")
+                    },
+                    userViewModel = userViewModel,
+                    onNavigateToDetail = { settingTitle ->
+                        navigationState.navigate(Screen.SettingDetail(settingTitle))
+                    },
+                    onNavigateToEditProfile = {
+                        navigationState.navigate(Screen.EditProfile)
+                    }
+                )
+            }
+            
+            is Screen.SettingDetail -> {
+                com.example.juejin.screen.SettingDetailScreen(
+                    settingItem = com.example.juejin.model.SettingItem(
+                        title = screen.settingTitle,
+                        type = com.example.juejin.model.SettingType.NORMAL
+                    ),
+                    onLeftClick = { navigationState.popBackStack() },
+                    onNavigateToDeviceInfo = {
+                        navigationState.navigate(Screen.DeviceInfo)
+                    },
+                    onNavigateToWebView = { title, url ->
+                        navigationState.navigate(Screen.WebView(title, url))
+                    }
+                )
+            }
+            
+            is Screen.EditProfile -> {
+                com.example.juejin.screen.EditProfileDetailScreen(
+                    onLeftClick = { navigationState.popBackStack() },
+                    onSaveSuccess = {
+                        // 保存成功后返回到"我的"页面（主页面）
+                        // 清空导航栈，回到主页面
+                        while (navigationState.popBackStack()) {
+                            // 持续返回直到回到主页面
+                        }
+                    },
+                    viewModel = userViewModel
+                )
+            }
+            
+            is Screen.QrScanner -> {
+                QrScannerScreen(
+                    onBack = { navigationState.popBackStack() },
+                    onQrCodeScanned = { /* 扫码结果在 QrScannerScreen 内部处理 */ }
+                )
+            }
+            
+            is Screen.TestList -> {
+                com.example.juejin.test.TestListScreen(
+                    onLeftClick = { navigationState.popBackStack() },
+                    onTestClick = { testCase ->
+                        when (testCase.id) {
+                            "test_course_list" -> navigationState.navigate(Screen.CourseList)
+                            "test_charts" -> navigationState.navigate(Screen.ChartTest)
+                            "test_webview" -> navigationState.navigate(Screen.WebViewTest)
+                            "test_badge" -> navigationState.navigate(Screen.BadgeTest)
+                            else -> navigationState.navigate(Screen.TestDetail(testCase.id))
+                        }
+                    }
+                )
+            }
+            
+            is Screen.TestDetail -> {
+                val testCase = com.example.juejin.test.TestRegistry.getTestCase(screen.testId)
+                if (testCase != null) {
+                    com.example.juejin.test.TestDetailScreen(
+                        testCase = testCase,
+                        onLeftClick = { navigationState.popBackStack() }
+                    )
+                }
+            }
+            
+            is Screen.CourseList -> {
+                com.example.juejin.test.CourseListScreen(
+                    onLeftClick = { navigationState.popBackStack() },
+                    onItemClick = { logStat ->
+                        val courseId = logStat.id?.toString() ?: "0"
+                        navigationState.navigate(Screen.CourseDetail(courseId))
+                    }
+                )
+            }
+            
+            is Screen.CourseDetail -> {
+                val course = com.example.juejin.test.TestRegistry.getCourse(screen.courseId)
+                if (course != null) {
+                    com.example.juejin.test.CourseDetailScreen(
+                        logStat = course,
+                        onLeftClick = { navigationState.popBackStack() }
+                    )
+                }
+            }
+            
+            is Screen.ChartTest -> {
+                com.example.juejin.test.ChartTestScreen(
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.WebViewTest -> {
+                com.example.juejin.test.WebViewTestScreen(
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.BadgeTest -> {
+                com.example.juejin.test.BadgeTestScreen(
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.WebView -> {
+                com.example.juejin.ui.components.WebViewScreen(
+                    title = screen.title,
+                    url = screen.url,
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+            
+            is Screen.DeviceInfo -> {
+                com.example.juejin.screen.DeviceInfoScreen(
+                    onLeftClick = { navigationState.popBackStack() }
+                )
+            }
+        }
+    }
+}

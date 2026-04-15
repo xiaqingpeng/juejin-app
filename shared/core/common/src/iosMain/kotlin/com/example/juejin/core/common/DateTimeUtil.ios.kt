@@ -1,0 +1,43 @@
+package com.example.juejin.core.common
+
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import platform.Foundation.NSDate
+import platform.Foundation.timeIntervalSince1970
+
+actual object DateTimeUtil {
+    
+    private fun String.padStart(length: Int, padChar: Char): String {
+        if (this.length >= length) return this
+        val padding = CharArray(length - this.length) { padChar }
+        return padding.concatToString() + this
+    }
+    
+    actual fun formatRequestTime(isoString: String?): String {
+        if (isoString == null || isoString.length == 0) return "N/A"
+        
+        return try {
+            val instant = Instant.parse(isoString)
+            val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+            
+            // 手动拼接字符串
+            val year = localDateTime.year.toString().padStart(4, '0')
+            val month = localDateTime.monthNumber.toString().padStart(2, '0')
+            val day = localDateTime.dayOfMonth.toString().padStart(2, '0')
+            val hour = localDateTime.hour.toString().padStart(2, '0')
+            val minute = localDateTime.minute.toString().padStart(2, '0')
+            val second = localDateTime.second.toString().padStart(2, '0')
+            
+            "$year-$month-$day $hour:$minute:$second"
+        } catch (e: Exception) {
+            isoString
+        }
+    }
+    
+    actual fun currentTimeMillis(): Long {
+        // Use NSDate directly to get current time in milliseconds
+        val date = NSDate()
+        return (date.timeIntervalSince1970 * 1000.0).toLong()
+    }
+}

@@ -44,4 +44,22 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-include(":composeApp")
+// 应用模块
+include(":apps:juejin-main")
+include(":apps:juejin-lite")
+
+// 共享模块 - 核心
+include(":shared:core:common")
+include(":shared:core:storage")
+include(":shared:core:network")
+
+// 共享模块 - 领域
+include(":shared:domain")
+
+// 共享模块 - UI
+include(":shared:ui:theme")
+include(":shared:ui:components")
+
+// 设置项目路径
+project(":apps:juejin-main").projectDir = file("apps/juejin-main")
+project(":apps:juejin-lite").projectDir = file("apps/juejin-lite")
