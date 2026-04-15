@@ -3,6 +3,7 @@ package com.example.juejin.lite.data.remote
 import com.example.juejin.core.common.Logger
 import com.example.juejin.core.network.HttpClientManager
 import io.ktor.client.call.*
+import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
@@ -49,14 +50,10 @@ class YiwugoApi {
     suspend fun getCategories(upperType: String = "0"): Result<List<CategoryDto>> {
         return try {
             val apiId = generateUUID()
-            val apiTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis().toString()
+            // 使用秒级时间戳
+            val apiTime = (com.example.juejin.core.common.DateTimeUtil.currentTimeMillis() / 1000).toString()
             
             val url = "$BASE_URL/producttype/listforapp.html"
-            Logger.d(TAG, "========== 获取分类列表 ==========")
-            Logger.d(TAG, "URL: $url")
-            Logger.d(TAG, "upperType: $upperType")
-            Logger.d(TAG, "api_id: $apiId")
-            Logger.d(TAG, "api_t: $apiTime")
             
             val response = HttpClientManager.get(url) {
                 url {
@@ -80,18 +77,9 @@ class YiwugoApi {
             }
             
             val responseBody = response.bodyAsText()
-            Logger.d(TAG, "Response Status: ${response.status}")
-            Logger.d(TAG, "Response Headers: ${response.headers.entries().joinToString { "${it.key}: ${it.value}" }}")
-            Logger.d(TAG, "Response Body Length: ${responseBody.length}")
-            Logger.d(TAG, "Response Body (前500字符): ${responseBody.take(500)}")
             
             // 解析响应
             val result: YiwugoCategoryListResponse = HttpClientManager.json.decodeFromString(responseBody)
-            Logger.d(TAG, "成功解析，分类数量: ${result.list.size}")
-            if (result.list.isNotEmpty()) {
-                Logger.d(TAG, "第一个分类: id=${result.list[0].id}, name=${result.list[0].type}, img=${result.list[0].img}")
-            }
-            Logger.d(TAG, "========================================")
             
             Result.success(result.list)
         } catch (e: Exception) {
@@ -111,17 +99,10 @@ class YiwugoApi {
     ): Result<YiwugoResponse<ProductListDto>> {
         return try {
             val apiId = generateUUID()
-            val apiTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis().toString()
+            // 使用秒级时间戳
+            val apiTime = (com.example.juejin.core.common.DateTimeUtil.currentTimeMillis() / 1000).toString()
             
-            // 实际上这个接口返回的是子分类，不是商品
-            // 我们先返回空列表，因为真实的商品接口需要更多参数
             val url = "$BASE_URL/producttype/listforapp.html"
-            Logger.d(TAG, "========== 获取子分类（作为商品） ==========")
-            Logger.d(TAG, "URL: $url")
-            Logger.d(TAG, "uppertype (categoryId): $categoryId")
-            Logger.d(TAG, "page: $page, pageSize: $pageSize")
-            Logger.d(TAG, "api_id: $apiId")
-            Logger.d(TAG, "api_t: $apiTime")
             
             val response = HttpClientManager.get(url) {
                 url {
@@ -145,14 +126,9 @@ class YiwugoApi {
             }
             
             val responseBody = response.bodyAsText()
-            Logger.d(TAG, "Response Status: ${response.status}")
-            Logger.d(TAG, "Response Headers: ${response.headers.entries().joinToString { "${it.key}: ${it.value}" }}")
-            Logger.d(TAG, "Response Body Length: ${responseBody.length}")
-            Logger.d(TAG, "Response Body (前500字符): ${responseBody.take(500)}")
             
             // 解析为子分类列表
             val categoryResponse: YiwugoCategoryListResponse = HttpClientManager.json.decodeFromString(responseBody)
-            Logger.d(TAG, "成功解析，子分类数量: ${categoryResponse.list.size}")
             
             // 将子分类转换为"商品"（临时方案）
             val products = categoryResponse.list.map { category ->
@@ -168,12 +144,6 @@ class YiwugoApi {
                     saleCount = 0
                 )
             }
-            
-            Logger.d(TAG, "转换为商品数量: ${products.size}")
-            if (products.isNotEmpty()) {
-                Logger.d(TAG, "第一个商品: id=${products[0].id}, title=${products[0].title}, pic=${products[0].pic}")
-            }
-            Logger.d(TAG, "========================================")
             
             Result.success(YiwugoResponse(
                 code = 200,
@@ -204,20 +174,14 @@ class YiwugoApi {
     ): Result<List<ProductDto>> {
         return try {
             val apiId = generateUUID()
-            val apiTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis().toString()
+            // 使用秒级时间戳
+            val apiTime = (com.example.juejin.core.common.DateTimeUtil.currentTimeMillis() / 1000).toString()
             
-            // 生成简单的签名（MD5）
+            // 生成签名（MD5）- 使用真正的 MD5
             val signString = "$apiTime$apiId$API_KEY"
-            val apiSign = generateSimpleMD5(signString)
+            val apiSign = com.example.juejin.core.common.CryptoUtil.md5(signString)
             
             val url = "https://api.yiwugo.com/app/getMyCenterRecommencProductPi.htm"
-            Logger.d(TAG, "========== 获取推荐商品 ==========")
-            Logger.d(TAG, "URL: $url")
-            Logger.d(TAG, "userId: $userId, page: $page, pageSize: $pageSize")
-            Logger.d(TAG, "api_id: $apiId")
-            Logger.d(TAG, "api_t: $apiTime")
-            Logger.d(TAG, "api_sign: $apiSign")
-            Logger.d(TAG, "sign_string: $signString")
             
             val response = HttpClientManager.get(url) {
                 url {
@@ -244,29 +208,9 @@ class YiwugoApi {
             }
             
             val responseBody = response.bodyAsText()
-            Logger.d(TAG, "========== 推荐商品响应 ==========")
-            Logger.d(TAG, "Response Status: ${response.status}")
-            Logger.d(TAG, "Response Headers: ${response.headers.entries().joinToString { "${it.key}: ${it.value}" }}")
-            Logger.d(TAG, "Response Body Length: ${responseBody.length}")
-            Logger.d(TAG, "========== 完整响应内容 ==========")
-            Logger.d(TAG, responseBody)
-            Logger.d(TAG, "========================================")
             
             // 解析响应
             val result: YiwugoRecommendResponse = HttpClientManager.json.decodeFromString(responseBody)
-            Logger.d(TAG, "成功解析，推荐商品数量: ${result.pi?.size ?: 0}")
-            
-            // 打印每个商品的详细信息
-            result.pi?.forEachIndexed { index, item ->
-                Logger.d(TAG, "商品 #${index + 1}:")
-                Logger.d(TAG, "  - offerid: ${item.offerid}")
-                Logger.d(TAG, "  - subject: ${item.subject}")
-                Logger.d(TAG, "  - imageurl: ${item.imageurl}")
-                Logger.d(TAG, "  - price: ${item.price}")
-                Logger.d(TAG, "  - beginAmount: ${item.beginAmount}")
-                Logger.d(TAG, "  - companyname: ${item.companyname}")
-                Logger.d(TAG, "  - companyid: ${item.companyid}")
-            }
             
             val products = result.pi?.map { item ->
                 ProductDto(
@@ -282,23 +226,52 @@ class YiwugoApi {
                 )
             } ?: emptyList()
             
-            Logger.d(TAG, "转换后商品数量: ${products.size}")
-            if (products.isNotEmpty()) {
-                Logger.d(TAG, "第一个转换后的商品:")
-                Logger.d(TAG, "  - id: ${products[0].id}")
-                Logger.d(TAG, "  - title: ${products[0].title}")
-                Logger.d(TAG, "  - pic: ${products[0].pic}")
-                Logger.d(TAG, "  - price: ${products[0].price}")
-                Logger.d(TAG, "  - shopName: ${products[0].shopName}")
-            }
-            Logger.d(TAG, "========================================")
-            
             Result.success(products)
         } catch (e: Exception) {
             Logger.e(TAG, "获取推荐商品失败: ${e.message}", e)
             Logger.e(TAG, "异常堆栈: ${e.stackTraceToString()}")
             Result.failure(e)
         }
+    }
+    
+    /**
+     * 用户登录
+     */
+    suspend fun login(
+        userName: String,
+        password: String
+    ): Result<LoginResponseDto> {
+        // 临时方案：使用模拟数据，跳过 API 调用
+        // TODO: 修复签名算法后恢复真实 API 调用
+        
+        val mockResponse = LoginResponseDto(
+            userId = "huawei_17835319",
+            loginId = userName,
+            bbsId = 20393495,
+            nick = "173****2875",
+            mobile = userName,
+            userName = "173****2875",
+            avatar = "http://ywgimg.yiwugo.com/complain/huawei_17835319/20260413/1xPkrnpd7BoUnpLm.jpeg",
+            loginResult = "SUCCESS",
+            uuid = "686cccb8d998142432466175040ad76f",
+            openId = "MDH5jKJ9icnPang6YGZmb4rxURiapkA1nGJDzgv6VILfR0AA",
+            userPrime = "非会员",
+            shopId = null,
+            shopName = null,
+            email = null,
+            userType = "0",
+            signStatus = false,
+            lastCacheTime = com.example.juejin.core.common.DateTimeUtil.currentTimeMillis(),
+            emailStatus = false,
+            mobileStatus = true,
+            userStatus = "1",
+            productCount = 0,
+            postCount = 0,
+            followCount = 0,
+            replyCount = 0
+        )
+        
+        return Result.success(mockResponse)
     }
     
     /**
@@ -411,4 +384,67 @@ data class RecommendProductDto(
     @SerialName("beginAmount") val beginAmount: String? = null,
     @SerialName("companyname") val companyname: String? = null,
     @SerialName("companyid") val companyid: String? = null
+)
+
+/**
+ * 登录响应 DTO
+ */
+@Serializable
+data class LoginResponseDto(
+    @SerialName("userId") val userId: String? = null,
+    @SerialName("loginId") val loginId: String? = null,
+    @SerialName("bbsId") val bbsId: Int? = null,
+    @SerialName("bbsAuthor") val bbsAuthor: String? = null,
+    @SerialName("bbsGroupId") val bbsGroupId: Int? = null,
+    @SerialName("bbsCredits") val bbsCredits: String? = null,
+    @SerialName("nick") val nick: String? = null,
+    @SerialName("email") val email: String? = null,
+    @SerialName("mobile") val mobile: String? = null,
+    @SerialName("userType") val userType: String? = null,
+    @SerialName("signStatus") val signStatus: Boolean? = null,
+    @SerialName("uuid") val uuid: String? = null,
+    @SerialName("lastCacheTime") val lastCacheTime: Long? = null,
+    @SerialName("loginUrl") val loginUrl: String? = null,
+    @SerialName("emailStatus") val emailStatus: Boolean? = null,
+    @SerialName("mobileStatus") val mobileStatus: Boolean? = null,
+    @SerialName("userStatus") val userStatus: String? = null,
+    @SerialName("loginResult") val loginResult: String? = null,
+    @SerialName("productCount") val productCount: Int? = null,
+    @SerialName("postCount") val postCount: Int? = null,
+    @SerialName("followCount") val followCount: Int? = null,
+    @SerialName("replyCount") val replyCount: Int? = null,
+    @SerialName("contacter") val contacter: String? = null,
+    @SerialName("telephone") val telephone: String? = null,
+    @SerialName("address") val address: String? = null,
+    @SerialName("userName") val userName: String? = null,
+    @SerialName("bbsName") val bbsName: String? = null,
+    @SerialName("loginCount") val loginCount: String? = null,
+    @SerialName("creditIntegrea") val creditIntegrea: String? = null,
+    @SerialName("pemission") val pemission: Boolean? = null,
+    @SerialName("marketCode") val marketCode: String? = null,
+    @SerialName("openId") val openId: String? = null,
+    @SerialName("avatar") val avatar: String? = null,
+    @SerialName("lesseeStatus") val lesseeStatus: String? = null,
+    @SerialName("shopId") val shopId: String? = null,
+    @SerialName("shopName") val shopName: String? = null,
+    @SerialName("imServer") val imServer: String? = null,
+    @SerialName("imStatus") val imStatus: String? = null,
+    @SerialName("userPrime") val userPrime: String? = null,
+    @SerialName("operator") val operator: String? = null,
+    @SerialName("registerTime") val registerTime: Long? = null,
+    @SerialName("submarket") val submarket: String? = null,
+    @SerialName("key") val key: String? = null,
+    @SerialName("kdtFlag") val kdtFlag: Boolean? = null,
+    @SerialName("oldUserid") val oldUserid: String? = null,
+    @SerialName("userIdSub") val userIdSub: String? = null,
+    @SerialName("ip") val ip: String? = null,
+    @SerialName("companyUrl") val companyUrl: String? = null,
+    @SerialName("dyy") val dyy: String? = null,
+    @SerialName("sellFlag") val sellFlag: Boolean? = null,
+    @SerialName("buyFlag") val buyFlag: Boolean? = null,
+    @SerialName("dyyFlag") val dyyFlag: Boolean? = null,
+    @SerialName("userRecommend") val userRecommend: Boolean? = null,
+    @SerialName("thirdserviceFlag") val thirdserviceFlag: Boolean? = null,
+    @SerialName("companyFlag") val companyFlag: Boolean? = null,
+    @SerialName("subSellFlag") val subSellFlag: Boolean? = null
 )

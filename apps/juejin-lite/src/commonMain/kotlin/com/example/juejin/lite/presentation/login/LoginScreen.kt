@@ -17,19 +17,76 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.juejin.core.common.CryptoUtil
+import com.example.juejin.lite.di.AppContainer
 import com.example.juejin.ui.theme.ThemeColors
 
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    viewModel: LoginViewModel = viewModel { AppContainer.getInstance().provideLoginViewModel() }
 ) {
     var account by remember { mutableStateOf("17304472875") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isRememberAccount by remember { mutableStateOf(true) }
-    var isAgreeProtocol by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
+    var isAgreeProtocol by remember { mutableStateOf(true) }  // 默认勾选协议
+    
+    val uiState by viewModel.uiState.collectAsState()
+    
+    var showProtocolWarning by remember { mutableStateOf(false) }
+    var showEmptyWarning by remember { mutableStateOf(false) }
+    
+    // 监听登录成功
+    LaunchedEffect(uiState.loginResult) {
+        if (uiState.loginResult != null) {
+            onLoginSuccess()
+        }
+    }
+    
+    // 显示错误提示
+    if (uiState.errorMessage != null) {
+        AlertDialog(
+            onDismissRequest = { viewModel.clearError() },
+            title = { Text("登录失败") },
+            text = { Text(uiState.errorMessage ?: "") },
+            confirmButton = {
+                TextButton(onClick = { viewModel.clearError() }) {
+                    Text("确定")
+                }
+            }
+        )
+    }
+    
+    // 显示协议提示
+    if (showProtocolWarning) {
+        AlertDialog(
+            onDismissRequest = { showProtocolWarning = false },
+            title = { Text("提示") },
+            text = { Text("请先阅读并同意用户协议") },
+            confirmButton = {
+                TextButton(onClick = { showProtocolWarning = false }) {
+                    Text("确定")
+                }
+            }
+        )
+    }
+    
+    // 显示空值提示
+    if (showEmptyWarning) {
+        AlertDialog(
+            onDismissRequest = { showEmptyWarning = false },
+            title = { Text("提示") },
+            text = { Text("请输入账号和密码") },
+            confirmButton = {
+                TextButton(onClick = { showEmptyWarning = false }) {
+                    Text("确定")
+                }
+            }
+        )
+    }
     
     Box(
         modifier = Modifier
@@ -175,18 +232,18 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         if (!isAgreeProtocol) {
-                            // TODO: 显示提示
+                            showProtocolWarning = true
                             return@Button
                         }
                         if (account.isEmpty() || password.isEmpty()) {
-                            // TODO: 显示提示
+                            showEmptyWarning = true
                             return@Button
                         }
-                        isLoading = true
-                        // 模拟登录
-                        onLoginSuccess()
+                        // MD5 加密密码
+                        val encryptedPassword = CryptoUtil.md5(password)
+                        viewModel.login(account, encryptedPassword)
                     },
-                    enabled = !isLoading,
+                    enabled = !uiState.isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -196,7 +253,7 @@ fun LoginScreen(
                         disabledContainerColor = Color(0xFFFFB380)
                     )
                 ) {
-                    if (isLoading) {
+                    if (uiState.isLoading) {
                         CircularProgressIndicator(
                             color = Color.White,
                             modifier = Modifier.size(24.dp)

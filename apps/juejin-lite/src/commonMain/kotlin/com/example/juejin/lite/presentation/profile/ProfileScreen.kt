@@ -27,8 +27,6 @@ import coil3.compose.AsyncImage
 import com.example.juejin.lite.domain.model.Article
 import com.example.juejin.lite.domain.model.UserProfile
 import com.example.juejin.ui.theme.ThemeColors
-import juejin.lite.generated.resources.*
-import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +56,7 @@ fun ProfileScreen(
                 ProfileContent(
                     profile = state.profile,
                     recommendedProducts = state.recommendedProducts,
-                    isLoggedIn = isLoggedIn,
+                    isLoggedIn = state.isLoggedIn,
                     onLoginClick = onLoginClick
                 )
             }
@@ -75,7 +73,10 @@ fun ProfileScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = { viewModel.refresh() }) {
-                            Text(stringResource(Res.string.retry))
+                            Text(
+                            text = "重试",
+                            color = ThemeColors.Text.secondary
+                        )
                         }
                     }
                 }
@@ -166,7 +167,15 @@ private fun UserHeader(
                 color = Color.White.copy(alpha = 0.3f)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    if (isLoggedIn) {
+                    if (isLoggedIn && profile.avatar?.isNotEmpty() == true) {
+                        // 显示用户头像
+                        AsyncImage(
+                            model = profile.avatar,
+                            contentDescription = "用户头像",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else if (isLoggedIn) {
+                        // 显示用户名首字母
                         Text(
                             text = profile.username.take(1),
                             style = MaterialTheme.typography.headlineMedium,
@@ -174,6 +183,7 @@ private fun UserHeader(
                             fontWeight = FontWeight.Bold
                         )
                     } else {
+                        // 显示登录图标
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = "登录",
@@ -311,7 +321,7 @@ private fun OrderSection() {
                 OrderTabItem("待发货", Icons.Default.LocalShipping)
                 OrderTabItem("待收货", Icons.Default.Inventory)
                 OrderTabItem("待评价", Icons.Default.RateReview)
-                OrderTabItem("退款/售后", Icons.Default.AssignmentReturn)
+                OrderTabItem("退款/售后", Icons.Default.Assignment)
             }
         }
     }

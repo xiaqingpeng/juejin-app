@@ -2,11 +2,13 @@ package com.example.juejin.lite.di
 
 import com.example.juejin.lite.data.remote.YiwugoApi
 import com.example.juejin.lite.data.repository.ArticleRepositoryImpl
+import com.example.juejin.lite.data.repository.AuthRepositoryImpl
 import com.example.juejin.lite.data.repository.CartRepositoryImpl
 import com.example.juejin.lite.data.repository.CategoryRepositoryImpl
 import com.example.juejin.lite.data.repository.MessageRepositoryImpl
 import com.example.juejin.lite.data.repository.UserRepositoryImpl
 import com.example.juejin.lite.domain.repository.ArticleRepository
+import com.example.juejin.lite.domain.repository.AuthRepository
 import com.example.juejin.lite.domain.repository.CartRepository
 import com.example.juejin.lite.domain.repository.CategoryRepository
 import com.example.juejin.lite.domain.repository.MessageRepository
@@ -16,9 +18,11 @@ import com.example.juejin.lite.domain.usecase.GetCategoriesUseCase
 import com.example.juejin.lite.domain.usecase.GetMessagesUseCase
 import com.example.juejin.lite.domain.usecase.GetRecommendedArticlesUseCase
 import com.example.juejin.lite.domain.usecase.GetUserProfileUseCase
+import com.example.juejin.lite.domain.usecase.LoginUseCase
 import com.example.juejin.lite.presentation.cart.CartViewModel
 import com.example.juejin.lite.presentation.category.CategoryViewModel
 import com.example.juejin.lite.presentation.home.HomeViewModel
+import com.example.juejin.lite.presentation.login.LoginViewModel
 import com.example.juejin.lite.presentation.message.MessageViewModel
 import com.example.juejin.lite.presentation.profile.ProfileViewModel
 
@@ -53,6 +57,10 @@ class AppContainer(
         UserRepositoryImpl()
     }
     
+    private val authRepository: AuthRepository by lazy {
+        AuthRepositoryImpl(yiwugoApi)
+    }
+    
     private val categoryRepository: CategoryRepository by lazy {
         CategoryRepositoryImpl(
             yiwugoApi = if (useRealApi) yiwugoApi else null,
@@ -78,6 +86,10 @@ class AppContainer(
         GetUserProfileUseCase(userRepository)
     }
     
+    private val loginUseCase: LoginUseCase by lazy {
+        LoginUseCase(authRepository)
+    }
+    
     private val getCategoriesUseCase: GetCategoriesUseCase by lazy {
         GetCategoriesUseCase(categoryRepository)
     }
@@ -98,6 +110,10 @@ class AppContainer(
     
     fun provideProfileViewModel(): ProfileViewModel {
         return ProfileViewModel(getUserProfileUseCase)
+    }
+    
+    fun provideLoginViewModel(): LoginViewModel {
+        return LoginViewModel(loginUseCase)
     }
     
     fun provideCategoryViewModel(): CategoryViewModel {

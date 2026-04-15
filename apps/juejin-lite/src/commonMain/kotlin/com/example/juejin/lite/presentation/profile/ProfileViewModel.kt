@@ -2,6 +2,7 @@ package com.example.juejin.lite.presentation.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.juejin.lite.data.local.UserPreferences
 import com.example.juejin.lite.domain.model.UserProfile
 import com.example.juejin.lite.domain.usecase.GetUserProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,21 +28,46 @@ class ProfileViewModel(
         viewModelScope.launch {
             _uiState.value = ProfileUiState.Loading
             
-            // 加载用户资料
-            val profileResult = getUserProfileUseCase("current_user")
+            // 检查是否已登录
+            val loginUser = UserPreferences.getUser()
             
-            profileResult
-                .onSuccess { profile ->
-                    // 加载推荐商品
-                    val recommendedProducts = loadRecommendedProducts()
-                    _uiState.value = ProfileUiState.Success(
-                        profile = profile,
-                        recommendedProducts = recommendedProducts
-                    )
-                }
-                .onFailure { error ->
-                    _uiState.value = ProfileUiState.Error(error.message ?: "加载失败")
-                }
+            if (loginUser != null) {
+                // 使用登录用户信息
+                val profile = UserProfile(
+                    id = loginUser.userId,
+                    username = loginUser.nick ?: loginUser.userName,
+                    avatar = loginUser.avatar,
+                    bio = loginUser.userPrime,
+                    level = 0,
+                    followCount = 0,
+                    followerCount = 0,
+                    articleCount = 0,
+                    likeCount = 0
+                )
+                
+                val recommendedProducts = loadRecommendedProducts()
+                _uiState.value = ProfileUiState.Success(
+                    profile = profile,
+                    recommendedProducts = recommendedProducts,
+                    isLoggedIn = true
+                )
+            } else {
+                // 未登录，使用默认资料
+                val profileResult = getUserProfileUseCase("current_user")
+                
+                profileResult
+                    .onSuccess { profile ->
+                        val recommendedProducts = loadRecommendedProducts()
+                        _uiState.value = ProfileUiState.Success(
+                            profile = profile,
+                            recommendedProducts = recommendedProducts,
+                            isLoggedIn = false
+                        )
+                    }
+                    .onFailure { error ->
+                        _uiState.value = ProfileUiState.Error(error.message ?: "加载失败")
+                    }
+            }
         }
     }
     
@@ -159,7 +185,8 @@ sealed class ProfileUiState {
     object Loading : ProfileUiState()
     data class Success(
         val profile: UserProfile,
-        val recommendedProducts: List<com.example.juejin.lite.domain.model.Article> = emptyList()
+        val recommendedProducts: List<com.example.juejin.lite.domain.model.Article> = emptyList(),
+        val isLoggedIn: Boolean = false
     ) : ProfileUiState()
     data class Error(val message: String) : ProfileUiState()
 }
